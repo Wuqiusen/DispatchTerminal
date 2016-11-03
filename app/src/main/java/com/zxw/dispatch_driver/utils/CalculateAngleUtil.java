@@ -1,43 +1,25 @@
-package com.zxw.dispatch_driver;
-
-import android.support.test.runner.AndroidJUnit4;
-
-import junit.framework.Assert;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
+package com.zxw.dispatch_driver.utils;
 
 /**
- * Instrumentation test, which will execute on an Android device.
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * author：CangJie on 2016/11/2 17:55
+ * email：cangjie2016@gmail.com
  */
-@RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
-    @Test
-    public void useAppContext() throws Exception {
-//        double v = calculateDiff(22.6413801906, 114.0095452679, 22.6415131906, 114.0094552679);   //55.91411300581078
-//        double v = calculateDiff(22.6410301906, 114.0097882679, 22.6412091906, 114.0096572679);    //53.80170832010174
-//        RoadTrack roadTrack = new RoadTrack(22.6412091906, 114.0096572679, 22.6410301906, 114.0097882679); // 233.80170832010177
-        RoadTrack roadTrack = new RoadTrack(22.6413801906, 114.0095452679, 22.6413471906, 114.0094372679);
-        RoadTrack roadTrack2 = new RoadTrack(22.6410301906, 114.0097882679, 22.6412091906, 114.0096572679); //53.80170832010174
-
-        double b = calculateAngle(roadTrack, roadTrack2);
-
-        Assert.assertEquals(1.0, b);
+public class CalculateAngleUtil {
+    public static boolean judgeAngle(RoadTrack roadTrack, RoadTrack roadTrack2) {
+        double angle = calculateAngle(roadTrack, roadTrack2);
+        return   angle < 90 || 360 - angle < 90;
     }
 
-    private boolean judgeAngle(RoadTrack roadTrack, RoadTrack roadTrack2) {
-        return  calculateAngle(roadTrack, roadTrack2) < 90;
-    }
-
-    private double calculateAngle(RoadTrack roadTrack, RoadTrack roadTrack2) {
+    private static double calculateAngle(RoadTrack roadTrack, RoadTrack roadTrack2) {
         double v = calculateDirection(roadTrack);
         double v2 = calculateDirection(roadTrack2);
+        System.out.println(v +"==" + v2);
+        System.out.println("angle < 90 = " + (Math.abs(v - v2) < 90 ));
+        System.out.println("360 - angle < 90 = " + (360 - Math.abs(v - v2) < 90));
         return Math.abs(v - v2);
     }
 
-    private double calculateDirection(RoadTrack track) {
+    private static double calculateDirection(RoadTrack track) {
         double lat1 = track.getLat1();
         double lng1 = track.getLng1();
         double lat2 = track.getLat2();
@@ -52,7 +34,7 @@ public class ExampleInstrumentedTest {
     }
 
     // 返回方向度数
-    public double calculateDirection(double x, double y){
+    private static double calculateDirection(double x, double y){
         double diff = 1 / 2d * Math.PI;
         double p25 = Math.atan2(y, x) - diff;
         if (p25 < 0)
@@ -62,7 +44,7 @@ public class ExampleInstrumentedTest {
         return p25 / Math.PI * 180;
     }
 
-    public class RoadTrack{
+    public static class RoadTrack{
         private double lat1;
         private double lng1;
         private double lat2;
