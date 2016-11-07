@@ -72,6 +72,9 @@ public class DebugLog {
 		getMethodNames(new Throwable().getStackTrace());
 		Log.v(className, createLog(message));
 	}
+	public static void w(int i){
+		w(String.valueOf(i));
+	}
 
 	public static void w(String message) {
 		if (!isDebuggable())

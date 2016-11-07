@@ -1,10 +1,12 @@
 package com.zxw.dispatch_driver;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import static junit.framework.Assert.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -12,9 +14,44 @@ import static org.junit.Assert.assertEquals;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
+
+    @Test
+    public void testMapCopy() throws Exception{
+        HashMap<String, String> map1 = new HashMap<>();
+        map1.put("s1", "s1");
+        map1.put("s2", "s2");
+        map1.put("s3", "s3");
+
+        HashMap<String, String> map2 = new HashMap<>();
+        map2.putAll(map1);
+
+        print(map1, map2);
+        map1.put("s1", "s11");
+
+        print(map1, map2);
+    }
+
+    private void print(HashMap<String, String> map1, HashMap<String, String> map2) {
+        Iterator<Map.Entry<String, String>> it = map1.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, String> entry = it.next();
+            System.out.println("key= " + entry.getKey() + " and value= " + entry.getValue());
+        }
+        System.out.println("=================== map1.memory length" + map1);
+        Iterator<Map.Entry<String, String>> it2 = map2.entrySet().iterator();
+        while (it2.hasNext()) {
+            Map.Entry<String, String> entry = it2.next();
+            System.out.println("key= " + entry.getKey() + " and value= " + entry.getValue());
+        }
+        System.out.println("=================== map2.memory length" + map2);
+    }
+
+
     @Test
     public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+        long i = 201610291002L;
+        Integer integer = Integer.valueOf("201610291002");
+        assertEquals(2, integer.intValue());
     }
 
     @Test
@@ -33,7 +70,7 @@ public class ExampleUnitTest {
 
         boolean b = judgeAngle(roadTrack, roadTrack2);
 
-        Assert.assertEquals(true, b);
+        assertEquals(true, b);
     }
 
     private boolean judgeAngle(RoadTrack roadTrack, RoadTrack roadTrack2) {
