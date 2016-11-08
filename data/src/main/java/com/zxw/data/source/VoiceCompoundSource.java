@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.zxw.data.bean.BaseBean;
-import com.zxw.data.bean.UpdateStationBean;
-import com.zxw.data.dao.StationDao;
+import com.zxw.data.bean.UpdateVoiceCompoundBean;
+import com.zxw.data.dao.VoiceCompoundDao;
 import com.zxw.data.sp.SpUtils;
 
 import java.text.SimpleDateFormat;
@@ -23,27 +23,27 @@ import rx.schedulers.Schedulers;
  * author：CangJie on 2016/11/4 10:37
  * email：cangjie2016@gmail.com
  */
-public class StationSource extends BaseSrouce {
+public class VoiceCompoundSource extends BaseSrouce {
 
     private final Context mContext;
-    private final StationDao mDao;
+    private final VoiceCompoundDao mDao;
     private final String yyyyMMddHHmm;
     private boolean mIsCheckFinish;
     private long mLineUpdateTime;
-    private OnUpdateStationFinishListener mListener;
+    private OnUpdateVoiceCompoundTableFinishListener mListener;
 
-    public StationSource(Context context) {
+    public VoiceCompoundSource(Context context) {
         super();
         this.mContext = context;
-        mDao = new StationDao(mContext);
+        mDao = new VoiceCompoundDao(mContext);
         // 记录这个类工作的时间yyyyMMddHHmm 当更新完成后,把这个值赋给SP中的记录时间
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm", Locale.CHINA);
         yyyyMMddHHmm = format.format(new Date());
-        mLineUpdateTime = SpUtils.getTableUpdateTime(mContext, SpUtils.TABLE_STATION);
+        mLineUpdateTime = SpUtils.getTableUpdateTime(mContext, SpUtils.TABLE_VOICE_COMPOUND);
     }
 
-    public void loadUpdateStationTableData() {
-        mHttpMethods.stationUpdate(code(), String.valueOf(mLineUpdateTime), time(), mPageNo, mPageSize, new Subscriber<BaseBean<List<UpdateStationBean>>>() {
+    public void loadUpdateVoiceCompoundTableData() {
+        mHttpMethods.voiceCompoundUpdate(code(), String.valueOf(mLineUpdateTime), time(), mPageNo, mPageSize, new Subscriber<BaseBean<List<UpdateVoiceCompoundBean>>>() {
             @Override
             public void onCompleted() {
 
@@ -55,40 +55,40 @@ public class StationSource extends BaseSrouce {
             }
 
             @Override
-            public void onNext(final BaseBean<List<UpdateStationBean>> lineBeanBaseBean) {
+            public void onNext(final BaseBean<List<UpdateVoiceCompoundBean>> voiceCompoundBeanBaseBean) {
                 // 检查是否还有内容
-                isCheckNextPage(lineBeanBaseBean.returnSize);
+                isCheckNextPage(voiceCompoundBeanBaseBean.returnSize);
                 // 用子线程 更新数据库
-                Observable.just(lineBeanBaseBean.returnData)
+                Observable.just(voiceCompoundBeanBaseBean.returnData)
                         .subscribeOn(Schedulers.io())
                         .unsubscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Action1<List<UpdateStationBean>>() {
+                        .subscribe(new Action1<List<UpdateVoiceCompoundBean>>() {
                             @Override
-                            public void call(List<UpdateStationBean> stationBeen) {
-                                updateDatabase(stationBeen);
-                                partUpdateFinish(mPageNo, mPageSize, lineBeanBaseBean.returnSize);
+                            public void call(List<UpdateVoiceCompoundBean> voiceCompoundBeen) {
+                                updateDatabase(voiceCompoundBeen);
+                                partUpdateFinish(mPageNo, mPageSize, voiceCompoundBeanBaseBean.returnSize);
                             }
                         });
             }
         });
     }
 
-    private void updateDatabase(List<UpdateStationBean> lineBeen) {
-        for (UpdateStationBean bean : lineBeen) {
+    private void updateDatabase(List<UpdateVoiceCompoundBean> beans) {
+        for (UpdateVoiceCompoundBean bean : beans) {
             updateDatabase(bean);
         }
     }
 
 
-    private void updateDatabase(UpdateStationBean bean) {
-        mDao.updateStation(bean);
+    private void updateDatabase(UpdateVoiceCompoundBean bean) {
+        mDao.updateVoiceCompound(bean);
     }
 
     private void isCheckNextPage(int returnSize) {
         if (mPageNo * mPageSize < returnSize) {
             mPageNo++;
-            loadUpdateStationTableData();
+            loadUpdateVoiceCompoundTableData();
         } else {
             //完成更新!
             mIsCheckFinish = true;
@@ -97,18 +97,17 @@ public class StationSource extends BaseSrouce {
     private void partUpdateFinish(int pageNo, int pageSize, int returnSize){
         //完成更新
         if (mIsCheckFinish && pageNo * pageSize >= returnSize){
-            SpUtils.setCache(mContext, SpUtils.TABLE_STATION, Long.valueOf(yyyyMMddHHmm));
-            if(mListener != null)
-                mListener.onUpdateStationFinish();
+            SpUtils.setCache(mContext, SpUtils.TABLE_VOICE_COMPOUND, Long.valueOf(yyyyMMddHHmm));
+            if (mListener != null)
+                mListener.onUpdateVoiceCompoundTableFinish();
         }
-        Log.w("station", "update : " + pageNo);
+        Log.w("line", "update : " + pageNo);
     }
 
-    public void setOnUpdateStationFinishListener(OnUpdateStationFinishListener listener) {
+    public void setOnUpdateVoiceCompoundTableFinishListener(OnUpdateVoiceCompoundTableFinishListener listener) {
         this.mListener = listener;
     }
-
-    public interface OnUpdateStationFinishListener{
-        void onUpdateStationFinish();
+    public interface OnUpdateVoiceCompoundTableFinishListener{
+        void onUpdateVoiceCompoundTableFinish();
     }
 }

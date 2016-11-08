@@ -32,7 +32,7 @@ public class ManualReportActivity extends PresenterActivity<StationReportPresent
 
         ButterKnife.bind(this);
 
-        int lineId = getIntent().getIntExtra("lineId", 95);
+        int lineId = getIntent().getIntExtra("lineId", 42);
         DebugLog.w(lineId);
         presenter.loadStations(lineId);
         presenter.loadServiceWord();

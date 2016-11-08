@@ -13,16 +13,18 @@ public class UpdateStationBean {
                 ", lat=" + lat +
                 ", lng=" + lng +
                 ", name='" + name + '\'' +
+                ", realId=" + realId +
                 ", updateTimeKey=" + updateTimeKey +
                 '}';
     }
 
     /**
-     * id : 2
+     * id : 1
      * isDele : 0
-     * lat : 22.6202
-     * lng : 113.92562
-     * name : 宝安笔架山
+     * lat : 22.6808
+     * lng : 114.22302
+     * name : 荷坳新村
+     * realId : 4273
      * updateTimeKey : 201610291002
      */
 
@@ -31,6 +33,7 @@ public class UpdateStationBean {
     private double lat;
     private double lng;
     private String name;
+    private int realId;
     private long updateTimeKey;
 
     public int getId() {
@@ -71,6 +74,14 @@ public class UpdateStationBean {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getRealId() {
+        return realId;
+    }
+
+    public void setRealId(int realId) {
+        this.realId = realId;
     }
 
     public long getUpdateTimeKey() {

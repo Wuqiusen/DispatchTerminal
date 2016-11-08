@@ -6,6 +6,7 @@ import android.util.Log;
 import com.zxw.data.bean.BaseBean;
 import com.zxw.data.bean.UpdateReportPointBean;
 import com.zxw.data.dao.ReportPointDao;
+import com.zxw.data.sp.SpUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,6 +30,7 @@ public class ReportPointSource extends BaseSrouce {
     private final String yyyyMMddHHmm;
     private boolean mIsCheckFinish;
     private long mLineUpdateTime;
+    private OnUpdateReportPointFinishListener mListener;
 
     public ReportPointSource(Context context) {
         super();
@@ -37,11 +39,10 @@ public class ReportPointSource extends BaseSrouce {
         // 记录这个类工作的时间yyyyMMddHHmm 当更新完成后,把这个值赋给SP中的记录时间
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm", Locale.CHINA);
         yyyyMMddHHmm = format.format(new Date());
-        mLineUpdateTime = mDao.lastUpdateTime();
+        mLineUpdateTime = SpUtils.getTableUpdateTime(mContext, SpUtils.TABLE_REPORT_POINT);
     }
 
     public void loadUpdateReportPointSource() {
-//        long lineUpdateTime = -253171910;
         mHttpMethods.ReportPointUpdate(code(), String.valueOf(mLineUpdateTime), time(), mPageNo, mPageSize, new Subscriber<BaseBean<List<UpdateReportPointBean>>>() {
             @Override
             public void onCompleted() {
@@ -54,7 +55,7 @@ public class ReportPointSource extends BaseSrouce {
             }
 
             @Override
-            public void onNext(BaseBean<List<UpdateReportPointBean>> lineBeanBaseBean) {
+            public void onNext(final BaseBean<List<UpdateReportPointBean>> lineBeanBaseBean) {
                 // 检查是否还有内容
                 isCheckNextPage(lineBeanBaseBean.returnSize);
                 // 用子线程 更新数据库
@@ -65,8 +66,8 @@ public class ReportPointSource extends BaseSrouce {
                         .subscribe(new Action1<List<UpdateReportPointBean>>() {
                             @Override
                             public void call(List<UpdateReportPointBean> reportPointBean) {
-                                Log.w("lineBean", reportPointBean.toString());
                                 updateDatabase(reportPointBean);
+                                partUpdateFinish(mPageNo, mPageSize, lineBeanBaseBean.returnSize);
                             }
                         });
             }
@@ -77,7 +78,6 @@ public class ReportPointSource extends BaseSrouce {
         for (UpdateReportPointBean bean : lineBeen) {
             updateDatabase(bean);
         }
-        partUpdateFinish();
     }
 
 
@@ -94,10 +94,20 @@ public class ReportPointSource extends BaseSrouce {
             mIsCheckFinish = true;
         }
     }
-    private void partUpdateFinish(){
-        if (mIsCheckFinish){
-            //完成更新
-
+    private void partUpdateFinish(int pageNo, int pageSize, int returnSize){
+        //完成更新
+        if (mIsCheckFinish && pageNo * pageSize >= returnSize){
+            SpUtils.setCache(mContext, SpUtils.TABLE_REPORT_POINT, Long.valueOf(yyyyMMddHHmm));
+            if(mListener != null)
+                mListener.onUpdateReportPointFinishListener();
         }
+        Log.w("reportPoint", "update : " + pageNo);
+    }
+
+    public void setOnUpdateReportPointFinishListener(OnUpdateReportPointFinishListener listener) {
+        this.mListener = listener;
+    }
+    public interface OnUpdateReportPointFinishListener{
+        void onUpdateReportPointFinishListener();
     }
 }

@@ -69,19 +69,6 @@ public class ReportPointDao {
         return list;
     }
 
-    public long lastUpdateTime() {
-        String sql = "SELECT max(updateTime) FROM" + StationReportDBOpenHelper.TABLE_REPORT_POINT;
-        SQLiteDatabase db = mHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery(sql, null);
-        long updateTime = -1;
-        if (cursor.moveToNext()) {
-            updateTime = cursor.getLong(0);
-        }
-        cursor.close();
-        db.close();
-        return updateTime;
-    }
-
     public void updateReportPoint(UpdateReportPointBean bean) {
         SQLiteDatabase db = mHelper.getWritableDatabase();
         String sql = "replace into" + StationReportDBOpenHelper.TABLE_REPORT_POINT + "(id,isDele,keyCode,lat,lineId,lng,stationId,type,updateTime) values (?,?,?,?,?,?,?,?,?)";

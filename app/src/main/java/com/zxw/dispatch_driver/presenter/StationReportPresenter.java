@@ -67,10 +67,10 @@ public class StationReportPresenter extends BasePresenter<StationReportView> imp
             throw new RuntimeException("speak content can not be null");
         switch (type) {
             case 1:
-                content = content.replace("#curentStation#", stationName);
+                content = content.replace("#currentStation#", stationName);
                 break;
             case 2:
-                content = content.replace("#curentStation#", stationName);
+                content = content.replace("#currentStation#", stationName);
                 break;
             case 4:
                 content = content.replace("#nextStation#", stationName);

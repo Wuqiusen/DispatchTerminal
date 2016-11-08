@@ -1,13 +1,12 @@
 package com.zxw.data.dao;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.zxw.data.bean.UpdateLineBean;
-import com.zxw.data.db.bean.LineBean;
 import com.zxw.data.db.StationReportDBOpenHelper;
+import com.zxw.data.db.bean.LineBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,44 +21,6 @@ public class LineDao {
     public LineDao(Context context) {
         mHelper = new StationReportDBOpenHelper(context);
     }
-    public long addLine(int lineId, String lineName){
-        SQLiteDatabase db = mHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("lineId",lineId);
-        values.put("lineName",lineName);
-        values.put("isDele",0);
-        long rowid = db.insert(StationReportDBOpenHelper.TABLE_LINE, null, values);
-        db.close();
-        return rowid;
-    }
-
-    //
-    public long lastUpdateTime(){
-        String sql = "SELECT max(updateTime) FROM" + StationReportDBOpenHelper.TABLE_LINE;
-        SQLiteDatabase db = mHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery(sql, null);
-        long updateTime = -1;
-        if (cursor.moveToNext()){
-            updateTime = cursor.getLong(0);
-        }
-        cursor.close();
-        db.close();
-        return  updateTime;
-    }
-//    public List<LineBean> queryLines(){
-//        List<LineBean> list = new ArrayList<>();
-//        SQLiteDatabase db = mHelper.getWritableDatabase();
-//        String sql = "select * from" + StationReportDBOpenHelper.TABLE_LINE;
-//        Cursor cursor = db.rawQuery(sql, null);
-//        while (cursor.moveToNext()){
-//            int lineId = cursor.getInt(1);
-//            String lineName = cursor.getString(2);
-//            list.add(new LineBean(lineId, lineName));
-//        }
-//        cursor.close();
-//        db.close();
-//        return list;
-//    }
     public List<LineBean> queryLine(String str){
         List<LineBean> list = new ArrayList<>();
         SQLiteDatabase db = mHelper.getWritableDatabase();

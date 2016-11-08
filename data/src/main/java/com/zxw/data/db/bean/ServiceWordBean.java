@@ -62,7 +62,7 @@ public class ServiceWordBean {
 
     @Override
     public String toString() {
-        return "ServiceWordBean{" +
+        return "UpdateServiceWordBean{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", keyCode='" + keyCode + '\'' +

@@ -30,6 +30,7 @@ public class LineSource extends BaseSrouce {
     private final String yyyyMMddHHmm;
     private boolean mIsCheckFinish;
     private long mLineUpdateTime;
+    private OnUpdateLineTableFinishListener mListener;
 
     public LineSource(Context context) {
         super();
@@ -65,7 +66,6 @@ public class LineSource extends BaseSrouce {
                         .subscribe(new Action1<List<UpdateLineBean>>() {
                             @Override
                             public void call(List<UpdateLineBean> lineBeen) {
-                                Log.w("lineBean", lineBeen.toString());
                                 updateDatabase(lineBeen);
                                 partUpdateFinish(mPageNo, mPageSize, lineBeanBaseBean.returnSize);
                             }
@@ -95,13 +95,19 @@ public class LineSource extends BaseSrouce {
         }
     }
     private void partUpdateFinish(int pageNo, int pageSize, int returnSize){
+        //完成更新
         if (mIsCheckFinish && pageNo * pageSize >= returnSize){
-            //完成更新
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm", Locale.CHINA);
-            SpUtils.setCache(mContext, SpUtils.TABLE_LINE, Long.valueOf(format.format(new Date())));
-            Log.w("tag", pageNo + "true");
-        }else{
-            Log.w("tag", pageNo + "false");
+            SpUtils.setCache(mContext, SpUtils.TABLE_LINE, Long.valueOf(yyyyMMddHHmm));
+            if (mListener != null)
+                mListener.onUpdateLineTableFinish();
         }
+        Log.w("line", "update : " + pageNo);
+    }
+
+    public void setOnUpdateLineTableFinishListener(OnUpdateLineTableFinishListener listener) {
+        this.mListener = listener;
+    }
+    public interface OnUpdateLineTableFinishListener{
+        void onUpdateLineTableFinish();
     }
 }

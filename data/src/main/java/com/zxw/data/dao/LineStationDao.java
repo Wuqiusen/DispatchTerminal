@@ -33,19 +33,6 @@ public class LineStationDao {
                 String.valueOf(bean.getSortNum()),String.valueOf(bean.getIsDele()), String.valueOf(bean.getUpdateTimeKey())});
         db.close();
     }
-
-    public long lastUpdateTime(){
-        String sql = "SELECT max(updateTime) FROM tb_line_station";
-        SQLiteDatabase db = mHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery(sql, null);
-        long updateTime = -1;
-        if (cursor.moveToNext()){
-            updateTime = cursor.getLong(0);
-        }
-        cursor.close();
-        db.close();
-        return  updateTime;
-    }
     /**
      * select b.station_id,b.type,b.lng,b.lat from ` a inner join tb_report_line_station_point b
      on a.line_id=b.line_id and a.station_id=b.station_id and a.is_dele=b.is_dele and a.is_dele=0 order by a.sort_num,b.type;
@@ -59,8 +46,8 @@ public class LineStationDao {
         String sql = "select stationId from tb_line_station where lineId=? and isDele='0' order by sortNum asc";
         Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(lineId)});
         while (cursor.moveToNext()){
-            int anInt = cursor.getInt(0);
-            list.add(mStationDao.queryStation(anInt));
+            int stationId = cursor.getInt(0);
+            list.add(mStationDao.queryStation(stationId));
         }
         cursor.close();
         db.close();

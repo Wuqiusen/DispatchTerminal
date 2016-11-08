@@ -19,9 +19,6 @@ public class LineDaoTest {
     }
     @Test
     public void addLine() throws Exception {
-        lineDao.addLine(101, "101");
-        lineDao.addLine(103, "103");
-        lineDao.addLine(104, "104");
     }
 
     @Test
@@ -42,11 +39,6 @@ public class LineDaoTest {
 
     @Test
     public void addVoiceCompound() throws Exception{
-        VoiceCompoundDao dao = new VoiceCompoundDao(InstrumentationRegistry.getTargetContext());
-        dao.addVoiceCompound(1, "#curentStation#到了,请乘客有序从后门下车.",0);
-        dao.addVoiceCompound(4, "请乘客抓紧扶稳,下一站是#nextStation#",0);
-        dao.addVoiceCompound(2, "各位乘客，终点站：#curentStation#到了，请您携带好行李物品依次下车，开门请当心，下车请走好。",0);
-//
     }
 
 }

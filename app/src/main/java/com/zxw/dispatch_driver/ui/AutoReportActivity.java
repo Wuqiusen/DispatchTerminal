@@ -37,7 +37,7 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
     @Bind(R.id.rv_service_word)
     RecyclerView mRecyclerViewServiceWord;
     private AMap mMap;
-    private int mLineId = 42;
+    private int mLineId;
 
 
     @Override

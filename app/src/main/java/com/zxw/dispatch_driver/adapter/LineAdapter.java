@@ -58,7 +58,6 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder> {
                 Intent intent = new Intent(mContext, AutoReportActivity.class);
                 intent.putExtra("lineId", lineBean.getLineId());
                 mContext.startActivity(intent);
-//                ToastHelper.showToast("lineId :"+ lineBean.getLineId() + ", lineType :" + lineBean.getType(), mContext);
             }
         });
     }

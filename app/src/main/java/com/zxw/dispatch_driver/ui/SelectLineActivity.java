@@ -6,13 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.widget.EditText;
 
-import com.zxw.data.db.bean.LineBean;
 import com.zxw.data.dao.LineDao;
-import com.zxw.data.dao.LineStationDao;
-import com.zxw.data.dao.ServiceWordDao;
-import com.zxw.data.dao.StationDao;
-import com.zxw.data.dao.VoiceCompoundDao;
-import com.zxw.data.sp.SpUtils;
+import com.zxw.data.db.bean.LineBean;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.adapter.LineAdapter;
@@ -41,21 +36,6 @@ public class SelectLineActivity extends BaseHeadActivity {
         ButterKnife.bind(this);
 
         mLineDao = new LineDao(MyApplication.mContext);
-        StationDao mStationDao = new StationDao(MyApplication.mContext);
-        LineStationDao mLineStationDao = new LineStationDao(MyApplication.mContext);
-        VoiceCompoundDao mVoiceCompoundDao = new VoiceCompoundDao(MyApplication.mContext);
-        ServiceWordDao serviceWordDao = new ServiceWordDao(MyApplication.mContext);
-        if(SpUtils.isFirst(MyApplication.mContext)){
-            mLineDao.init();
-            mStationDao.init();
-            mLineStationDao.init();
-            mVoiceCompoundDao.init();
-            serviceWordDao.initInsert();
-            SpUtils.inited(MyApplication.mContext);
-        }else{
-            mStationDao.initQuery();
-            mLineStationDao.initQuery();
-        }
     }
 
     @OnClick(R.id.btn_confirm)

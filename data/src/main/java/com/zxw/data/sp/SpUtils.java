@@ -19,6 +19,10 @@ public class SpUtils {
     public final static String TABLE_STATION = "table_station";
     public final static String TABLE_LINE_STATION = "table_line_station";
     public final static String TABLE_REPORT_POINT = "table_report_point";
+    public final static String TABLE_SERVICE_WORD = "table_service_word";
+    public final static String TABLE_VOICE_COMPOUND = "table_voice_compound";
+    public final static String TABLE_DOG_MAIN = "table_dog_main";
+    public final static String TABLE_DOG_SECOND = "table_dog_second";
 
     private static void initSp(Context mContext, String fileName) {
         sp = mContext.getSharedPreferences(fileName,Context.MODE_PRIVATE);

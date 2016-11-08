@@ -155,7 +155,7 @@ public class AutoReportPresenter extends BasePresenter<AutoReportView> {
         switch (type) {
             case 1:
             case 2:
-                content = content.replace("#curentStation#", stationName);
+                content = content.replace("#currentStation#", stationName);
                 break;
             case 4:
                 content = content.replace("#nextStation#", stationName);

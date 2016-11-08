@@ -4,7 +4,11 @@ import com.zxw.data.bean.BaseBean;
 import com.zxw.data.bean.UpdateLineBean;
 import com.zxw.data.bean.UpdateLineStationBean;
 import com.zxw.data.bean.UpdateReportPointBean;
+import com.zxw.data.bean.UpdateServiceWordBean;
 import com.zxw.data.bean.UpdateStationBean;
+import com.zxw.data.bean.UpdateVoiceCompoundBean;
+import com.zxw.data.db.bean.TbDogLineMain;
+import com.zxw.data.db.bean.TbDogLineSecond;
 
 import java.util.List;
 
@@ -76,6 +80,26 @@ public class HttpMethods {
     public void ReportPointUpdate(String code, String updateTimeKey, String time, int pageNo, int pageSize, Subscriber<BaseBean<List<UpdateReportPointBean>>> subscriber){
         HttpInterfaces.ReportStation reportStation = retrofit.create(HttpInterfaces.ReportStation.class);
         Observable<BaseBean<List<UpdateReportPointBean>>> observable = reportStation.updateReportPoint(code, updateTimeKey, time, pageNo, pageSize);
+        toSubscribe(observable, subscriber);
+    }
+    public void serviceWordUpdate(String code, String updateTimeKey, String time, int pageNo, int pageSize, Subscriber<BaseBean<List<UpdateServiceWordBean>>> subscriber){
+        HttpInterfaces.ReportStation reportStation = retrofit.create(HttpInterfaces.ReportStation.class);
+        Observable<BaseBean<List<UpdateServiceWordBean>>> observable = reportStation.updateServiceWord(code, updateTimeKey, time, pageNo, pageSize);
+        toSubscribe(observable, subscriber);
+    }
+    public void voiceCompoundUpdate(String code, String updateTimeKey, String time, int pageNo, int pageSize, Subscriber<BaseBean<List<UpdateVoiceCompoundBean>>> subscriber){
+        HttpInterfaces.ReportStation reportStation = retrofit.create(HttpInterfaces.ReportStation.class);
+        Observable<BaseBean<List<UpdateVoiceCompoundBean>>> observable = reportStation.updateVoiceCompound(code, updateTimeKey, time, pageNo, pageSize);
+        toSubscribe(observable, subscriber);
+    }
+    public void dogMainUpdate(String code, String updateTimeKey, String time, int pageNo, int pageSize, Subscriber<BaseBean<List<TbDogLineMain>>> subscriber){
+        HttpInterfaces.ReportStation reportStation = retrofit.create(HttpInterfaces.ReportStation.class);
+        Observable<BaseBean<List<TbDogLineMain>>> observable = reportStation.updateDogMain(code, updateTimeKey, time, pageNo, pageSize);
+        toSubscribe(observable, subscriber);
+    }
+    public void dogSecondUpdate(String code, String updateTimeKey, String time, int pageNo, int pageSize, Subscriber<BaseBean<List<TbDogLineSecond>>> subscriber){
+        HttpInterfaces.ReportStation reportStation = retrofit.create(HttpInterfaces.ReportStation.class);
+        Observable<BaseBean<List<TbDogLineSecond>>> observable = reportStation.updatedogSecond(code, updateTimeKey, time, pageNo, pageSize);
         toSubscribe(observable, subscriber);
     }
 }

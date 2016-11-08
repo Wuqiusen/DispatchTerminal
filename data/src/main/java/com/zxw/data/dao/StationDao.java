@@ -20,18 +20,6 @@ public class StationDao {
 
         mHelper = new StationReportDBOpenHelper(context);
     }
-    public long lastUpdateTime(){
-        String sql = "SELECT max(updateTime) FROM" + StationReportDBOpenHelper.TABLE_STATION;
-        SQLiteDatabase db = mHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery(sql, null);
-        long updateTime = -1;
-        if (cursor.moveToNext()){
-            updateTime = cursor.getLong(0);
-        }
-        cursor.close();
-        db.close();
-        return  updateTime;
-    }
 
     /**
      *  根据站点ID查询站点信息
@@ -41,7 +29,7 @@ public class StationDao {
     public StationBean queryStation(int queryId){
         StationBean stationBean = null;
         SQLiteDatabase db = mHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select * from" + StationReportDBOpenHelper.TABLE_STATION + "where id=? and isDele='0'", new String[]{String.valueOf(queryId)});
+        Cursor cursor = db.rawQuery("select * from" + StationReportDBOpenHelper.TABLE_STATION + "where realId=? and isDele='0'", new String[]{String.valueOf(queryId)});
         if (cursor.moveToNext()){
             int stationId = cursor.getInt(1);
             String stationName = cursor.getString(2);
@@ -54,8 +42,8 @@ public class StationDao {
 
     public void updateStation(UpdateStationBean bean) {
         SQLiteDatabase db = mHelper.getWritableDatabase();
-        String sql = "replace into" + StationReportDBOpenHelper.TABLE_STATION + "(id,stationName,lng,lat,isDele,updateTime) values (?,?,?,?,?,?)";
-        db.execSQL(sql, new String[]{String.valueOf(bean.getId()), bean.getName(), String.valueOf(bean.getLng()), String.valueOf(bean.getLat()), String.valueOf(bean.getIsDele()), String.valueOf(bean.getUpdateTimeKey())});
+        String sql = "replace into" + StationReportDBOpenHelper.TABLE_STATION + "(id,realId,stationName,lng,lat,isDele,updateTime) values (?,?,?,?,?,?,?)";
+        db.execSQL(sql, new String[]{String.valueOf(bean.getId()), String.valueOf(bean.getRealId()), bean.getName(), String.valueOf(bean.getLng()), String.valueOf(bean.getLat()), String.valueOf(bean.getIsDele()), String.valueOf(bean.getUpdateTimeKey())});
         db.close();
     }
 
