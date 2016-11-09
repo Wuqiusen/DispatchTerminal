@@ -76,14 +76,16 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".ui.WelcomeActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+        <activity android:name=".ui.WelcomeActivity"
+            android:label="@string/app_name1">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".ui.DogActivity">
+        <activity android:name=".ui.DogActivity"
+            android:label="@string/app_name2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

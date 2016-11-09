@@ -13,6 +13,8 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.zxw.data.db.bean.InnerReportPointBean;
+import com.zxw.data.sp.SpUtils;
+import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.adapter.AutoReportStationAdapter;
 import com.zxw.dispatch_driver.adapter.ServiceWordAdapter;
@@ -37,7 +39,7 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
     @Bind(R.id.rv_service_word)
     RecyclerView mRecyclerViewServiceWord;
     private AMap mMap;
-    private int mLineId;
+    private long mLineId;
 
 
     @Override
@@ -45,8 +47,15 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        showTitle("自动报站");
-        showBackButton();
+        String lineName = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_NAME);
+        showTitle(lineName + " 自动报站");
+        showBackButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SpUtils.deleteLineHistory(MyApplication.mContext);
+                finish();
+            }
+        });
         showRightImageButton(R.mipmap.ic_launcher, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +88,7 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
             }
         });
 
-        mLineId = getIntent().getIntExtra("lineId", 42);
+        mLineId = Long.valueOf(SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID));
         presenter.loadStationsName(mLineId);
         presenter.loadReportPotins(mLineId);
         presenter.loadServiceWord();

@@ -24,6 +24,9 @@ public class SpUtils {
     public final static String TABLE_DOG_MAIN = "table_dog_main";
     public final static String TABLE_DOG_SECOND = "table_dog_second";
 
+    public final static String CURRENT_LINE_ID = "current_line_id";
+    public final static String CURRENT_LINE_NAME = "current_line_name";
+
     private static void initSp(Context mContext, String fileName) {
         sp = mContext.getSharedPreferences(fileName,Context.MODE_PRIVATE);
     }
@@ -77,5 +80,12 @@ public class SpUtils {
         SharedPreferences.Editor edit = sp.edit();
         edit.putLong(key, value);
         edit.commit();
+    }
+    public static void deleteLineHistory(Context mContext){
+        if(sp == null){
+            initSp(mContext, CACHE_FILE_NAME);
+        }
+        SharedPreferences.Editor edit = sp.edit();
+        edit.remove(CURRENT_LINE_ID).remove(CURRENT_LINE_NAME).commit();
     }
 }

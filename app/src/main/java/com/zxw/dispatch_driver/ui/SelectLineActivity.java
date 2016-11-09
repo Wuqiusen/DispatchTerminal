@@ -34,6 +34,7 @@ public class SelectLineActivity extends BaseHeadActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_line);
         ButterKnife.bind(this);
+        showTitle("选择线路");
 
         mLineDao = new LineDao(MyApplication.mContext);
     }

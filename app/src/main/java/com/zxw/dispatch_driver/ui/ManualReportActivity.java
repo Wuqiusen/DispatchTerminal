@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.zxw.data.sp.SpUtils;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.adapter.ServiceWordAdapter;
 import com.zxw.dispatch_driver.adapter.ManualReportStationAdapter;
@@ -27,7 +28,8 @@ public class ManualReportActivity extends PresenterActivity<StationReportPresent
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_station_report);
 
-        showTitle("人工报站");
+        String lineName = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_NAME);
+        showTitle(lineName + " 人工报站");
         showBackButton();
 
         ButterKnife.bind(this);

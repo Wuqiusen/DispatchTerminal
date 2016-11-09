@@ -2,15 +2,15 @@ package com.zxw.dispatch_driver.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 
-import com.zxw.data.dao.DogMainDao;
-import com.zxw.data.dao.DogSecondDao;
 import com.zxw.data.source.LineSource;
 import com.zxw.data.source.LineStationSource;
 import com.zxw.data.source.ReportPointSource;
 import com.zxw.data.source.ServiceWordSource;
 import com.zxw.data.source.StationSource;
 import com.zxw.data.source.VoiceCompoundSource;
+import com.zxw.data.sp.SpUtils;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.ui.base.BaseHeadActivity;
@@ -24,7 +24,17 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         showLoading();
-        update();
+        showTitle("欢迎页");
+//        update();
+        String lineId = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID);
+        if(TextUtils.isEmpty(lineId)){
+            startActivity(new Intent(this, SelectLineActivity.class));
+        }else{
+            Intent intent = new Intent(mContext, AutoReportActivity.class);
+            intent.putExtra("lineId", lineId);
+            mContext.startActivity(intent);
+        }
+        finish();
     }
 
     private void update() {
@@ -76,8 +86,15 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
 
     private void goMain(){
         if (isUpdateLineFinish && isUpdateLineStationFinish && isUpdateReportPointFinish && isUpdateStationFinish && isUpdateServiceWordFinish && isUpdateVoiceCompoundFinish){
-            startActivity(new Intent(this, SelectLineActivity.class));
-            finish();
+            String lineId = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID);
+            if(TextUtils.isEmpty(lineId)){
+                startActivity(new Intent(this, SelectLineActivity.class));
+                finish();
+            }else{
+                Intent intent = new Intent(mContext, AutoReportActivity.class);
+                intent.putExtra("lineId", lineId);
+                mContext.startActivity(intent);
+            }
         }
     }
 

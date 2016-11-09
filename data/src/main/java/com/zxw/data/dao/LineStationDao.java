@@ -39,7 +39,7 @@ public class LineStationDao {
      * @param lineId
      * @return
      */
-    public List<StationBean> queryStations(int lineId){
+    public List<StationBean> queryStations(long lineId){
         List<StationBean> list = new ArrayList<>();
         StationDao mStationDao = new StationDao(mContext);
         SQLiteDatabase db = mHelper.getWritableDatabase();

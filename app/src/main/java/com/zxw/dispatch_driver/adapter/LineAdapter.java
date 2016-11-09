@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.zxw.data.db.bean.LineBean;
 import com.zxw.data.db.bean.StationBean;
+import com.zxw.data.sp.SpUtils;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.ui.AutoReportActivity;
@@ -56,8 +57,9 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, AutoReportActivity.class);
-                intent.putExtra("lineId", lineBean.getLineId());
                 mContext.startActivity(intent);
+                SpUtils.setCache(mContext, SpUtils.CURRENT_LINE_ID, String.valueOf(lineBean.getLineId()));
+                SpUtils.setCache(mContext, SpUtils.CURRENT_LINE_NAME, lineBean.getLineName());
             }
         });
     }

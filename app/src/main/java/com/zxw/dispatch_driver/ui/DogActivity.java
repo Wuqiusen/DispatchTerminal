@@ -1,6 +1,9 @@
 package com.zxw.dispatch_driver.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.EditText;
 
 import com.amap.api.maps2d.AMap;
@@ -11,6 +14,8 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.zxw.data.db.bean.TbDogLineMain;
 import com.zxw.data.db.bean.TbDogLineSecond;
+import com.zxw.data.sp.SpUtils;
+import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.presenter.DogPresenter;
 import com.zxw.dispatch_driver.presenter.view.DogView;
@@ -33,6 +38,18 @@ public class DogActivity extends PresenterActivity<DogPresenter> implements DogV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog);
         showTitle("电子狗测试");
+        showBackButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SpUtils.deleteLineHistory(MyApplication.mContext);
+                finish();
+            }
+        });
+        String lineId = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID);
+        if(TextUtils.isEmpty(lineId)){
+            startActivity(new Intent(mContext, SelectLineActivity.class));
+            finish();
+        }
         ButterKnife.bind(this);
         mMapView.onCreate(savedInstanceState);
         mMap = mMapView.getMap();

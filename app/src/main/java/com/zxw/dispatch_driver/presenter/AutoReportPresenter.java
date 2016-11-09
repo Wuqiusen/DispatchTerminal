@@ -164,12 +164,12 @@ public class AutoReportPresenter extends BasePresenter<AutoReportView> {
         return content;
     }
 
-    public void loadReportPotins(int mLineId) {
+    public void loadReportPotins(long mLineId) {
         mLineStationReportList = mReportPointDao.queryByLineId(mLineId);
         mvpView.drawStationMarker(mLineStationReportList);
     }
 
-    public void loadStationsName(int mLineId) {
+    public void loadStationsName(long mLineId) {
         LineStationDao lineStationDao = new LineStationDao(mContext);
         mOrderStationList = lineStationDao.queryStations(mLineId);
         mStationNameAdapter = new AutoReportStationAdapter(mOrderStationList, mContext);

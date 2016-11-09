@@ -44,7 +44,7 @@ public class ReportPointDao {
     }
 
     //id integer, isDele integer, keyCode varchar(80),lat double, lineId integer, lng double, stationId integer, type integer, updateTime integer,mainId integer
-    public List<InnerReportPointBean> queryByLineId(int queryId) {
+    public List<InnerReportPointBean> queryByLineId(long queryId) {
         List<InnerReportPointBean> list = new ArrayList<>();
         SQLiteDatabase db = mHelper.getWritableDatabase();
         String sql = "select a.stationId,a.sortNum,b.lat,b.lng,b.type from tb_line_station a inner join tb_report_point b" +
