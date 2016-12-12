@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Dispatch_Driver.iml" filepath="$PROJECT_DIR$/Dispatch_Driver.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/data/data.iml" filepath="$PROJECT_DIR$/data/data.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pullToRefresh/pullToRefresh.iml" filepath="$PROJECT_DIR$/pullToRefresh/pullToRefresh.iml" />
     </modules>
   </component>
 </project>

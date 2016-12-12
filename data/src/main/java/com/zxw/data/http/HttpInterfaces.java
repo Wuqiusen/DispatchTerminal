@@ -1,6 +1,10 @@
 package com.zxw.data.http;
 
 import com.zxw.data.bean.BaseBean;
+import com.zxw.data.bean.Journey;
+import com.zxw.data.bean.LineDetail;
+import com.zxw.data.bean.Login;
+import com.zxw.data.bean.Receive;
 import com.zxw.data.bean.UpdateLineBean;
 import com.zxw.data.bean.UpdateLineStationBean;
 import com.zxw.data.bean.UpdateReportPointBean;
@@ -27,11 +31,52 @@ public class HttpInterfaces {
      */
     public interface User {
         @FormUrlEncoded
-        @POST("phone/visitor/login")
-        Observable<BaseBean> login(@Field("code") String code,
-                                   @Field("password") String password,
-                                   @Field("time") String time);
+        @POST("phone/visitor/driver/login/2")
+        Observable<BaseBean<Login>> login(@Field("code") String code,
+                                          @Field("password") String password,
+                                          @Field("time") String time);
     }
+
+    /**
+     * 调度
+     */
+    public interface Dispatch {
+        @FormUrlEncoded
+        @POST("phone/driver/bill/data/2")
+        Observable<BaseBean<List<Receive>>> receiveList(@Field("code") String code,
+                                                        @Field("keyCode") String keyCode,
+                                                        @Field("pageNo") int pageNo,
+                                                        @Field("pageSize") int pageSize
+        );
+        @FormUrlEncoded
+        @POST("phone/driver/bill/deal/2")
+        Observable<BaseBean> receiveOperator(@Field("code") String code,
+                                             @Field("keyCode") String keyCode,
+                                             @Field("opId") int opId,  //对应接单列表id唯一值
+                                             @Field("status") int status  //操作类型,必填,格式：2开始、3异常终止、4正常结束
+        );
+        @FormUrlEncoded
+        @POST("phone/driver/trip/data/2")
+        Observable<BaseBean<List<Journey>>> journeyList(@Field("code") String code,
+                                                  @Field("keyCode") String keyCode,
+                                                  @Field("pageNo") int pageNo,
+                                                  @Field("pageSize") int pageSize
+        );
+        @FormUrlEncoded
+        @POST("phone/driver/trip/deal/2")
+        Observable<BaseBean> journeyOperator(@Field("code") String code,
+                                                  @Field("keyCode") String keyCode,
+                                                  @Field("opId") int opId,  //对应接单列表id唯一值
+                                                  @Field("status") int status  //操作类型,必填,格式：2开始、3异常终止、4正常结束
+        );
+        @FormUrlEncoded
+        @POST("phone/driver/line/detail/2")
+        Observable<BaseBean<LineDetail>> lineDetail(@Field("code") String code,
+                                                    @Field("keyCode") String keyCode,
+                                                    @Field("lineId") int lineId
+        );
+    }
+
 
     /**
      * 报站模块
@@ -45,33 +90,36 @@ public class HttpInterfaces {
                                                               @Field("pageNo") int pageNo,
                                                               @Field("pageSize") int pageSize
         );
+
         @FormUrlEncoded
         @POST("phone/station/report/station/data")
         Observable<BaseBean<List<UpdateStationBean>>> updateStation(@Field("code") String code,
-                                                              @Field("updateTimeKey") String updateTimeKey,
-                                                              @Field("time") String time,
-                                                              @Field("pageNo") int pageNo,
-                                                              @Field("pageSize") int pageSize
+                                                                    @Field("updateTimeKey") String updateTimeKey,
+                                                                    @Field("time") String time,
+                                                                    @Field("pageNo") int pageNo,
+                                                                    @Field("pageSize") int pageSize
         );
+
         // 4.获取需要更新的线路站点基础信息
         @FormUrlEncoded
         @POST("phone/station/report/line/station/data")
         Observable<BaseBean<List<UpdateLineStationBean>>> updateLineStation(@Field("code") String code,
-                                                                      @Field("updateTimeKey") String updateTimeKey,
-                                                                      @Field("time") String time,
-                                                                      @Field("pageNo") int pageNo,
-                                                                      @Field("pageSize") int pageSize
+                                                                            @Field("updateTimeKey") String updateTimeKey,
+                                                                            @Field("time") String time,
+                                                                            @Field("pageNo") int pageNo,
+                                                                            @Field("pageSize") int pageSize
         );
 
         // 4.获取需要更新的线路站点报站点信息
         @FormUrlEncoded
         @POST("phone/station/report/line/station/point/data")
         Observable<BaseBean<List<UpdateReportPointBean>>> updateReportPoint(@Field("code") String code,
-                                                                      @Field("updateTimeKey") String updateTimeKey,
-                                                                      @Field("time") String time,
-                                                                      @Field("pageNo") int pageNo,
-                                                                      @Field("pageSize") int pageSize
+                                                                            @Field("updateTimeKey") String updateTimeKey,
+                                                                            @Field("time") String time,
+                                                                            @Field("pageNo") int pageNo,
+                                                                            @Field("pageSize") int pageSize
         );
+
         // 6.获取需要更新服务用语的数据
         @FormUrlEncoded
         @POST("phone/station/report/service/words/data")
@@ -81,6 +129,7 @@ public class HttpInterfaces {
                                                                             @Field("pageNo") int pageNo,
                                                                             @Field("pageSize") int pageSize
         );
+
         // 7.获取需要更新语音合成模板的数据
         @FormUrlEncoded
         @POST("phone/station/report/voice/template/data")
@@ -90,19 +139,21 @@ public class HttpInterfaces {
                                                                                 @Field("pageNo") int pageNo,
                                                                                 @Field("pageSize") int pageSize
         );
+
         //
         @FormUrlEncoded
-        @POST("phone/station/report/voice/template/data")
+        @POST("phone/dog/line/main/data")
         Observable<BaseBean<List<TbDogLineMain>>> updateDogMain(@Field("code") String code,
                                                                 @Field("updateTimeKey") String updateTimeKey,
                                                                 @Field("time") String time,
                                                                 @Field("pageNo") int pageNo,
                                                                 @Field("pageSize") int pageSize
         );
+
         //
         @FormUrlEncoded
-        @POST("phone/station/report/voice/template/data")
-        Observable<BaseBean<List<TbDogLineSecond>>> updatedogSecond(@Field("code") String code,
+        @POST("phone/dog/line/second/data")
+        Observable<BaseBean<List<TbDogLineSecond>>> updateDogSecond(@Field("code") String code,
                                                                     @Field("updateTimeKey") String updateTimeKey,
                                                                     @Field("time") String time,
                                                                     @Field("pageNo") int pageNo,

@@ -112,6 +112,9 @@
     <!--高宽度-->
     <dimen name="main_height50">50dp</dimen>
 
+    <!-- 按钮弧度-->
+    <dimen name="radian">25dp</dimen>
+
     <!--登录-->
     <!--布局边距-->
     <dimen name="login_margin2">2dp</dimen>
@@ -405,6 +408,20 @@
     <dimen name="radian_xxmax">100dp</dimen>
     <!--TabBar弧度-->
     <dimen name="radian_my_tabbar">27dp</dimen>
+
+    <!-- 字体大小 -->
+    <dimen name="font_so_tiny">5sp</dimen>
+    <dimen name="radian_xhuge_100">100dp</dimen>
+    <dimen name="radian_huge_50">50dp</dimen>
+    <dimen name="radian_small_6">6dp</dimen>
+    <dimen name="radian_edit_40">40dp</dimen>
+    <!-- dot弧度-->
+    <dimen name="margin_dot_with">20dp</dimen>
+    <dimen name="margin_dot_height">10dp</dimen>
+    <dimen name="margin_ll_dot_height">30dp</dimen>
+    <dimen name="margin_dot">2dp</dimen>
+
+    <dimen name="abc_action_bar_default_height">48dp</dimen>
 
 
 </resources>

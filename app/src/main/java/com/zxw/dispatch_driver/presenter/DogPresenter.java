@@ -2,14 +2,15 @@ package com.zxw.dispatch_driver.presenter;
 
 import com.zxw.data.dao.DogMainDao;
 import com.zxw.data.dao.DogSecondDao;
+import com.zxw.data.dao.VoiceCompoundDao;
 import com.zxw.data.db.bean.TbDogLineMain;
 import com.zxw.data.db.bean.TbDogLineSecond;
-import com.zxw.data.source.DogMainSource;
-import com.zxw.data.source.DogSecondSource;
+import com.zxw.data.db.bean.VoiceCompoundBean;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.presenter.view.DogView;
 import com.zxw.dispatch_driver.ui.DogActivity;
 import com.zxw.dispatch_driver.utils.CalculateDistanceUtil;
+import com.zxw.dispatch_driver.utils.SpeakUtil;
 import com.zxw.dispatch_driver.utils.ToastHelper;
 
 import java.util.List;
@@ -24,12 +25,14 @@ public class DogPresenter extends BasePresenter<DogView> {
 
     private final DogMainDao mDogMainDao;
     private final DogSecondDao mDogSecondDao;
+    private final SpeakUtil mSpeakUtil;
     private List<TbDogLineMain> mDogLineMains;
     private double lastLat, lastLng;
     private long lastSinglePointPosition, lastCompoundPointPosition;
     private int mockSpeed = -1;
     private boolean isOverspeedRoad;
     private DogActivity mActivity;
+    private final VoiceCompoundDao mVoiceCompoundDao;
 
 
     public DogPresenter(DogView mvpView, DogActivity activity) {
@@ -38,17 +41,18 @@ public class DogPresenter extends BasePresenter<DogView> {
         mDogSecondDao = new DogSecondDao(MyApplication.mContext);
         this.mActivity = activity;
 
-        DogMainSource dogMainSource = new DogMainSource(MyApplication.mContext);
-//        dogMainSource.setOnUpdateDogMainTableFinishListener();
-        dogMainSource.loadUpdateLineTableData();
-        DogSecondSource dogSecondSource = new DogSecondSource(MyApplication.mContext);
-//        dogMainSource.setOnUpdateDogMainTableFinishListener();
-        dogSecondSource.loadUpdateLineTableData();
+        mVoiceCompoundDao = new VoiceCompoundDao(MyApplication.mContext);
 
+        mSpeakUtil = SpeakUtil.getInstance(MyApplication.mContext);
+        mSpeakUtil.init();
+//        DogSecondDao dogSecondDao = new DogSecondDao(MyApplication.mContext);
+//        dogSecondDao.mockData();
     }
 
     public void loadDogByLineId(int lineId){
         mDogLineMains = mDogMainDao.queryByLineID(lineId);
+        if (mDogLineMains == null || mDogLineMains.size() == 0)
+            return;
         mvpView.drawMarker(mDogLineMains);
     }
     public void drive(double lat, double lng){
@@ -80,7 +84,8 @@ public class DogPresenter extends BasePresenter<DogView> {
                 // 1需要比较车速 才启动语音事件
                 if(isOverSpeed(main)){
                     //当前值大于或等于比较值 则报告
-                    ToastHelper.showToast("比较后播放语音id: " + main.getVoiceId());
+//                    ToastHelper.showToast("比较后播放语音id: " + main.getVoiceId());
+                    voice(main.getVoiceId());
                     // 判断是否需要报告后台
 
                     if(isCommit(main)){
@@ -89,7 +94,8 @@ public class DogPresenter extends BasePresenter<DogView> {
                 }
             }else{
                 //直接播放
-                ToastHelper.showToast("直接播放 播放语音id: " + main.getVoiceId());
+//                ToastHelper.showToast("直接播放 播放语音id: " + main.getVoiceId());
+                voice(main.getVoiceId());
             }
             lastCompoundPointPosition = second.getId();
         }
@@ -102,7 +108,8 @@ public class DogPresenter extends BasePresenter<DogView> {
                 // 1需要比较车速 才启动语音事件
                 if(isOverSpeed(main)){
                     //当前值大于或等于比较值 则报告
-                    ToastHelper.showToast("比较后播放语音id: " + main.getVoiceId());
+//                    ToastHelper.showToast("比较后播放语音id: " + main.getVoiceId());
+                    voice(main.getVoiceId());
                     // 判断是否需要报告后台
 
                     if(isCommit(main)){
@@ -111,10 +118,16 @@ public class DogPresenter extends BasePresenter<DogView> {
                 }
             }else{
                 //直接播放
-                ToastHelper.showToast("直接播放 播放语音id: " + main.getVoiceId());
+//                ToastHelper.showToast("直接播放 播放语音id: " + main.getVoiceId());
+                voice(main.getVoiceId());
             }
             lastSinglePointPosition = second.getId();
         }
+    }
+
+    private void voice(Long voiceId) {
+        VoiceCompoundBean voiceCompoundBean = mVoiceCompoundDao.queryVoiceCompound(voiceId);
+        mSpeakUtil.playText(voiceCompoundBean.getContent());
     }
 
     private boolean isCommit(TbDogLineMain main){

@@ -2,39 +2,31 @@ package com.zxw.dispatch_driver.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 
+import com.zxw.data.source.DogMainSource;
+import com.zxw.data.source.DogSecondSource;
 import com.zxw.data.source.LineSource;
 import com.zxw.data.source.LineStationSource;
 import com.zxw.data.source.ReportPointSource;
 import com.zxw.data.source.ServiceWordSource;
 import com.zxw.data.source.StationSource;
 import com.zxw.data.source.VoiceCompoundSource;
-import com.zxw.data.sp.SpUtils;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.ui.base.BaseHeadActivity;
 
-public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUpdateLineTableFinishListener, StationSource.OnUpdateStationFinishListener, LineStationSource.OnUpdateLineStationFinishListener, ReportPointSource.OnUpdateReportPointFinishListener, ServiceWordSource.OnUpdateServiceWordTableFinishListener, VoiceCompoundSource.OnUpdateVoiceCompoundTableFinishListener {
+public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUpdateLineTableFinishListener, StationSource.OnUpdateStationFinishListener, LineStationSource.OnUpdateLineStationFinishListener, ReportPointSource.OnUpdateReportPointFinishListener, ServiceWordSource.OnUpdateServiceWordTableFinishListener, VoiceCompoundSource.OnUpdateVoiceCompoundTableFinishListener, DogMainSource.OnUpdateDogMainTableFinishListener, DogSecondSource.OnUpdateDogSecondTableFinishListener {
 
-    private boolean isUpdateLineFinish, isUpdateStationFinish, isUpdateLineStationFinish, isUpdateReportPointFinish, isUpdateServiceWordFinish, isUpdateVoiceCompoundFinish;
+    private boolean isUpdateLineFinish, isUpdateStationFinish, isUpdateLineStationFinish, isUpdateReportPointFinish, isUpdateServiceWordFinish, isUpdateVoiceCompoundFinish, isUpdateDogMain, isUpdateDogSecond;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        hideHeadArea();
         showLoading();
-        showTitle("欢迎页");
-//        update();
-        String lineId = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID);
-        if(TextUtils.isEmpty(lineId)){
-            startActivity(new Intent(this, SelectLineActivity.class));
-        }else{
-            Intent intent = new Intent(mContext, AutoReportActivity.class);
-            intent.putExtra("lineId", lineId);
-            mContext.startActivity(intent);
-        }
-        finish();
+        update();
+        hideLoading();
     }
 
     private void update() {
@@ -57,6 +49,12 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
         voiceCompoundSource.setOnUpdateVoiceCompoundTableFinishListener(this);
         voiceCompoundSource.loadUpdateVoiceCompoundTableData();
 
+        DogMainSource dogMainSource = new DogMainSource(MyApplication.mContext);
+        dogMainSource.setOnUpdateDogMainTableFinishListener(this);
+        dogMainSource.loadUpdateDogMainTableData();
+        DogSecondSource dogSecondSource = new DogSecondSource(MyApplication.mContext);
+        dogSecondSource.setOnUpdateDogSecondTableFinishListener(this);
+        dogSecondSource.loadUpdateDogSecondTableData();
 
     }
 
@@ -85,17 +83,20 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
     }
 
     private void goMain(){
-        if (isUpdateLineFinish && isUpdateLineStationFinish && isUpdateReportPointFinish && isUpdateStationFinish && isUpdateServiceWordFinish && isUpdateVoiceCompoundFinish){
-            String lineId = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID);
-            if(TextUtils.isEmpty(lineId)){
-                startActivity(new Intent(this, SelectLineActivity.class));
-                finish();
-            }else{
-                Intent intent = new Intent(mContext, AutoReportActivity.class);
-                intent.putExtra("lineId", lineId);
-                mContext.startActivity(intent);
-            }
+        if (isUpdateLineFinish && isUpdateLineStationFinish && isUpdateReportPointFinish && isUpdateStationFinish && isUpdateServiceWordFinish && isUpdateVoiceCompoundFinish && isUpdateDogMain && isUpdateDogSecond){
+            hideLoading();
+//            String lineId = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID);
+//            if(TextUtils.isEmpty(lineId)){
+//                startActivity(new Intent(this, SelectLineActivity.class));
+//            }else{
+//                Intent intent = new Intent(mContext, AutoReportActivity.class);
+//                intent.putExtra("lineId", lineId);
+//                mContext.startActivity(intent);
+//            }
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
         }
+
     }
 
     @Override
@@ -107,6 +108,18 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
     @Override
     public void onUpdateVoiceCompoundTableFinish() {
         isUpdateVoiceCompoundFinish = true;
+        goMain();
+    }
+
+    @Override
+    public void onUpdateDogMainTableFinish() {
+        isUpdateDogMain = true;
+        goMain();
+    }
+
+    @Override
+    public void onUpdateDogSecondTableFinish() {
+        isUpdateDogSecond = true;
         goMain();
     }
 }

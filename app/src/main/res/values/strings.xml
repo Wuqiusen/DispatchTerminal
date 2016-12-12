@@ -2,4 +2,25 @@
     <string name="app_name">智能运调司机端</string>
     <string name="app_name1">智运司机欢迎页</string>
     <string name="app_name2">智运司机电子狗</string>
+    <string name="no_more_data">没有更多数据</string>
+
+
+    <string name="receive_status_1">该工单已拒绝</string>
+    <string name="receive_status_2">该工单已改派</string>
+    <string name="receive_status_3">该工单已接受</string>
+
+    <string name="journey_status_1">该行程未开始</string>
+    <string name="journey_status_2">该行程未结束</string>
+    <string name="journey_status_3">该行程异常终止</string>
+    <string name="journey_status_4">该行程正常结束</string>
+
+    <string name="line_name">线路：%1$s</string>
+    <string name="company_name">公司：%1$s</string>
+    <string name="org_name">车队：%1$s</string>
+
+    //用户详情页
+
+    <string name="username">姓名：%1$s</string>
+    <string name="code">工号：%1$s</string>
+    <string name="user_info_label">用户详情</string>
 </resources>

@@ -1,6 +1,10 @@
 package com.zxw.data.http;
 
 import com.zxw.data.bean.BaseBean;
+import com.zxw.data.bean.Journey;
+import com.zxw.data.bean.LineDetail;
+import com.zxw.data.bean.Login;
+import com.zxw.data.bean.Receive;
 import com.zxw.data.bean.UpdateLineBean;
 import com.zxw.data.bean.UpdateLineStationBean;
 import com.zxw.data.bean.UpdateReportPointBean;
@@ -24,7 +28,7 @@ import rx.schedulers.Schedulers;
  * email：cangjie2016@gmail.com
  */
 public class HttpMethods {
-    public static final String BASE_URL = "http://192.168.0.93:8080/yd_app/";
+    public static final String BASE_URL = "http://192.168.0.90:8080/yd_app/";
     public Retrofit retrofit = RetrofitSetting.getInstance();
 
     private static class SingletonHolder{
@@ -56,9 +60,9 @@ public class HttpMethods {
         }
     }
 
-    public void login(Subscriber subscriber, String code, String password, String time){
+    public void login(Subscriber<Login> subscriber, String code, String password, String time){
         HttpInterfaces.User user = retrofit.create(HttpInterfaces.User.class);
-        Observable observable = user.login(code, password, time).map(new HttpResultFunc());
+        Observable<Login> observable = user.login(code, password, time).map(new HttpResultFunc<Login>());
         toSubscribe(observable, subscriber);
     }
 
@@ -99,7 +103,39 @@ public class HttpMethods {
     }
     public void dogSecondUpdate(String code, String updateTimeKey, String time, int pageNo, int pageSize, Subscriber<BaseBean<List<TbDogLineSecond>>> subscriber){
         HttpInterfaces.ReportStation reportStation = retrofit.create(HttpInterfaces.ReportStation.class);
-        Observable<BaseBean<List<TbDogLineSecond>>> observable = reportStation.updatedogSecond(code, updateTimeKey, time, pageNo, pageSize);
+        Observable<BaseBean<List<TbDogLineSecond>>> observable = reportStation.updateDogSecond(code, updateTimeKey, time, pageNo, pageSize);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 调度
+     */
+    public void receiveList(String code, String keyCode, int pageNo, int pageSize, Subscriber<BaseBean<List<Receive>>> subscriber){
+        HttpInterfaces.Dispatch dispatch = retrofit.create(HttpInterfaces.Dispatch.class);
+        Observable<BaseBean<List<Receive>>> observable = dispatch.receiveList(code, keyCode, pageNo, pageSize);
+        toSubscribe(observable, subscriber);
+    }
+
+    public void receiveOperator(String code, String keyCode, int opId, int status, Subscriber<BaseBean> subscriber){
+        HttpInterfaces.Dispatch dispatch = retrofit.create(HttpInterfaces.Dispatch.class);
+        Observable<BaseBean> observable = dispatch.receiveOperator(code, keyCode, opId, status);
+        toSubscribe(observable, subscriber);
+    }
+    public void journeyList(String code, String keyCode, int pageNo, int pageSize, Subscriber<BaseBean<List<Journey>>> subscriber){
+        HttpInterfaces.Dispatch dispatch = retrofit.create(HttpInterfaces.Dispatch.class);
+        Observable<BaseBean<List<Journey>>> observable = dispatch.journeyList(code, keyCode, pageNo, pageSize);
+        toSubscribe(observable, subscriber);
+    }
+
+    public void journeyOperator(String code, String keyCode, int opId, int status, Subscriber<BaseBean> subscriber){
+        HttpInterfaces.Dispatch dispatch = retrofit.create(HttpInterfaces.Dispatch.class);
+        Observable<BaseBean> observable = dispatch.journeyOperator(code, keyCode, opId, status);
+        toSubscribe(observable, subscriber);
+    }
+
+    public void lineDetail(String code, String keyCode, int lineId, Subscriber<LineDetail> subscriber){
+        HttpInterfaces.Dispatch dispatch = retrofit.create(HttpInterfaces.Dispatch.class);
+        Observable<LineDetail> observable = dispatch.lineDetail(code, keyCode, lineId).map(new HttpResultFunc<LineDetail>());
         toSubscribe(observable, subscriber);
     }
 }

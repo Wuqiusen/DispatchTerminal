@@ -39,7 +39,7 @@ public class StationReportDAOTest{
 //    }
     @Test
     public void testLine() throws Exception{
-        dao.addLine(101, "淘金地线");
+//        dao.addLine(101, "淘金地线");
 //        dao.addLine(100, "测试无数据1线");
 //        dao.addLine(102, "测试无数据2线");
 //        dao.addLine(103, "测试无数据3线");

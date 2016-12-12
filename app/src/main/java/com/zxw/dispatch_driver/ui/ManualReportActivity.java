@@ -29,15 +29,15 @@ public class ManualReportActivity extends PresenterActivity<StationReportPresent
         setContentView(R.layout.activity_station_report);
 
         String lineName = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_NAME);
-        showTitle(lineName + " 人工报站");
+        showTitle("人工报站");
         showBackButton();
 
         ButterKnife.bind(this);
 
         int lineId = getIntent().getIntExtra("lineId", 42);
         DebugLog.w(lineId);
-        presenter.loadStations(lineId);
-        presenter.loadServiceWord();
+        mPresenter.loadStations(lineId);
+        mPresenter.loadServiceWord();
     }
 
 

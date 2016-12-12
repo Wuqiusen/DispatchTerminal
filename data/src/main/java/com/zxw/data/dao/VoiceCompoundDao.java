@@ -57,10 +57,11 @@ public class VoiceCompoundDao {
     }
     /**
      *  根据ID查询语音合成表
+     * @param id
      */
-    public VoiceCompoundBean queryVoiceCompound(int id){
+    public VoiceCompoundBean queryVoiceCompound(Long id){
         SQLiteDatabase db = mHelper.getReadableDatabase();
-        String sql = "select * from" + StationReportDBOpenHelper.TABLE_VOICE_COMPOUND + "where type=?";
+        String sql = "select * from" + StationReportDBOpenHelper.TABLE_VOICE_COMPOUND + "where id=?";
         Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(id)});
         if (cursor.moveToNext()){
             int type = cursor.getInt(1);

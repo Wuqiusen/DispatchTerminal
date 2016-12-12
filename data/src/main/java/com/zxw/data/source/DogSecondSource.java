@@ -42,7 +42,7 @@ public class DogSecondSource extends BaseSrouce {
         mLineUpdateTime = SpUtils.getTableUpdateTime(mContext, SpUtils.TABLE_DOG_SECOND);
     }
 
-    public void loadUpdateLineTableData() {
+    public void loadUpdateDogSecondTableData() {
         mHttpMethods.dogSecondUpdate(code(), String.valueOf(mLineUpdateTime), time(), mPageNo, mPageSize, new Subscriber<BaseBean<List<TbDogLineSecond>>>() {
             @Override
             public void onCompleted() {
@@ -88,7 +88,7 @@ public class DogSecondSource extends BaseSrouce {
     private void isCheckNextPage(int returnSize) {
         if (mPageNo * mPageSize < returnSize) {
             mPageNo++;
-            loadUpdateLineTableData();
+            loadUpdateDogSecondTableData();
         } else {
             //完成更新!
             mIsCheckFinish = true;

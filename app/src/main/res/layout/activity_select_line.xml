@@ -16,7 +16,7 @@
         android:id="@+id/et_line_no"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="939"
+        android:text="387"
         android:hint="请输入线路编号"/>
     <Button
         android:id="@+id/btn_confirm"

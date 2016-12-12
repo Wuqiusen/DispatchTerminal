@@ -1,5 +1,6 @@
 package com.zxw.dispatch_driver.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,13 +21,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SelectLineActivity extends BaseHeadActivity {
+public class SelectLineActivity extends BaseHeadActivity implements LineAdapter.OnClickLineListener {
     @Bind(R.id.rv)
     RecyclerView mRecyclerView;
 
     @Bind(R.id.et_line_no)
     EditText mLineNo;
     private LineDao mLineDao;
+    private boolean dog_start;
 
 
     @Override
@@ -35,7 +37,7 @@ public class SelectLineActivity extends BaseHeadActivity {
         setContentView(R.layout.activity_select_line);
         ButterKnife.bind(this);
         showTitle("选择线路");
-
+        dog_start = getIntent().getBooleanExtra("dog_start", false);
         mLineDao = new LineDao(MyApplication.mContext);
     }
 
@@ -51,11 +53,23 @@ public class SelectLineActivity extends BaseHeadActivity {
             disPlay("数据库中没有该线路");
         }else{
             LineAdapter lineAdapter = new LineAdapter(list, this);
+            lineAdapter.setOnClickLineListener(this);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             mRecyclerView.setAdapter(lineAdapter);
             mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL_LIST));
 
         }
+    }
+
+    @Override
+    public void onClickLine(LineBean currentBean) {
+        Intent intent = null;
+        if(dog_start){
+            intent = new Intent(mContext, DogActivity.class);
+        }else{
+            intent = new Intent(mContext, AutoReportActivity.class);
+        }
+        mContext.startActivity(intent);
     }
 }

@@ -7,11 +7,11 @@ import android.os.Bundle;
  * email：cangjie2016@gmail.com
  */
 public abstract class PresenterActivity<P> extends BaseHeadActivity {
-    protected P presenter;
+    protected P mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        presenter = createPresenter();
+        mPresenter = createPresenter();
         super.onCreate(savedInstanceState);
 
     }

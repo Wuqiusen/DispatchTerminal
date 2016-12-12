@@ -2,6 +2,7 @@ package com.zxw.data.sp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 /**
  * author：CangJie on 2016/9/28 14:11
@@ -87,5 +88,24 @@ public class SpUtils {
         }
         SharedPreferences.Editor edit = sp.edit();
         edit.remove(CURRENT_LINE_ID).remove(CURRENT_LINE_NAME).commit();
+    }
+
+    public static boolean isLogin(Context mContext){
+        if(sp == null){
+            initSp(mContext,CACHE_FILE_NAME);
+        }
+        String userPhone = sp.getString(CODE, "");
+        String userId = sp.getString(NAME, "");
+        String keycode = sp.getString(KEYCODE, "");
+        if(TextUtils.isEmpty(userPhone)){
+            return false;
+        }
+        if(TextUtils.isEmpty(userId)){
+            return false;
+        }
+        if(TextUtils.isEmpty(keycode)){
+            return false;
+        }
+        return true;
     }
 }

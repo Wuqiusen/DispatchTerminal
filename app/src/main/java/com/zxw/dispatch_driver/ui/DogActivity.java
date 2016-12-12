@@ -20,6 +20,7 @@ import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.presenter.DogPresenter;
 import com.zxw.dispatch_driver.presenter.view.DogView;
 import com.zxw.dispatch_driver.ui.base.PresenterActivity;
+import com.zxw.dispatch_driver.utils.DebugLog;
 
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class DogActivity extends PresenterActivity<DogPresenter> implements DogV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog);
+
         showTitle("电子狗测试");
         showBackButton(new View.OnClickListener() {
             @Override
@@ -47,24 +49,29 @@ public class DogActivity extends PresenterActivity<DogPresenter> implements DogV
         });
         String lineId = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID);
         if(TextUtils.isEmpty(lineId)){
-            startActivity(new Intent(mContext, SelectLineActivity.class));
+            Intent intent = new Intent(mContext, SelectLineActivity.class);
+            intent.putExtra("dog_start", true);
+            startActivity(intent);
+
             finish();
+        }else{
+            ButterKnife.bind(this);
+            mMapView.onCreate(savedInstanceState);
+            mMap = mMapView.getMap();
+            mMap.setOnMapClickListener(new AMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    mMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
+                            .position(latLng)
+                            .icon(BitmapDescriptorFactory
+                                    .fromResource(R.mipmap.off_station_point))
+                            .draggable(true));
+                    mPresenter.drive(latLng.latitude, latLng.longitude);
+                    DebugLog.w(latLng.latitude+ "," + latLng.longitude);
+                }
+            });
+            mPresenter.loadDogByLineId(Integer.valueOf(lineId));
         }
-        ButterKnife.bind(this);
-        mMapView.onCreate(savedInstanceState);
-        mMap = mMapView.getMap();
-        mMap.setOnMapClickListener(new AMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                mMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
-                        .position(latLng)
-                        .icon(BitmapDescriptorFactory
-                                .fromResource(R.mipmap.off_station_point))
-                        .draggable(true));
-                presenter.drive(latLng.latitude, latLng.longitude);
-            }
-        });
-        presenter.loadDogByLineId(365);
     }
 
 

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:wqs="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/margin_fit"
+    android:scrollbars="none">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+
+                <zxzs.mirror.view.MyEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bluebtn_height"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="@dimen/btn_margin"
+                    android:layout_marginRight="@dimen/btn_margin"
+                    wqs:hint="请输入工号"
+                    wqs:inputType="text"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/margin_fit"
+                android:layout_marginLeft="@dimen/btn_margin"
+                android:layout_marginRight="@dimen/btn_margin"
+                android:layout_marginTop="@dimen/margin_fit"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+
+                <zxzs.mirror.view.MyEditText
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/bluebtn_height"
+                    android:layout_below="@+id/et_phone"
+                    android:layout_weight="2"
+                    wqs:hint="验证码"
+                    wqs:inputType="num"
+                    />
+                <Button
+                    style="@style/getcode_button_style"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="获取验证码"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_small"/>
+            </LinearLayout>
+        </LinearLayout>
+        <Button
+            style="@style/btn_big_blue_normal_style"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bluebtn_height"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_fit"
+            android:text="确定"
+            android:textSize="@dimen/font_large"/>
+    </LinearLayout>
+
+</ScrollView>

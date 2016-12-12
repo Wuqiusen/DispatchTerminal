@@ -16,3 +16,8 @@
 #   public *;
 #}
 -keep class com.iflytek.**{*;}
+-dontoptimize
+-dontpreverify
+
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** { *; }

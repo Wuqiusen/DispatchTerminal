@@ -24,21 +24,38 @@ public class DogSecondDao {
     public void mockData(){
         SQLiteDatabase db = mHelper.getWritableDatabase();
         // 前方红绿灯违章拍摄
-        String sql1 = "insert into" + DOGDBOpenHelper.TABLE_DOB_SECOND + "values (1,1,22.6372340000,114.0155950000,0,0)";
-        db.execSQL(sql1, new String[]{});
+//        String sql1 = "insert into" + DOGDBOpenHelper.TABLE_DOB_SECOND + "values (1,1,22.6372340000,114.0155950000,0,0)";
+//        db.execSQL(sql1, new String[]{});
         // 多点判断 限速
-        String sql2 = "insert into" + DOGDBOpenHelper.TABLE_DOB_SECOND + "values (2,2,22.6362930000,114.0152510000,0,0)";
+        String sql2 = "insert into" + DOGDBOpenHelper.TABLE_DOB_SECOND + "values (12,14,22.595886,114.324829,0,0)";
         db.execSQL(sql2, new String[]{});
-        String sql3 = "insert into" + DOGDBOpenHelper.TABLE_DOB_SECOND + "values (3,2,22.6342830000,114.0120220000,0,0)";
+        String sql3 = "insert into" + DOGDBOpenHelper.TABLE_DOB_SECOND + "values (13,14,22.59572,114.324501,0,0)";
         db.execSQL(sql3, new String[]{});
+        String sql4 = "insert into" + DOGDBOpenHelper.TABLE_DOB_SECOND + "values (14,14,22.595674,114.324066,0,0)";
+        db.execSQL(sql4, new String[]{});
+        String sql5 = "insert into" + DOGDBOpenHelper.TABLE_DOB_SECOND + "values (15,14,22.595651,114.323661,0,0)";
+        db.execSQL(sql5, new String[]{});
+        String sql6 = "insert into" + DOGDBOpenHelper.TABLE_DOB_SECOND + "values (16,14,22.595651,114.323181,0,0)";
+        db.execSQL(sql6, new String[]{});
+        String sql7 = "insert into" + DOGDBOpenHelper.TABLE_DOB_SECOND + "values (17,14,22.595645,114.322784,0,0)";
+        db.execSQL(sql7, new String[]{});
+        String sql8 = "insert into" + DOGDBOpenHelper.TABLE_DOB_SECOND + "values (18,14,22.595491,114.322486,0,0)";
+        db.execSQL(sql8, new String[]{});
+        String sql9 = "insert into" + DOGDBOpenHelper.TABLE_DOB_SECOND + "values (19,14,22.595466,114.32209,0,0)";
+        db.execSQL(sql9, new String[]{});
+
+
+        String sql10 = "insert into" + DOGDBOpenHelper.TABLE_DOG_MAIN + "values (14,42,2,0,1,75,3,0,0)";
+        db.execSQL(sql10, new String[]{});
+
         db.close();
     }
 
     public void update(TbDogLineSecond bean){
         SQLiteDatabase db = mHelper.getWritableDatabase();
         String sql = "replace into" + DOGDBOpenHelper.TABLE_DOB_SECOND + "(id,mainId,lat,lng,isDele,updateTime) values (?,?,?,?,?,?)";
-        db.execSQL(sql, new String[]{String.valueOf(bean.getId()), String.valueOf(bean.getMainId()), String.valueOf(bean.getLng()),
-                String.valueOf(bean.getLat()), String.valueOf(bean.getIsDele()), String.valueOf(bean.getUpdateTimeKey())});
+        db.execSQL(sql, new String[]{String.valueOf(bean.getId()), String.valueOf(bean.getMainId()), String.valueOf(bean.getLat()),
+                String.valueOf(bean.getLng()), String.valueOf(bean.getIsDele()), String.valueOf(bean.getUpdateTimeKey())});
         db.close();
     }
 

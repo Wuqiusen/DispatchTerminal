@@ -66,4 +66,81 @@
         <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
         <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
     </style>
+
+
+        <style name="main_tab_bottom">
+            <item name="android:textSize">@dimen/font_small</item>
+            <item name="android:textColor">@color/main_tab_font_select</item>
+            <item name="android:ellipsize">marquee</item>
+            <item name="android:gravity">center_horizontal</item>
+            <item name="android:background">@drawable/rb_main_tab_backgroud</item>
+            <item name="android:paddingBottom">@dimen/margin_tiny</item>
+            <item name="android:layout_width">0dp</item>
+            <item name="android:layout_height">match_parent</item>
+            <item name="android:button">@null</item>
+            <item name="android:singleLine">true</item>
+            <item name="android:layout_weight">1.0</item>
+            <item name="android:layout_marginTop">2dp</item>
+            <item name="android:paddingTop">4dp</item>
+        </style>
+
+        <style name="et_style1">
+            <item name="android:background">@drawable/et_background</item>
+            <item name="android:paddingLeft">@dimen/margin_fit</item>
+            <item name="android:textSize">@dimen/font_medium</item>
+            <item name="android:textColor">@color/font_black</item>
+            <item name="android:textCursorDrawable">@drawable/color_cursor</item>
+        </style>
+
+        <style name="btn_big_blue_normal_style">
+            <item name="android:background">@drawable/btn_big_blue_style</item>
+            <item name="android:textColor">@color/white</item>
+            <item name="android:paddingRight">@dimen/margin_tiny</item>
+            <item name="android:paddingLeft">@dimen/margin_tiny</item>
+            <item name="android:layout_marginRight">@dimen/btn_margin</item>
+            <item name="android:layout_marginLeft">@dimen/btn_margin</item>
+        </style>
+
+        <style name="btn_big_green_normal_style">
+            <item name="android:background">@drawable/btn_big_green_style</item>
+            <item name="android:textColor">@color/white</item>
+            <item name="android:textSize">@dimen/font_large</item>
+            <item name="android:paddingRight">@dimen/margin_tiny</item>
+            <item name="android:paddingLeft">@dimen/margin_tiny</item>
+        </style>
+
+
+
+        <style name="getcode_button_style">
+            <item name="android:background">@drawable/btn_big_blue_style</item>
+            <item name="android:textColor">@color/white</item>
+            <item name="android:paddingRight">@dimen/margin_tiny</item>
+            <item name="android:paddingLeft">@dimen/margin_tiny</item>
+        </style>
+
+
+        <style name="red_button_style">
+            <item name="android:background">@drawable/btn_red_style</item>
+            <item name="android:textColor">@color/white</item>
+            <item name="android:textSize">@dimen/font_xlarge</item>
+            <item name="android:paddingRight">@dimen/margin_tiny</item>
+            <item name="android:paddingLeft">@dimen/margin_tiny</item>
+        </style>
+
+
+        <style name="blue_button_style">
+            <item name="android:background">@drawable/btn_blue_style</item>
+            <item name="android:textColor">@color/white</item>
+            <item name="android:textSize">@dimen/font_xlarge</item>
+            <item name="android:paddingRight">@dimen/margin_tiny</item>
+            <item name="android:paddingLeft">@dimen/margin_tiny</item>
+        </style>
+
+        <style name="green_button_style">
+            <item name="android:background">@drawable/btn_green_style</item>
+            <item name="android:textColor">@color/white</item>
+            <item name="android:textSize">@dimen/font_large</item>
+            <item name="android:paddingRight">@dimen/margin_tiny</item>
+            <item name="android:paddingLeft">@dimen/margin_tiny</item>
+        </style>
 </resources>

@@ -14,7 +14,6 @@ import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.zxw.data.db.bean.InnerReportPointBean;
 import com.zxw.data.sp.SpUtils;
-import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.adapter.AutoReportStationAdapter;
 import com.zxw.dispatch_driver.adapter.ServiceWordAdapter;
@@ -47,12 +46,13 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        String lineName = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_NAME);
-        showTitle(lineName + " 自动报站");
+//        hideHeadArea();
+//        String lineName = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_NAME);
+        showTitle("自动报站");
         showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SpUtils.deleteLineHistory(MyApplication.mContext);
+//                SpUtils.deleteLineHistory(MyApplication.mContext);
                 finish();
             }
         });
@@ -84,14 +84,14 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
             @Override
             public void onMapClick(LatLng latLng) {
                 drawDriverTrackMarker(latLng);
-                presenter.drive(latLng.latitude, latLng.longitude);
+                mPresenter.drive(latLng.latitude, latLng.longitude);
             }
         });
 
         mLineId = Long.valueOf(SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID));
-        presenter.loadStationsName(mLineId);
-        presenter.loadReportPotins(mLineId);
-        presenter.loadServiceWord();
+        mPresenter.loadStationsName(mLineId);
+        mPresenter.loadReportPotins(mLineId);
+        mPresenter.loadServiceWord();
     }
 
     @Override

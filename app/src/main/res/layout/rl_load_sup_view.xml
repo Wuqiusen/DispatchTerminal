@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:gravity="center">
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:scrollbars="none" />
+    <RelativeLayout
+        android:id="@+id/display_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <RelativeLayout
+            android:id="@+id/rl_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+            <TextView
+                android:id="@+id/tv_noline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="暂无相关信息"
+                android:textSize="18sp"
+                android:textColor="@color/font_gray2"
+                android:drawableLeft="@drawable/img_plaint"
+                android:layout_centerHorizontal="true"
+                />
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/img_ebus"
+                android:layout_below="@+id/tv_noline"
+                android:layout_marginTop="@dimen/margin_fit"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/progress_bar"
+            android:visibility="gone">
+
+            <ProgressBar
+                style="@style/myProgressBarStyleLarge"
+                android:layout_width="63dp"
+                android:layout_height="63dp"
+                android:layout_centerInParent="true"
+                android:indeterminateDuration="700"
+                android:background="@drawable/tool_pb_bg"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>
