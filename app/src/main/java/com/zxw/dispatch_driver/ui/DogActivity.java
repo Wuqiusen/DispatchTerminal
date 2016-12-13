@@ -15,10 +15,12 @@ import com.amap.api.maps2d.model.MarkerOptions;
 import com.zxw.data.db.bean.TbDogLineMain;
 import com.zxw.data.db.bean.TbDogLineSecond;
 import com.zxw.data.sp.SpUtils;
+import com.zxw.dispatch_driver.Constants;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.presenter.DogPresenter;
 import com.zxw.dispatch_driver.presenter.view.DogView;
+import com.zxw.dispatch_driver.service.DogService;
 import com.zxw.dispatch_driver.ui.base.PresenterActivity;
 import com.zxw.dispatch_driver.utils.DebugLog;
 
@@ -33,6 +35,8 @@ public class DogActivity extends PresenterActivity<DogPresenter> implements DogV
     @Bind(R.id.et_mock_speed)
     EditText mEtMockSpeed;
     private AMap mMap;
+
+    private Intent latLngIntent = new Intent(Constants.RECEIVER_GPS);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +70,22 @@ public class DogActivity extends PresenterActivity<DogPresenter> implements DogV
                             .icon(BitmapDescriptorFactory
                                     .fromResource(R.mipmap.off_station_point))
                             .draggable(true));
-                    mPresenter.drive(latLng.latitude, latLng.longitude);
+//                    mPresenter.drive(latLng.latitude, latLng.longitude);
+                    drive(latLng.latitude, latLng.longitude);
                     DebugLog.w(latLng.latitude+ "," + latLng.longitude);
                 }
             });
             mPresenter.loadDogByLineId(Integer.valueOf(lineId));
         }
+
+        startService(new Intent(this, DogService.class));
+    }
+
+    private void drive(double latitude, double longitude) {
+        latLngIntent.putExtra("lat", latitude);
+        latLngIntent.putExtra("lng", longitude);
+        latLngIntent.putExtra("speed", 76d);
+        sendBroadcast(latLngIntent);
     }
 
 

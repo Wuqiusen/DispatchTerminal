@@ -27,6 +27,7 @@ public class SpUtils {
 
     public final static String CURRENT_LINE_ID = "current_line_id";
     public final static String CURRENT_LINE_NAME = "current_line_name";
+    public final static String IS_SET_ALIAS = "is_set_alias";//是否已经设置别名
 
     private static void initSp(Context mContext, String fileName) {
         sp = mContext.getSharedPreferences(fileName,Context.MODE_PRIVATE);
@@ -107,5 +108,32 @@ public class SpUtils {
             return false;
         }
         return true;
+    }
+
+
+    //是否已经设置别名参数
+    public static void isSetAlias(Context context){
+        if (sp == null){
+            initSp(context, CACHE_FILE_NAME);
+        }
+        if (!sp.contains(IS_SET_ALIAS)){
+            setAlias(context, false);
+        }
+    }
+    //是否已经设置别名
+    public static boolean getIsSetAlias(Context context){
+        if(sp == null){
+            initSp(context, CACHE_FILE_NAME);
+        }
+        return sp.getBoolean(IS_SET_ALIAS, Boolean.parseBoolean(""));
+    }
+    //设置别名参数
+    public static void setAlias(Context mContext, boolean isSetAlias){
+        if(sp == null){
+            initSp(mContext,CACHE_FILE_NAME);
+        }
+        SharedPreferences.Editor edit = sp.edit();
+        edit.putBoolean(IS_SET_ALIAS, isSetAlias);
+        edit.commit();
     }
 }

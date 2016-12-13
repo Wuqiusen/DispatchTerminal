@@ -33,4 +33,11 @@ public class BasePresenter<V extends BaseView> {
 //    protected String md5(String str){
 //        return MD5.MD5Encode(str);
 //    }
+
+    protected void invalidKeyCode(int returnCode){
+        if(returnCode == 510){
+            SpUtils.logOut(MyApplication.mContext);
+            mvpView.invalidKeyCode();
+        }
+    }
 }

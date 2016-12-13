@@ -11,4 +11,7 @@ public class Constants {
     }
     public static final int SUCCESS = 500;
     public static final int FAILED = 505;
+
+    public static final String RECEIVER_GPS = "com.zxw.gps.receiver";
+
 }

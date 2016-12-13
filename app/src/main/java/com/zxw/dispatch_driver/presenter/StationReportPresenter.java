@@ -42,7 +42,7 @@ public class StationReportPresenter extends BasePresenter<StationReportView> imp
         mSpeakUtil.init();
     }
 
-    public void loadStations(int mLineId) {
+    public void loadStations(long mLineId) {
         LineStationDao lineStationDao = new LineStationDao(mContext);
         List<StationBean> stationBeen = lineStationDao.queryStations(mLineId);
         ManualReportStationAdapter manualReportStationAdapter = new ManualReportStationAdapter(stationBeen, mContext);

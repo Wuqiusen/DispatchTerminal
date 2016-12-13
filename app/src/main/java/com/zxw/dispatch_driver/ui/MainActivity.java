@@ -49,6 +49,7 @@ public class MainActivity extends PresenterActivity<MainPresenter> implements Ma
         ButterKnife.bind(this);
         hideHeadArea();
         initViewPager();
+        mPresenter.jPushComponent();
     }
 
     private void initViewPager() {
@@ -177,5 +178,13 @@ public class MainActivity extends PresenterActivity<MainPresenter> implements Ma
         super.onResume();
         mPresenter.reloadJourneyList();
         mPresenter.reloadReceiveList();
+        mPresenter.isSetAlias();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.unregisterReceiver();
     }
 }

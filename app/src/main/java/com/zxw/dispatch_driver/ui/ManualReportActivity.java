@@ -31,11 +31,11 @@ public class ManualReportActivity extends PresenterActivity<StationReportPresent
         String lineName = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_NAME);
         showTitle("人工报站");
         showBackButton();
-
+        hideHeadArea();
         ButterKnife.bind(this);
 
-        int lineId = getIntent().getIntExtra("lineId", 42);
-        DebugLog.w(lineId);
+        long lineId = getIntent().getLongExtra("lineId", 42);
+        DebugLog.w("lineId :" + lineId);
         mPresenter.loadStations(lineId);
         mPresenter.loadServiceWord();
     }
@@ -48,7 +48,7 @@ public class ManualReportActivity extends PresenterActivity<StationReportPresent
 
     @Override
     public void setServiceWordAdapter(ServiceWordAdapter serviceWordAdapter) {
-        mRecyclerViewServiceWord.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
+        mRecyclerViewServiceWord.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
         mRecyclerViewServiceWord.setAdapter(serviceWordAdapter);
     }
 

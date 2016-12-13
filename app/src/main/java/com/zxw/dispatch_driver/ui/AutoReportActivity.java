@@ -1,10 +1,14 @@
 package com.zxw.dispatch_driver.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
@@ -14,6 +18,7 @@ import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.zxw.data.db.bean.InnerReportPointBean;
 import com.zxw.data.sp.SpUtils;
+import com.zxw.dispatch_driver.Constants;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.adapter.AutoReportStationAdapter;
 import com.zxw.dispatch_driver.adapter.ServiceWordAdapter;
@@ -21,6 +26,7 @@ import com.zxw.dispatch_driver.presenter.AutoReportPresenter;
 import com.zxw.dispatch_driver.presenter.view.AutoReportView;
 import com.zxw.dispatch_driver.ui.base.PresenterActivity;
 import com.zxw.dispatch_driver.utils.DebugLog;
+import com.zxw.dispatch_driver.utils.ToastHelper;
 import com.zxw.dispatch_driver.view.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -28,6 +34,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> implements AutoReportView {
     private List<Marker> mStationMarkers = new ArrayList<>();
@@ -37,8 +44,11 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
     RecyclerView mRecyclerView;
     @Bind(R.id.rv_service_word)
     RecyclerView mRecyclerViewServiceWord;
+    @Bind(R.id.btn_rengong)
+    Button btn_rengong;
     private AMap mMap;
     private long mLineId;
+    private LatLngReceiver myLatLngReceiver;
 
 
     @Override
@@ -49,6 +59,7 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
 //        hideHeadArea();
 //        String lineName = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_NAME);
         showTitle("自动报站");
+        hideHeadArea();
         showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,20 +91,31 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
                 DebugLog.i("地图加载完成");
             }
         });
-        mMap.setOnMapClickListener(new AMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                drawDriverTrackMarker(latLng);
-                mPresenter.drive(latLng.latitude, latLng.longitude);
-            }
-        });
+//        mMap.setOnMapClickListener(new AMap.OnMapClickListener() {
+//            @Override
+//            public void onMapClick(LatLng latLng) {
+//                drawDriverTrackMarker(latLng);
+//                mPresenter.drive(latLng.latitude, latLng.longitude);
+//            }
+//        });
 
         mLineId = Long.valueOf(SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID));
         mPresenter.loadStationsName(mLineId);
         mPresenter.loadReportPotins(mLineId);
         mPresenter.loadServiceWord();
+
+        myLatLngReceiver = new LatLngReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.RECEIVER_GPS);
+        registerReceiver(myLatLngReceiver, filter);
     }
 
+    @OnClick(R.id.btn_rengong)
+    public void rengong(){
+        Intent intent = new Intent(AutoReportActivity.this, ManualReportActivity.class);
+        intent.putExtra("lineId", mLineId);
+        startActivity(intent);
+    }
     @Override
     public void setStationListAdapter(AutoReportStationAdapter stationReportAdapter) {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
@@ -104,7 +126,7 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
 
     @Override
     public void setServiceWordAdapter(ServiceWordAdapter serviceWordAdapter) {
-        mRecyclerViewServiceWord.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
+        mRecyclerViewServiceWord.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
         mRecyclerViewServiceWord.setAdapter(serviceWordAdapter);
     }
 
@@ -144,5 +166,23 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
                         .fromResource(R.mipmap.off_station_point))
                 .draggable(true));
         mTrackMarkers.add(marker);
+    }
+    public class LatLngReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Constants.RECEIVER_GPS.equals(intent.getAction())){
+                double lat = intent.getDoubleExtra("lat", -1d);
+                double lng = intent.getDoubleExtra("lng", -1d);
+                mPresenter.drive(lat, lng);
+                ToastHelper.showToast(lat+ "," + lng);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(myLatLngReceiver);
     }
 }

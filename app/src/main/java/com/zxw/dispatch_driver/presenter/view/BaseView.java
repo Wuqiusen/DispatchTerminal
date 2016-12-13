@@ -10,4 +10,6 @@ public interface BaseView {
 
     void disPlay(String s);
     void finish();
+
+    void invalidKeyCode();
 }

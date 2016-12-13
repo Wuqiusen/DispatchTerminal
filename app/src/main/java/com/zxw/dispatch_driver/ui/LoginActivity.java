@@ -41,7 +41,7 @@ public class LoginActivity extends PresenterActivity<LoginPresenter> implements 
 
     @Override
     protected LoginPresenter createPresenter() {
-        return new LoginPresenter(this);
+        return new LoginPresenter(this, this);
     }
 
     @OnClick(R.id.btn_login)
