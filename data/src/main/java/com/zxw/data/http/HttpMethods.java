@@ -11,6 +11,7 @@ import com.zxw.data.bean.UpdateReportPointBean;
 import com.zxw.data.bean.UpdateServiceWordBean;
 import com.zxw.data.bean.UpdateStationBean;
 import com.zxw.data.bean.UpdateVoiceCompoundBean;
+import com.zxw.data.bean.VersionBean;
 import com.zxw.data.db.bean.TbDogLineMain;
 import com.zxw.data.db.bean.TbDogLineSecond;
 
@@ -30,6 +31,7 @@ import rx.schedulers.Schedulers;
 public class HttpMethods {
     public static final String BASE_URL = "http://192.168.0.90:8080/yd_app/";
     public Retrofit retrofit = RetrofitSetting.getInstance();
+
 
     private static class SingletonHolder{
         private static final HttpMethods INSTANCE = new HttpMethods();
@@ -136,6 +138,13 @@ public class HttpMethods {
     public void lineDetail(String code, String keyCode, int lineId, Subscriber<LineDetail> subscriber){
         HttpInterfaces.Dispatch dispatch = retrofit.create(HttpInterfaces.Dispatch.class);
         Observable<LineDetail> observable = dispatch.lineDetail(code, keyCode, lineId).map(new HttpResultFunc<LineDetail>());
+        toSubscribe(observable, subscriber);
+    }
+
+    public void checkVersion(String keyCode, Subscriber<VersionBean> subscriber) {
+        HttpInterfaces.UpdateVersion updateVersion = retrofit.create(HttpInterfaces.UpdateVersion.class);
+        Observable<VersionBean> observable = updateVersion.checkVersion("http://slb.szebus.net/version/phone/last/data", keyCode)
+                .map(new HttpResultFunc<VersionBean>());
         toSubscribe(observable, subscriber);
     }
 }

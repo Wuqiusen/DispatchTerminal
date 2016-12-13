@@ -14,4 +14,8 @@ public class Constants {
 
     public static final String RECEIVER_GPS = "com.zxw.gps.receiver";
 
+    public class Path{
+        public static final String SECONDPATH = "DriverDevice/download";
+        public static final String APKNAME = "DriverDevice.apk";
+    }
 }
