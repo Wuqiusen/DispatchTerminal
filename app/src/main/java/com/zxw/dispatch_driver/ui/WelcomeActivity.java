@@ -14,6 +14,8 @@ import com.zxw.data.source.VoiceCompoundSource;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.ui.base.BaseHeadActivity;
+import com.zxw.dispatch_driver.utils.InitializeAssertFileUtil;
+
 
 public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUpdateLineTableFinishListener, StationSource.OnUpdateStationFinishListener, LineStationSource.OnUpdateLineStationFinishListener, ReportPointSource.OnUpdateReportPointFinishListener, ServiceWordSource.OnUpdateServiceWordTableFinishListener, VoiceCompoundSource.OnUpdateVoiceCompoundTableFinishListener, DogMainSource.OnUpdateDogMainTableFinishListener, DogSecondSource.OnUpdateDogSecondTableFinishListener {
 
@@ -24,9 +26,15 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         hideHeadArea();
+
         showLoading();
+        initializeAssertFile();
         update();
         hideLoading();
+    }
+
+    private void initializeAssertFile() {
+        InitializeAssertFileUtil.initialize(MyApplication.mContext);
     }
 
     private void update() {

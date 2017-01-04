@@ -2,13 +2,22 @@ package com.zxw.dispatch_driver;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Environment;
 
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.zxw.dispatch_driver.utils.DebugLog;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.io.StringWriter;
+import java.lang.reflect.Field;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -27,6 +36,64 @@ public class MyApplication extends Application {
 
         JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
         JPushInterface.init(this);     		// 初始化 JPush
+
+//        Thread.currentThread().setUncaughtExceptionHandler(
+//                new MyUncaughtExceptionHandler());
+    }
+
+    private class MyUncaughtExceptionHandler implements
+            Thread.UncaughtExceptionHandler {
+
+        @Override
+        public void uncaughtException(Thread thread, Throwable ex) {
+            // TODO Auto-generated method stub
+            // 获取异常信息 （补救）
+            // 把异常写到文件里 放到sd卡
+            // 服务器上传
+            try {
+                // byte[] file String
+
+                StringWriter sw = new StringWriter();
+                PrintWriter err = new PrintWriter(sw);
+
+                Field[] fields = Build.class.getFields();
+                for (Field f : fields) {
+                    sw.write(f.getName() + ":" + f.get(null) + "\n");// 静态属性
+                    // 不需要对象
+                }
+
+                ex.printStackTrace(err);
+                String errorLog = sw.toString();
+
+                //保存到本地
+                String filePath = Environment.getExternalStorageDirectory()+"/"+Constants.Path.ERRORPATH;
+                String fileName = "log.txt";
+                writeTxtToFile(errorLog, filePath, fileName);
+
+                sw.close();
+                err.close();
+                PackageManager pm = getPackageManager();
+                Intent intent = pm.getLaunchIntentForPackage("com.zxw.dispatch_driver");
+                startActivity(intent);
+                // 自杀 重生
+                android.os.Process.killProcess(android.os.Process.myPid());
+
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
     }
 
     // 将字符串写入到文本文件中

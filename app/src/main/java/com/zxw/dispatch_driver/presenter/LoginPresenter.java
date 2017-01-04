@@ -12,6 +12,7 @@ import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.jpush.ExampleUtil;
 import com.zxw.dispatch_driver.presenter.view.LoginView;
 import com.zxw.dispatch_driver.utils.DebugLog;
+import com.zxw.dispatch_driver.utils.BroadcastUtil;
 
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -59,7 +60,8 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     }
 
     public void verifyAccount(String userName, String password) {
-        String time = String.valueOf(new Date().getTime());
+        Date date = new Date();
+        String time = String.valueOf(date.getTime());
         String md5Password = MD5.MD5Encode(MD5.MD5Encode(password) + time);
         mSource.login(userName, String.valueOf(time), md5Password, new Subscriber<Login>() {
             @Override
@@ -74,13 +76,17 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             @Override
             public void onNext(Login loginBean) {
-                SpUtils.setCache(MyApplication.mContext, SpUtils.CODE, loginBean.getCode());
-                SpUtils.setCache(MyApplication.mContext, SpUtils.NAME, loginBean.getName());
-                SpUtils.setCache(MyApplication.mContext, SpUtils.KEYCODE, loginBean.getKeyCode());
-
+                cacheLoginInfo(loginBean);
+                BroadcastUtil.loginIn(loginBean.getName(), loginBean.getCode());
                 jPushComponent();
             }
         });
+    }
+
+    private void cacheLoginInfo(Login loginBean) {
+        SpUtils.setCache(MyApplication.mContext, SpUtils.CODE, loginBean.getCode());
+        SpUtils.setCache(MyApplication.mContext, SpUtils.NAME, loginBean.getName());
+        SpUtils.setCache(MyApplication.mContext, SpUtils.KEYCODE, loginBean.getKeyCode());
     }
 
     public void jPushComponent() {

@@ -70,7 +70,7 @@ public class DogActivity extends PresenterActivity<DogPresenter> implements DogV
                             .icon(BitmapDescriptorFactory
                                     .fromResource(R.mipmap.off_station_point))
                             .draggable(true));
-//                    mPresenter.drive(latLng.latitude, latLng.longitude);
+                    mPresenter.drive(latLng.latitude, latLng.longitude);
                     drive(latLng.latitude, latLng.longitude);
                     DebugLog.w(latLng.latitude+ "," + latLng.longitude);
                 }

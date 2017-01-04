@@ -20,4 +20,6 @@ public interface AutoReportView extends BaseView {
     void setServiceWordAdapter(ServiceWordAdapter serviceWordAdapter);
 
     void drawStationMarker(List<InnerReportPointBean> lineStationReportBeen);
+
+    void scrollView(int position);
 }

@@ -1,8 +1,11 @@
 package com.zxw.dispatch_driver.presenter;
 
+import com.zxw.data.sp.SpUtils;
+import com.zxw.data.utils.MD5;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.presenter.view.BaseView;
-import com.zxw.data.sp.SpUtils;
+
+import java.util.Date;
 
 /**
  * author：CangJie on 2016/8/18 14:38
@@ -25,14 +28,13 @@ public class BasePresenter<V extends BaseView> {
     protected String code(){
         return SpUtils.getCache(MyApplication.mContext, SpUtils.CODE);
     }
-//    protected String timestamp(){
-//        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-//        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
-//        return formatter.format(curDate);
-//    }
-//    protected String md5(String str){
-//        return MD5.MD5Encode(str);
-//    }
+    protected String timestamp(){
+        Date date = new Date();
+        return String.valueOf(date.getTime());
+    }
+    protected String md5(String str){
+        return MD5.MD5Encode(str);
+    }
 
     protected void invalidKeyCode(int returnCode){
         if(returnCode == 510){

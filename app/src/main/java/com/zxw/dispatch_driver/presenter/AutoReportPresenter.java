@@ -3,15 +3,15 @@ package com.zxw.dispatch_driver.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.zxw.data.db.bean.InnerReportPointBean;
-import com.zxw.data.db.bean.ServiceWordBean;
-import com.zxw.data.db.bean.StationBean;
-import com.zxw.data.db.bean.VoiceCompoundBean;
 import com.zxw.data.dao.LineStationDao;
 import com.zxw.data.dao.ReportPointDao;
 import com.zxw.data.dao.ServiceWordDao;
 import com.zxw.data.dao.StationDao;
 import com.zxw.data.dao.VoiceCompoundDao;
+import com.zxw.data.db.bean.InnerReportPointBean;
+import com.zxw.data.db.bean.ServiceWordBean;
+import com.zxw.data.db.bean.StationBean;
+import com.zxw.data.db.bean.VoiceCompoundBean;
 import com.zxw.dispatch_driver.adapter.AutoReportStationAdapter;
 import com.zxw.dispatch_driver.adapter.ServiceWordAdapter;
 import com.zxw.dispatch_driver.presenter.view.AutoReportView;
@@ -31,7 +31,7 @@ import static com.zxw.dispatch_driver.MyApplication.mContext;
  */
 public class AutoReportPresenter extends BasePresenter<AutoReportView> {
 
-    public static final double RADIUS = 50;
+    public static final double RADIUS = 80;
 
 //    private final List<LineStationReportBean> lineStationReportBeen;
     private final VoiceCompoundDao mVoiceCompoundDao;
@@ -97,6 +97,8 @@ public class AutoReportPresenter extends BasePresenter<AutoReportView> {
                                 bean.getLat(), bean.getLng(), nextBean.getLat(), nextBean.getLng())) {
                             // 报站操作
                             speakVoice(bean.getType(), bean.getStationId());
+                            // 报站列表滑动到触发事件的站点
+                            scrollView(i);
                             // 记录标记
                             lastArriveOnPoint = bean.getSortNum();
                             mStationNameAdapter.reportPositionRecord(bean.getStationId());
@@ -125,6 +127,11 @@ public class AutoReportPresenter extends BasePresenter<AutoReportView> {
 
         }
     }
+
+    private void scrollView(int i) {
+        mvpView.scrollView(i);
+    }
+
     private boolean judgeAngle(double driveLat1, double driveLng1, double driveLat2, double driveLng2,
                                double checkLat1, double checkLng1, double checkLat2, double checkLng2) {
         CalculateAngleUtil.RoadTrack track = new CalculateAngleUtil.RoadTrack(driveLat1, driveLng1, driveLat2, driveLng2);
@@ -182,6 +189,4 @@ public class AutoReportPresenter extends BasePresenter<AutoReportView> {
         ServiceWordAdapter serviceWordAdapter = new ServiceWordAdapter(mContext, serviceWordBeen);
         mvpView.setServiceWordAdapter(serviceWordAdapter);
     }
-
-
 }

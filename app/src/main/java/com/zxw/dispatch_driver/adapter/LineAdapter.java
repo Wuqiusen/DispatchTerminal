@@ -53,9 +53,9 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder> {
 
             @Override
             public void onClick(View v) {
-                mListener.onClickLine(lineBean);
                 SpUtils.setCache(mContext, SpUtils.CURRENT_LINE_ID, String.valueOf(lineBean.getLineId()));
                 SpUtils.setCache(mContext, SpUtils.CURRENT_LINE_NAME, lineBean.getLineName());
+                mListener.onClickLine(lineBean);
             }
         });
     }

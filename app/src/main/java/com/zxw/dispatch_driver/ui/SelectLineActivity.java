@@ -12,6 +12,7 @@ import com.zxw.data.db.bean.LineBean;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.adapter.LineAdapter;
+import com.zxw.dispatch_driver.service.DogService;
 import com.zxw.dispatch_driver.ui.base.BaseHeadActivity;
 import com.zxw.dispatch_driver.view.DividerItemDecoration;
 
@@ -65,11 +66,13 @@ public class SelectLineActivity extends BaseHeadActivity implements LineAdapter.
     @Override
     public void onClickLine(LineBean currentBean) {
         Intent intent = null;
-        if(dog_start){
-            intent = new Intent(mContext, DogActivity.class);
-        }else{
+//        if(dog_start){
+//            intent = new Intent(mContext, DogActivity.class);
+//        }else{
+            startService(new Intent(this, DogService.class));
             intent = new Intent(mContext, AutoReportActivity.class);
-        }
+//        }
         mContext.startActivity(intent);
+        finish();
     }
 }

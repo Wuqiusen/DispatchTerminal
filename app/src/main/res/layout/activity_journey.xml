@@ -29,6 +29,12 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:text="异常终止" />
+    <Button
+        android:id="@+id/btn_resume_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="报站界面" />
     <TextView
         android:id="@+id/tv_prompt"
         android:layout_width="match_parent"

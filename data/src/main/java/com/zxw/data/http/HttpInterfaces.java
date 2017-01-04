@@ -17,8 +17,10 @@ import com.zxw.data.db.bean.TbDogLineSecond;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -54,6 +56,21 @@ public class HttpInterfaces {
         Observable<BaseBean<Login>> login(@Field("code") String code,
                                           @Field("password") String password,
                                           @Field("time") String time);
+        @FormUrlEncoded
+        @POST("phone/visitor/driver/card/login")
+        Observable<BaseBean<Login>> loginByEmployeeCard(@Field("uuid") String uuid,
+                                          @Field("time") String time);
+
+        @FormUrlEncoded
+        @POST
+        Call<ResponseBody> face(@Url String url,
+                                         @Field("api_key") String api_key,
+                                         @Field("api_secret") String api_secret,
+                                         @Field("image_url1") String image_url1,
+                                         @Field("image_url2") String image_url2);
+        @POST
+        Call<ResponseBody> verifyFaceByFile(@Url String url,
+                                         @Body RequestBody Body);
     }
 
     /**

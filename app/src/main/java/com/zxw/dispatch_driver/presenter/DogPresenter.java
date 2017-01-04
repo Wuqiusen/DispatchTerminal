@@ -2,10 +2,8 @@ package com.zxw.dispatch_driver.presenter;
 
 import com.zxw.data.dao.DogMainDao;
 import com.zxw.data.dao.DogSecondDao;
-import com.zxw.data.dao.VoiceCompoundDao;
 import com.zxw.data.db.bean.TbDogLineMain;
 import com.zxw.data.db.bean.TbDogLineSecond;
-import com.zxw.data.db.bean.VoiceCompoundBean;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.presenter.view.DogView;
 import com.zxw.dispatch_driver.ui.DogActivity;
@@ -32,7 +30,6 @@ public class DogPresenter extends BasePresenter<DogView> {
     private int mockSpeed = -1;
     private boolean isOverspeedRoad;
     private DogActivity mActivity;
-    private final VoiceCompoundDao mVoiceCompoundDao;
 
 
     public DogPresenter(DogView mvpView, DogActivity activity) {
@@ -40,8 +37,6 @@ public class DogPresenter extends BasePresenter<DogView> {
         mDogMainDao = new DogMainDao(MyApplication.mContext);
         mDogSecondDao = new DogSecondDao(MyApplication.mContext);
         this.mActivity = activity;
-
-        mVoiceCompoundDao = new VoiceCompoundDao(MyApplication.mContext);
 
         mSpeakUtil = SpeakUtil.getInstance(MyApplication.mContext);
         mSpeakUtil.init();
@@ -85,7 +80,7 @@ public class DogPresenter extends BasePresenter<DogView> {
                 if(isOverSpeed(main)){
                     //当前值大于或等于比较值 则报告
 //                    ToastHelper.showToast("比较后播放语音id: " + main.getVoiceId());
-                    voice(main.getVoiceId());
+                    voice(main.getVoiceContent());
                     // 判断是否需要报告后台
 
                     if(isCommit(main)){
@@ -95,7 +90,7 @@ public class DogPresenter extends BasePresenter<DogView> {
             }else{
                 //直接播放
 //                ToastHelper.showToast("直接播放 播放语音id: " + main.getVoiceId());
-                voice(main.getVoiceId());
+                voice(main.getVoiceContent());
             }
             lastCompoundPointPosition = second.getId();
         }
@@ -109,7 +104,7 @@ public class DogPresenter extends BasePresenter<DogView> {
                 if(isOverSpeed(main)){
                     //当前值大于或等于比较值 则报告
 //                    ToastHelper.showToast("比较后播放语音id: " + main.getVoiceId());
-                    voice(main.getVoiceId());
+                    voice(main.getVoiceContent());
                     // 判断是否需要报告后台
 
                     if(isCommit(main)){
@@ -119,15 +114,14 @@ public class DogPresenter extends BasePresenter<DogView> {
             }else{
                 //直接播放
 //                ToastHelper.showToast("直接播放 播放语音id: " + main.getVoiceId());
-                voice(main.getVoiceId());
+                voice(main.getVoiceContent());
             }
             lastSinglePointPosition = second.getId();
         }
     }
 
-    private void voice(Long voiceId) {
-        VoiceCompoundBean voiceCompoundBean = mVoiceCompoundDao.queryVoiceCompound(voiceId);
-        mSpeakUtil.playText(voiceCompoundBean.getContent());
+    private void voice(String voiceContent) {
+        mSpeakUtil.playText(voiceContent);
     }
 
     private boolean isCommit(TbDogLineMain main){

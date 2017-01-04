@@ -21,7 +21,6 @@ import com.zxw.data.dao.DogSecondDao;
 import com.zxw.data.dao.VoiceCompoundDao;
 import com.zxw.data.db.bean.TbDogLineMain;
 import com.zxw.data.db.bean.TbDogLineSecond;
-import com.zxw.data.db.bean.VoiceCompoundBean;
 import com.zxw.data.sp.SpUtils;
 import com.zxw.dispatch_driver.Constants;
 import com.zxw.dispatch_driver.MyApplication;
@@ -31,6 +30,12 @@ import com.zxw.dispatch_driver.utils.SpeakUtil;
 import com.zxw.dispatch_driver.utils.ToastHelper;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 import static com.zxw.dispatch_driver.MyApplication.mContext;
 import static com.zxw.dispatch_driver.presenter.AutoReportPresenter.RADIUS;
@@ -67,7 +72,31 @@ public class DogService extends Service {
 
     private void dogWork(String lineId) {
         init();
+//        mockLatLng();
         mDogLineMains = mDogMainDao.queryByLineID(Integer.valueOf(lineId));
+    }
+
+    private void mockLatLng() {
+        final double[] lat = new double[]{22.64364, 22.644945, 22.645887, 22.641946};
+        final double[] lng = new double[]{114.010765, 114.012847, 114.014228, 114.009048};
+        Observable.interval(6, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Long>() {
+                    int current = 0;
+                    @Override
+                    public void call(Long aLong) {
+                        if (current < 3){
+                            LatLng latLng = new LatLng(lat[current], lng[current]);
+                            drive(lat[current], lng[current]);
+                            sendPositionBroadcast(latLng);
+                            current++;
+                        }else{
+                            current = 0;
+                        }
+                    }
+                });
     }
 
     private void init() {
@@ -130,11 +159,16 @@ public class DogService extends Service {
         drive(desLatLng.latitude, desLatLng.longitude);
 
 
+        sendPositionBroadcast(desLatLng);
+    }
+
+    private void sendPositionBroadcast(LatLng desLatLng) {
         latLngIntent.putExtra("lat", desLatLng.latitude);
         latLngIntent.putExtra("lng", desLatLng.longitude);
         latLngIntent.putExtra("speed", mCurrentSpeed);
         sendBroadcast(latLngIntent);
     }
+
     public void drive(double lat, double lng){
         checkNearPoint(lat, lng);
         lastLat = lat;
@@ -175,7 +209,7 @@ public class DogService extends Service {
                 if(isOverSpeed(main)){
                     //当前值大于或等于比较值 则报告
 //                    ToastHelper.showToast("比较后播放语音id: " + main.getVoiceId());
-                    voice(main.getVoiceId());
+                    voice(main.getVoiceContent());
                     // 判断是否需要报告后台
                     if(isCommit(main)){
                         ToastHelper.showToast("报告后台 " + main.getId() +" 驾驶员违反这条规定");
@@ -184,15 +218,14 @@ public class DogService extends Service {
             }else{
                 //直接播放
 //                ToastHelper.showToast("直接播放 播放语音id: " + main.getVoiceId());
-                voice(main.getVoiceId());
+                voice(main.getVoiceContent());
             }
             lastSinglePointPosition = second.getId();
         }
     }
 
-    private void voice(Long voiceId) {
-        VoiceCompoundBean voiceCompoundBean = mVoiceCompoundDao.queryVoiceCompound(voiceId);
-        mSpeakUtil.playText(voiceCompoundBean.getContent());
+    private void voice(String voiceContent) {
+        mSpeakUtil.playText(voiceContent);
     }
 
     private boolean isCommit(TbDogLineMain main){
@@ -215,7 +248,7 @@ public class DogService extends Service {
                 if(isOverSpeed(main)){
                     //当前值大于或等于比较值 则报告
 //                    ToastHelper.showToast("比较后播放语音id: " + main.getVoiceId());
-                    voice(main.getVoiceId());
+                    voice(main.getVoiceContent());
                     // 判断是否需要报告后台
 
                     if(isCommit(main)){
@@ -225,7 +258,7 @@ public class DogService extends Service {
             }else{
                 //直接播放
 //                ToastHelper.showToast("直接播放 播放语音id: " + main.getVoiceId());
-                voice(main.getVoiceId());
+                voice(main.getVoiceContent());
             }
             lastCompoundPointPosition = second.getId();
         }

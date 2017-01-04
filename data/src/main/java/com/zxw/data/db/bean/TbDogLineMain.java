@@ -13,7 +13,7 @@ public class TbDogLineMain {
     private Integer isCommit;		//是否需要上报,格式：0否、1是
     private Integer isCompare;		//是否需要比较才启动语音事件 格式：0否、1是
     private Integer compareValue;	//比较值
-    private Long voiceId;			//语音模板id
+    private String voiceContent;			//语音模板id
     private Integer isDele;			//是否删除,格式：0否、1是
     private Long updateTimeKey;		//更新时间,无论是新增、修改、删除都需要更新此值,格式：yyyyMMddHHmm
     private List<TbDogLineSecond> secondList;
@@ -26,19 +26,12 @@ public class TbDogLineMain {
         this.secondList = secondList;
     }
 
-    @Override
-    public String toString() {
-        return "TbDogLineMain{" +
-                "id=" + id +
-                ", lineId=" + lineId +
-                ", type=" + type +
-                ", isCommit=" + isCommit +
-                ", isCompare=" + isCompare +
-                ", compareValue=" + compareValue +
-                ", voiceId=" + voiceId +
-                ", isDele=" + isDele +
-                ", updateTimeKey=" + updateTimeKey +
-                '}';
+    public String getVoiceContent() {
+        return voiceContent;
+    }
+
+    public void setVoiceContent(String voiceContent) {
+        this.voiceContent = voiceContent;
     }
 
     public Long getId() {
@@ -87,14 +80,6 @@ public class TbDogLineMain {
 
     public void setCompareValue(Integer compareValue) {
         this.compareValue = compareValue;
-    }
-
-    public Long getVoiceId() {
-        return voiceId;
-    }
-
-    public void setVoiceId(Long voiceId) {
-        this.voiceId = voiceId;
     }
 
     public Integer getIsDele() {

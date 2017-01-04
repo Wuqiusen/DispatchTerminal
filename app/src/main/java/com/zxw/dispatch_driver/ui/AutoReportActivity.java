@@ -7,11 +7,14 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
+import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
@@ -46,9 +49,14 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
     RecyclerView mRecyclerViewServiceWord;
     @Bind(R.id.btn_rengong)
     Button btn_rengong;
+
+    @Bind(R.id.ll_container)
+    LinearLayout ll_container;
+
     private AMap mMap;
     private long mLineId;
     private LatLngReceiver myLatLngReceiver;
+    private MapView mapView;
 
 
     @Override
@@ -77,13 +85,13 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
         });
 
         ButterKnife.bind(this);
-        com.amap.api.maps2d.MapView mapView = (com.amap.api.maps2d.MapView) findViewById(R.id.mv);
+        mapView = (MapView) findViewById(R.id.mv);
         mapView.onCreate(savedInstanceState);
         mMap = mapView.getMap();
         mMap.setOnMapLoadedListener(new AMap.OnMapLoadedListener() {
             @Override
             public void onMapLoaded() {
-                LatLng marker1 = new LatLng(22.59877,114.31347);    //设置中心点和缩放比例
+                LatLng marker1 = new LatLng(22.640081712773213,114.0111847705186);    //设置中心点和缩放比例
                 if (mMap != null) {
                     mMap.moveCamera(CameraUpdateFactory.changeLatLng(marker1));
                     mMap.moveCamera(CameraUpdateFactory.zoomTo(17));
@@ -99,7 +107,13 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
 //            }
 //        });
 
-        mLineId = Long.valueOf(SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID));
+        String lineId = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID);
+        if (TextUtils.isEmpty(lineId)){
+            startActivity(new Intent(this, SelectLineActivity.class));
+            finish();
+            return;
+        }
+        mLineId = Long.valueOf(lineId);
         mPresenter.loadStationsName(mLineId);
         mPresenter.loadReportPotins(mLineId);
         mPresenter.loadServiceWord();
@@ -108,6 +122,7 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constants.RECEIVER_GPS);
         registerReceiver(myLatLngReceiver, filter);
+
     }
 
     @OnClick(R.id.btn_rengong)
@@ -159,6 +174,11 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
         }
     }
 
+    @Override
+    public void scrollView(int position) {
+        mRecyclerView.smoothScrollToPosition(position);
+    }
+
     private void drawDriverTrackMarker(LatLng latLng) {
         Marker marker = mMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
                 .position(latLng)
@@ -174,6 +194,8 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
             if (Constants.RECEIVER_GPS.equals(intent.getAction())){
                 double lat = intent.getDoubleExtra("lat", -1d);
                 double lng = intent.getDoubleExtra("lng", -1d);
+                LatLng latLng = new LatLng(lat, lng);
+                drawDriverTrackMarker(latLng);
                 mPresenter.drive(lat, lng);
                 ToastHelper.showToast(lat+ "," + lng);
             }
@@ -183,6 +205,33 @@ public class AutoReportActivity extends PresenterActivity<AutoReportPresenter> i
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(myLatLngReceiver);
+        if (myLatLngReceiver != null)
+            unregisterReceiver(myLatLngReceiver);
+        mapView.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    private boolean isShowMap;
+    @OnClick(R.id.btn_map)
+    public void switchView(){
+        if(isShowMap){
+            mapView.setVisibility(View.GONE);
+            ll_container.setVisibility(View.VISIBLE);
+        }else{
+            mapView.setVisibility(View.VISIBLE);
+            ll_container.setVisibility(View.GONE);
+        }
+        isShowMap = !isShowMap;
     }
 }

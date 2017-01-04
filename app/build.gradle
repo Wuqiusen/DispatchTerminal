@@ -55,4 +55,5 @@ dependencies {
     compile project(':data')
     compile files('libs/jpush-android-2.2.0.jar')
     compile project(':pullToRefresh')
+    compile files('libs/AMap_Location_V3.2.0_20161205.jar')
 }

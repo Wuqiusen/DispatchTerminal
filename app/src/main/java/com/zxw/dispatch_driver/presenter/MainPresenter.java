@@ -92,6 +92,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         if(isReceiveLoading)
             return;
         isJourneyLoading= true;
+        mvpView.showLoadingReceivePage();
         mSource.receiveList(code(), keyCode(), mCurrentReceivePageNo, RECEIVE_DEFAULT_SIZE, new Subscriber<BaseBean<List<Receive>>>() {
             @Override
             public void onCompleted() {
@@ -159,6 +160,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         if(isJourneyLoading)
             return;
         isJourneyLoading= true;
+        mvpView.showLoadingJourneyPage();
         mSource.journeyList(code(), keyCode(), mCurrentJourneyPageNo, JOURNEY_DEFAULT_SIZE, new Subscriber<BaseBean<List<Journey>>>() {
             @Override
             public void onCompleted() {

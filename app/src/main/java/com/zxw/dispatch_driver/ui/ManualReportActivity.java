@@ -54,9 +54,10 @@ public class ManualReportActivity extends PresenterActivity<StationReportPresent
 
     @Override
     public void setStationListAdapter(ManualReportStationAdapter manualReportStationAdapter) {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mRecyclerView.setAdapter(manualReportStationAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.HORIZONTAL_LIST));
     }
+
 }

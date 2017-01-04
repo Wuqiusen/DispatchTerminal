@@ -27,4 +27,8 @@ public interface MainView extends BaseView {
     void journeyPageSetAdapter(JourneyAdapter mJourneyAdapter);
 
     void journeyPageLoadComplete();
+
+    void showLoadingJourneyPage();
+
+    void showLoadingReceivePage();
 }

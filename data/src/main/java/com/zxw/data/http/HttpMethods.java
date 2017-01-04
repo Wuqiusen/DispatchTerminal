@@ -29,7 +29,8 @@ import rx.schedulers.Schedulers;
  * email：cangjie2016@gmail.com
  */
 public class HttpMethods {
-    public static final String BASE_URL = "http://192.168.0.90:8080/yd_app/";
+    public static final String BASE_URL = "http://120.24.252.195:8080/yd_app/";
+//    public static final String BASE_URL = "http://192.168.0.90:8080/yd_app/";
     public Retrofit retrofit = RetrofitSetting.getInstance();
 
 
@@ -65,6 +66,12 @@ public class HttpMethods {
     public void login(Subscriber<Login> subscriber, String code, String password, String time){
         HttpInterfaces.User user = retrofit.create(HttpInterfaces.User.class);
         Observable<Login> observable = user.login(code, password, time).map(new HttpResultFunc<Login>());
+        toSubscribe(observable, subscriber);
+    }
+
+    public void loginByEmployeeCard(Subscriber<Login> subscriber, String uid, String time){
+        HttpInterfaces.User user = retrofit.create(HttpInterfaces.User.class);
+        Observable<Login> observable = user.loginByEmployeeCard(uid, time).map(new HttpResultFunc<Login>());
         toSubscribe(observable, subscriber);
     }
 

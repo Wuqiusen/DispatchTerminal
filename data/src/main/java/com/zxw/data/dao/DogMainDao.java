@@ -37,10 +37,10 @@ public class DogMainDao {
 
     public void update(TbDogLineMain bean){
         SQLiteDatabase db = mHelper.getWritableDatabase();
-        String sql = "replace into" + DOGDBOpenHelper.TABLE_DOG_MAIN + "(id,lineId,type,isCommit,isCompare,compareValue,voiceId,isDele,updateTime) values (?,?,?,?,?,?,?,?,?)";
+        String sql = "replace into" + DOGDBOpenHelper.TABLE_DOG_MAIN + "(id,lineId,type,isCommit,isCompare,compareValue,voiceContent,isDele,updateTime) values (?,?,?,?,?,?,?,?,?)";
         db.execSQL(sql, new String[]{String.valueOf(bean.getId()), String.valueOf(bean.getLineId()), String.valueOf(bean.getType()),
                 String.valueOf(bean.getIsCommit()), String.valueOf(bean.getIsCompare()), String.valueOf(bean.getCompareValue()),
-                String.valueOf(bean.getVoiceId()), String.valueOf(bean.getIsDele()), String.valueOf(bean.getUpdateTimeKey())});
+                bean.getVoiceContent(), String.valueOf(bean.getIsDele()), String.valueOf(bean.getUpdateTimeKey())});
         db.close();
     }
 
@@ -63,7 +63,7 @@ public class DogMainDao {
             int isCommit = cursor.getInt(3);
             int isCompare = cursor.getInt(4);
             int compareValue = cursor.getInt(5);
-            Long voiceId = cursor.getLong(6);
+            String voiceContent = cursor.getString(6);
             int isDele = cursor.getInt(7);
             Long updateTimeKey = cursor.getLong(8);
             element = new TbDogLineMain();
@@ -73,7 +73,7 @@ public class DogMainDao {
             element.setIsCommit(isCommit);
             element.setIsCompare(isCompare);
             element.setCompareValue(compareValue);
-            element.setVoiceId(voiceId);
+            element.setVoiceContent(voiceContent);
             element.setIsDele(isDele);
             element.setUpdateTimeKey(updateTimeKey);
             List<TbDogLineSecond> tbDogLineSeconds = dogSecondDao.queryByLineID(id);

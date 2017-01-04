@@ -31,6 +31,7 @@ public class ManualReportStationAdapter extends RecyclerView.Adapter<ManualRepor
     private final SpeakUtil mSpeakUtil;
     private OnClickStationListener mListener;
     private List<Integer> arriveList = new ArrayList<>();
+    private RecyclerView mRecyclerView;
 
     public ManualReportStationAdapter(List<StationBean> mData, Context mContext) {
         this.mData = mData;
@@ -46,7 +47,7 @@ public class ManualReportStationAdapter extends RecyclerView.Adapter<ManualRepor
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final StationBean currentStation = mData.get(position);
         holder.mStationName.setText(currentStation.getStationName());
         if (arriveList.contains(position)){
@@ -73,21 +74,22 @@ public class ManualReportStationAdapter extends RecyclerView.Adapter<ManualRepor
                 }else{
                     mListener.onClickStationOn(currentStation);
                 }
-                reportPositionRecord(position);
+                reportPositionRecord(position, holder);
             }
         });
         holder.mBtnOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onClickStationOff(mData.get(position + 1));
-                reportPositionRecord(position);
+                reportPositionRecord(position, holder);
             }
         });
     }
-    private void reportPositionRecord(int position){
+    private void reportPositionRecord(int position, ViewHolder holder){
         arriveList.add(position);
-        notifyDataSetChanged();
+        holder.mStationName.setTextColor(mContext.getResources().getColor(R.color.round_green));
     }
+
     @Override
     public int getItemCount() {
         return mData.size();

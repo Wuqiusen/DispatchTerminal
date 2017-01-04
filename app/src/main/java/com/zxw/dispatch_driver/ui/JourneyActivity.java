@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.zxw.data.bean.Journey;
+import com.zxw.data.sp.SpUtils;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.presenter.JourneyPresenter;
 import com.zxw.dispatch_driver.presenter.view.JourneyView;
@@ -24,6 +25,8 @@ public class JourneyActivity extends PresenterActivity<JourneyPresenter> impleme
     Button btn_normal;
     @Bind(R.id.btn_error)
     Button btn_error;
+    @Bind(R.id.btn_resume_report)
+    Button btn_resume_report;
     @Bind(R.id.tv_prompt)
     TextView tv_prompt;
     private Journey journey;
@@ -45,6 +48,7 @@ public class JourneyActivity extends PresenterActivity<JourneyPresenter> impleme
             case 2:
                 btn_normal.setVisibility(View.VISIBLE);
                 btn_error.setVisibility(View.VISIBLE);
+                btn_resume_report.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 tv_prompt.setVisibility(View.VISIBLE);
@@ -76,12 +80,18 @@ public class JourneyActivity extends PresenterActivity<JourneyPresenter> impleme
                 mPresenter.errorFinish();
                 break;
         }
+    }
 
+    @OnClick(R.id.btn_resume_report)
+    public void btn_resume_report(){
+        SpUtils.setCache(mContext, SpUtils.CURRENT_LINE_ID, String.valueOf(journey.getLineId()));
+        startSuccess("重新进入报站界面");
     }
 
     @Override
     public void startSuccess(String returnInfo) {
         disPlay(returnInfo);
+
         startService(new Intent(this, DogService.class));
         startActivity(new Intent(this, AutoReportActivity.class));
         finish();
@@ -94,8 +104,7 @@ public class JourneyActivity extends PresenterActivity<JourneyPresenter> impleme
 
     @Override
     public void normalFinishSuccess(String returnInfo) {
-        disPlay(returnInfo);
-        finish();
+        orderFinish(returnInfo);
     }
 
     @Override
@@ -105,6 +114,11 @@ public class JourneyActivity extends PresenterActivity<JourneyPresenter> impleme
 
     @Override
     public void errorFinishSuccess(String returnInfo) {
+        orderFinish(returnInfo);
+    }
+
+    public void orderFinish(String returnInfo){
+        SpUtils.setCache(mContext, SpUtils.CURRENT_LINE_ID, "");
         disPlay(returnInfo);
         finish();
     }

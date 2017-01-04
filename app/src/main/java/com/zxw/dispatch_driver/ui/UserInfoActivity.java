@@ -11,6 +11,7 @@ import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.presenter.UserInfoPresenter;
 import com.zxw.dispatch_driver.presenter.view.UserInfoView;
 import com.zxw.dispatch_driver.ui.base.PresenterActivity;
+import com.zxw.dispatch_driver.utils.BroadcastUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -60,6 +61,7 @@ public class UserInfoActivity extends PresenterActivity<UserInfoPresenter> imple
 
     @OnClick(R.id.btn_logout)
     public void logout(){
+        BroadcastUtil.loginOut();
         SpUtils.logOut(MyApplication.mContext);
         startActivity(new Intent(this, LoginActivity.class));
         finish();

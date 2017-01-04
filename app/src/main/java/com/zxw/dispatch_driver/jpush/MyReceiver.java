@@ -22,7 +22,6 @@ import com.zxw.data.source.VoiceCompoundSource;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.service.UpdateService;
 import com.zxw.dispatch_driver.ui.WelcomeActivity;
-import com.zxw.dispatch_driver.utils.ToastHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -189,7 +188,10 @@ UpdateDogData更新终端机电子狗app数据标识，值：1
     private void deviceNotice(Context context, String value) {
         if(TextUtils.isEmpty(value))
             return;
-        ToastHelper.showToast(value, context);
+        String action = "android.intent.action.NOTIFICATION_DISPLAY";
+        Intent intent = new Intent(action);
+        intent.putExtra("deviceNotice", value);
+        context.sendBroadcast(intent);
     }
 
     private void appNotice(Context context, String value) {

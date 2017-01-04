@@ -174,6 +174,16 @@ public class MainActivity extends PresenterActivity<MainPresenter> implements Ma
     }
 
     @Override
+    public void showLoadingJourneyPage() {
+        journey_lsv.showLoading();
+    }
+
+    @Override
+    public void showLoadingReceivePage() {
+        receive_lsv.showLoading();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         mPresenter.reloadJourneyList();

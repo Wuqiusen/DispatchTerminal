@@ -19,6 +19,9 @@ public class DispatchSource {
     public void login(String username, String time, String password, Subscriber<Login> subscriber){
         HttpMethods.getInstance().login(subscriber, username, password, time);
     }
+    public void loginByEmployeeCard(String uid, String time, Subscriber<Login> subscriber){
+        HttpMethods.getInstance().loginByEmployeeCard(subscriber, uid, time);
+    }
     public void receiveList(String code, String keyCode, int pageNo, int pageSize, Subscriber<BaseBean<List<Receive>>> subscriber){
         HttpMethods.getInstance().receiveList(code, keyCode, pageNo, pageSize, subscriber);
     }

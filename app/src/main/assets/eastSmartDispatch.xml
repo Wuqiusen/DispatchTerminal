@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <long name="table_dog_second" value="201612261457" />
+    <long name="table_service_word" value="201612261457" />
+    <long name="table_line" value="201612261457" />
+    <long name="table_line_station" value="201612261457" />
+    <long name="table_dog_main" value="201612261457" />
+    <long name="table_voice_compound" value="201612261457" />
+    <long name="table_report_point" value="201612261457" />
+    <long name="table_station" value="201612261457" />
+</map>
