@@ -97,11 +97,11 @@
             android:name=".ui.SelectLineActivity"
             android:label="手动选择线路"
             android:screenOrientation="landscape">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ui.DogActivity"
@@ -206,8 +206,23 @@
             android:name="JPUSH_APPKEY"
             android:value="0bf740db292764f1c336bcb2" />
 
-        <activity android:name=".ui.MainActivity"
-            android:launchMode="singleTask">
+        <!--替换，以便查看界面-->
+        <activity
+            android:name=".ui.MainActivity"
+            android:label="主页面"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--原来的-->
+        <!--<activity android:name=".ui.MainActivity"-->
+            <!--android:launchMode="singleTask"-->
+            <!--android:screenOrientation="landscape">-->
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -215,19 +230,28 @@
 
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
-        </activity>
+        <!--</activity>-->
+
+
         <activity android:name=".ui.LoginActivity"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
 
 
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
-        <activity android:name=".ui.JourneyActivity" />
-        <activity android:name=".ui.ReceiveActivity" />
+
+
+        <activity
+            android:name=".ui.JourneyActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".ui.ReceiveActivity"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".ui.UserInfoActivity"
             android:label="@string/user_info_label"

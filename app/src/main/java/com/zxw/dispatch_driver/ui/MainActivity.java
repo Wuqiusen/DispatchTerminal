@@ -79,7 +79,7 @@ public class MainActivity extends PresenterActivity<MainPresenter> implements Ma
         MainPagerAdapter mainPagerAdapter = new MainPagerAdapter(mViews, titleList);
         mViewPager.setAdapter(mainPagerAdapter);
         mViewPager.setCurrentItem(0);
-
+        setMainTabStyle(0);
         initPullToRefreshListView();
     }
 
@@ -115,13 +115,34 @@ public class MainActivity extends PresenterActivity<MainPresenter> implements Ma
     @OnClick(R.id.ll_receive)
     public void clickReceive(){
         mViewPager.setCurrentItem(0);
+        setMainTabStyle(0);
         mPresenter.reloadReceiveList();
     }
+
     @OnClick(R.id.ll_journey)
     public void clickJourney(){
         mViewPager.setCurrentItem(1);
+        setMainTabStyle(1);
         mPresenter.reloadJourneyList();
     }
+
+    private void setMainTabStyle(int item) {
+        switch (item) {
+            case 0:
+                ll_receive.setBackgroundColor(mContext.getResources()
+                        .getColor(R.color.tab_bg_blue));
+                ll_journey.setBackgroundColor(mContext.getResources()
+                        .getColor(R.color.tab_bg_black));
+                break;
+            case 1:
+                ll_receive.setBackgroundColor(mContext.getResources()
+                        .getColor(R.color.tab_bg_black));
+                ll_journey.setBackgroundColor(mContext.getResources()
+                        .getColor(R.color.tab_bg_blue));
+                break;
+        }
+    }
+
 
     @Override
     public void receivePageLoadFailed() {

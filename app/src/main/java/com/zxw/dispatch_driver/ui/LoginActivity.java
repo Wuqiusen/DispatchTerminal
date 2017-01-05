@@ -1,6 +1,7 @@
 package com.zxw.dispatch_driver.ui;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -32,11 +33,17 @@ public class LoginActivity extends PresenterActivity<LoginPresenter> implements 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        initView();
         ButterKnife.bind(this);
         if(SpUtils.isLogin(MyApplication.mContext)){
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
+    }
+
+    private void initView() {
+         showTitle("智能运调司机端");
+         tv_forget_password.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
     }
 
     @Override

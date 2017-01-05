@@ -1,44 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_journey"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:minHeight="280dp"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
+    android:layout_gravity="center"
     tools:context="com.zxw.dispatch_driver.ui.JourneyActivity">
 
-    <Button
-        android:id="@+id/btn_start"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="开始"/>
-    <Button
-        android:id="@+id/btn_normal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="正常结束" />
-    <Button
-        android:id="@+id/btn_error"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="异常终止" />
-    <Button
-        android:id="@+id/btn_resume_report"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="报站界面" />
-    <TextView
-        android:id="@+id/tv_prompt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="工单进行中" />
-</LinearLayout>
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="180dp"
+            android:minHeight="60dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/btn_green_style"
+            android:text="开始"
+            android:textSize="@dimen/font_large"
+            android:textColor="@color/white"
+            android:visibility="invisible"/>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="horizontal"
+           android:visibility="visible">
+           <Button
+               android:id="@+id/btn_normal"
+               style="@style/btn_journey_style"
+               android:layout_marginLeft="10dp"
+               android:background="@drawable/btn_yellow_style"
+               android:text="正常结束"
+               android:visibility="invisible"/>
+
+           <Button
+               android:id="@+id/btn_error"
+               style="@style/btn_journey_style"
+               android:layout_marginLeft="10dp"
+               android:background="@drawable/btn_red_style"
+               android:text="异常终止"
+               android:visibility="invisible"/>
+
+
+           <Button
+               android:id="@+id/btn_resume_report"
+               style="@style/btn_journey_style"
+               android:layout_marginLeft="10dp"
+               android:background="@drawable/btn_big_blue_style"
+               android:text="报站界面"
+               android:visibility="invisible"/>
+       </LinearLayout>
+        <TextView
+            android:id="@+id/tv_prompt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:text="工单进行中..."
+            android:textSize="@dimen/font_medium"
+            android:textColor="@color/font_bg_normal"
+            android:visibility="invisible"
+            />
+
+</RelativeLayout>

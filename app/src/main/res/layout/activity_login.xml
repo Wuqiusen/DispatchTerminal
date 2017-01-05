@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:wqs="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/backdrop_bg"
     android:gravity="center"
     android:orientation="horizontal">
     <ScrollView
@@ -14,7 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
+            android:background="@color/transparent"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -27,15 +27,15 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_top"
-                    android:layout_marginBottom="@dimen/margin_top"
-                    android:src="@drawable/login_icon"/>
+                    android:layout_marginTop="@dimen/login_margin10"
+                    android:layout_marginBottom="@dimen/login_margin30"
+                    android:src="@drawable/login_icon1"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/margin_fit_6"
-                android:layout_weight="1"
+                android:layout_weight="1.2"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -43,16 +43,17 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
-
                     <EditText
                         android:id="@+id/et_username"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/bluebtn_height"
                         android:layout_below="@+id/img_user_heard"
-                        android:text="901969"
+                        android:drawableRight="@drawable/img_down"
                         android:inputType="number"
-                        android:layout_marginLeft="@dimen/btn_margin"
-                        android:layout_marginRight="@dimen/btn_margin"/>
+                        android:hint="@string/login_hide_code"
+                        tools:text="901969"
+                        style="@style/edit_login_style"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
@@ -62,15 +63,18 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
+
                     <EditText
                         android:id="@+id/et_password"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/bluebtn_height"
+                        android:layout_weight="10"
                         android:layout_below="@+id/et_user_code"
-                        android:text="123456"
-                        android:layout_marginLeft="@dimen/btn_margin"
-                        android:layout_marginRight="@dimen/btn_margin"
-                        android:layout_weight="10"/>
+                        android:hint="@string/login_hide_keycode"
+                        android:drawableRight="@drawable/img_delete"
+                        tools:text="123456"
+                        style="@style/edit_login_style"
+                        />
 
                 </LinearLayout>
 
@@ -91,8 +95,9 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/margin_fit"
                     android:layout_marginBottom="@dimen/margin_fit"
-                    android:visibility="gone"
-                    android:text="忘记密码？"/>
+                    android:visibility="invisible"
+                    android:text="忘记密码？"
+                    android:textColor="@color/font_bg_normal"/>
             </LinearLayout>
 
 

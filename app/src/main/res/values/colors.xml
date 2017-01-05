@@ -110,4 +110,31 @@
     <!--dot颜色-->
     <color name="dot_normal">#B5B5B5</color>
     <color name="dot_focused">#FFFFFF</color>
+
+<!--优化ui-->
+    <!--字体-->
+      <!--hide-->
+      <color name="font_bg_gray">#d1d6de</color>
+      <!--加粗-->
+      <color name="font_bg_bold">#495568</color>
+      <!--常规-->
+      <color name="font_bg_normal">#828a97</color>
+
+    <!--背景色-->
+    <color name="backdrop_bg">#f1f1f1</color>
+    <!--线条-->
+    <color name="line_bg_gray">#d2d2d2</color>
+
+    <!--边框-->
+    <color name="edt_line_gray">#eae9e9</color>
+    <!--按钮-->
+    <color name="btn_bg_blue">#21a9d1</color>
+    <color name="btn_bg_yellow">#80BF26</color>
+    <color name="btn_bg_green">#3dbd43</color>
+    <color name="btn_bg_red">#f84949</color>
+    <color name="btn_bg_back">#495568</color>
+    <!--tab-->
+    <color name="tab_bg_black">#495568</color>
+    <color name="tab_bg_blue">#21a9d1</color>
+
 </resources>

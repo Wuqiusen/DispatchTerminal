@@ -113,6 +113,7 @@
     <dimen name="main_height50">50dp</dimen>
 
     <!-- 按钮弧度-->
+    <dimen name="tiny_radian">8dp</dimen>
     <dimen name="radian">25dp</dimen>
 
     <!--登录-->

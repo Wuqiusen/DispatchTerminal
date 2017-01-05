@@ -26,6 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="上塘"
+        android:textSize="@dimen/font_medium"
+        android:textColor="@color/font_bg_normal"
         />
     </RelativeLayout>
         </LinearLayout>

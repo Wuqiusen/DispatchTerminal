@@ -1,38 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_user_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/backdrop_bg"
     android:orientation="vertical"
     tools:context="com.zxw.dispatch_driver.ui.UserInfoActivity">
 
-    <TextView
-        android:id="@+id/tv_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="名字:沙斗富"
-        android:visibility="gone"/>
-    <TextView
-        android:id="@+id/tv_user_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="工号:1232321"
-        android:visibility="gone"/>
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="注销"
-        android:visibility="gone"/>
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="登录"
-        android:visibility="gone"/>
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="visible">
+                <TextView
+                    android:id="@+id/tv_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    tools:text="姓名:沙斗富"
+                    android:textSize="@dimen/font_huge"
+                    android:textColor="@color/font_bg_normal"
+                    android:visibility="visible"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_user_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="40dp"
+                    android:paddingLeft="6dp"
+                    android:gravity="center"
+                    tools:text="工号:1232321"
+                    android:textSize="@dimen/font_huge"
+                    android:textColor="@color/font_bg_normal"
+                    android:visibility="visible"
+                    />
+
+                <Button
+                    android:id="@+id/btn_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:background="@drawable/btn_back_style"
+                    android:text="注销"
+                    android:textSize="@dimen/font_large"
+                    android:textColor="@color/white"
+                    />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:background="@drawable/btn_big_blue_style"
+            android:layout_centerInParent="true"
+            android:text="登录"
+            android:textSize="@dimen/font_large"
+            android:textColor="@color/white"
+            android:visibility="invisible"
+            />
+
+
+</RelativeLayout>

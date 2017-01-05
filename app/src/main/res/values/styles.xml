@@ -55,7 +55,8 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
-        <item name="android:textSize">40px</item>
+        <item name="android:textSize">34px</item>
+        <item name="android:textColor">@color/font_bg_bold</item>
     </style>
 
     <!--AlderDialog主题-->
@@ -73,7 +74,7 @@
             <item name="android:textColor">@color/main_tab_font_select</item>
             <item name="android:ellipsize">marquee</item>
             <item name="android:gravity">center_horizontal</item>
-            <item name="android:background">@drawable/rb_main_tab_backgroud</item>
+            <item name="android:background">@drawable/rb_main_tab_background</item>
             <item name="android:paddingBottom">@dimen/margin_tiny</item>
             <item name="android:layout_width">0dp</item>
             <item name="android:layout_height">match_parent</item>
@@ -143,4 +144,27 @@
             <item name="android:paddingRight">@dimen/margin_tiny</item>
             <item name="android:paddingLeft">@dimen/margin_tiny</item>
         </style>
+
+    <!--登录界面_EditText-->
+    <style name="edit_login_style">
+        <item name="android:background">@drawable/edt_bg_style</item>
+        <item name="android:text">@null</item>
+        <item name="android:textColor">@color/font_bg_normal</item>
+        <item name="android:textColorHint">@color/font_bg_gray</item>
+        <item name="android:paddingLeft">@dimen/margin_top</item>
+        <item name="android:paddingRight">@dimen/margin_top</item>
+        <item name="android:layout_marginLeft">@dimen/btn_margin</item>
+        <item name="android:layout_marginRight">@dimen/btn_margin</item>
+    </style>
+    <!--行程详情界面_Button-->
+    <style name="btn_journey_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minWidth">40dp</item>
+        <item name="android:minHeight">60dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">@dimen/font_large</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>

@@ -3,7 +3,7 @@ package com.zxw.dispatch_driver.ui;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amap.api.maps2d.AMap;
@@ -42,16 +42,16 @@ public class ReceiveActivity extends PresenterActivity<ReceivePresenter> impleme
     TextView tv_org;
     @Bind(R.id.tv_prompt)
     TextView tv_prompt;
-    @Bind(R.id.btn_confirm)
-    Button btn_confirm;
-    @Bind(R.id.btn_refuse)
-    Button btn_refuse;
+    @Bind(R.id.ll_confirm)
+    LinearLayout ll_confirm;
+    @Bind(R.id.ll_refuse)
+    LinearLayout ll_refuse;
     private Receive mReceive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_receive);
+        setContentView(R.layout.activity_receive);///
         ButterKnife.bind(this);
         hideHeadArea();
         mMapView.onCreate(savedInstanceState);
@@ -63,25 +63,25 @@ public class ReceiveActivity extends PresenterActivity<ReceivePresenter> impleme
     private void initView() {
         switch(mReceive.getStatus()){
             case 0:
-                btn_refuse.setVisibility(View.VISIBLE);
-                btn_confirm.setVisibility(View.VISIBLE);
+                ll_refuse.setVisibility(View.VISIBLE);
+                ll_confirm.setVisibility(View.VISIBLE);
                 tv_prompt.setVisibility(View.GONE);
                 break;
             case 1:
-                btn_refuse.setVisibility(View.GONE);
-                btn_confirm.setVisibility(View.GONE);
+                ll_refuse.setVisibility(View.GONE);
+                ll_confirm.setVisibility(View.GONE);
                 tv_prompt.setVisibility(View.VISIBLE);
                 tv_prompt.setText(mContext.getResources().getString(R.string.receive_status_1));
                 break;
             case 2:
-                btn_refuse.setVisibility(View.GONE);
-                btn_confirm.setVisibility(View.GONE);
+                ll_refuse.setVisibility(View.GONE);
+                ll_confirm.setVisibility(View.GONE);
                 tv_prompt.setVisibility(View.VISIBLE);
                 tv_prompt.setText(mContext.getResources().getString(R.string.receive_status_2));
                 break;
             case 3:
-                btn_refuse.setVisibility(View.GONE);
-                btn_confirm.setVisibility(View.GONE);
+                ll_refuse.setVisibility(View.GONE);
+                ll_confirm.setVisibility(View.GONE);
                 tv_prompt.setVisibility(View.VISIBLE);
                 tv_prompt.setText(mContext.getResources().getString(R.string.receive_status_3));
                 break;

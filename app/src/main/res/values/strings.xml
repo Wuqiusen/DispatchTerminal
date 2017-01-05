@@ -4,6 +4,9 @@
     <string name="app_name2">电子狗</string>
     <string name="no_more_data">没有更多数据</string>
 
+    <string name="login_hide_code">请输入工号</string>
+    <string name="login_hide_keycode">请输入密码</string>
+
 
     <string name="receive_status_1">该工单已拒绝</string>
     <string name="receive_status_2">该工单已改派</string>

@@ -85,7 +85,7 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:text="取消"
-                android:background="@drawable/btn_big_green_style"
+                android:background="@drawable/btn_green_style"
                 android:layout_marginRight="6dp"
                 android:textColor="@color/white"
                 android:layout_marginBottom="4dp"/>

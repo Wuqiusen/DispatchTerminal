@@ -4,13 +4,16 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backdrop_bg"
     android:orientation="horizontal"
-    tools:context="com.zxw.dispatch_driver.ui.AutoReportActivity">
+    tools:context="com.zxw.dispatch_driver.ui.AutoReportActivity"
+    >
 
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="4">
+            <!--横向列表-->
             <LinearLayout
                 android:id="@+id/ll_container"
                 android:layout_width="match_parent"
@@ -23,35 +26,61 @@
                     android:layout_weight="2"/>
 
                 <!--<include layout="@layout/include_division"/>-->
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_service_word"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginBottom="6dp"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"/>
             </LinearLayout>
-
+            <!--地图-->
             <com.amap.api.maps2d.MapView
                 android:id="@+id/mv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone"/>
         </FrameLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <View
+            android:layout_width="0.5dp"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:background="@color/line_bg_gray"
+            />
 
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/ll_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:orientation="horizontal">
             <Button
                 android:id="@+id/btn_rengong"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="人工"/>
+                android:minWidth="54dp"
+                android:minHeight="54dp"
+                android:background="@drawable/btn_big_blue_style"
+                android:text="人工"
+                android:textColor="@color/white"/>
             <Button
                 android:id="@+id/btn_map"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="地图"/>
+                android:minWidth="54dp"
+                android:minHeight="54dp"
+                android:layout_marginLeft="6dp"
+                android:background="@drawable/btn_green_style"
+                android:text="地图"
+                android:textColor="@color/white"/>
         </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_service_word"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/ll_btn"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="6dp"
+            />
+    </RelativeLayout>
 </LinearLayout>

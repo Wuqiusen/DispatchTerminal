@@ -1,41 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="wrap_content"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:gravity="center"
+    >
+
     <TextView
         android:id="@+id/tv_station_name"
         android:layout_width="wrap_content"
         android:minWidth="52dp"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:drawableTop="@drawable/img_green_circle"
         tools:text="上塘地铁站"
-        android:textSize="32sp"
+        android:textSize="25sp"
+        android:textColor="@color/font_bg_bold"
         android:padding="8dp"
+        android:drawablePadding="12dp"
         android:ems="1"
         android:gravity="center_horizontal"
+        android:layout_margin="16dp"
         android:textStyle="bold"/>
     <LinearLayout
         android:layout_width="160dp"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
         <Button
             android:id="@+id/btn_on"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="32sp"
-            android:padding="8dp"
-            android:text="进"/>
+            android:background="@drawable/btn_big_blue_style"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="4dp"
+            android:text="进"
+            android:textSize="22sp"
+            android:textColor="@color/white"/>
 
         <Button
             android:id="@+id/btn_off"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="32sp"
-            android:padding="8dp"
-            android:text="出"/>
+            android:background="@drawable/btn_green_style"
+            android:layout_marginRight="8dp"
+            android:text="出"
+            android:textSize="22sp"
+            android:textColor="@color/white"/>
     </LinearLayout>
 </LinearLayout>
