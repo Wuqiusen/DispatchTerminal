@@ -22,10 +22,13 @@ import static com.iflytek.cloud.VerifierResult.TAG;
  */
 public class InitializeAssertFileUtil {
     public static void initialize(Context context){
-        copyDatabaseFile(context, "dog.db");
+        boolean isCopyDogSuccessful = copyDatabaseFile(context, "dog.db");
+        if (!isCopyDogSuccessful)
+            return;
+        boolean isCopyStationSuccessful = copyDatabaseFile(context, "stationReport.db");
+        if (!isCopyStationSuccessful)
+            return;
         copySharePrefenceFile(context, "eastSmartDispatch.xml");
-        copyDatabaseFile(context, "stationReport.db");
-
     }
 
     private static void copySharePrefenceFile(Context context, String filename) {
@@ -61,7 +64,7 @@ public class InitializeAssertFileUtil {
         }
     }
 
-    private static void copyDatabaseFile(Context context, String filename) {
+    private static boolean copyDatabaseFile(Context context, String filename) {
 //只要你拷贝了一次，我就不要你再拷贝了
         try {
             //在指定的目录创建了 database.db文件
@@ -70,6 +73,8 @@ public class InitializeAssertFileUtil {
                 //正常了，不需要拷贝了
                 Log.i(TAG, "正常了，不需要拷贝了");
             } else {
+                boolean newFile = file.createNewFile();
+                DebugLog.w("create " + newFile);
                 InputStream is = context.getAssets().open(filename);
 
                 FileOutputStream fos = new FileOutputStream(file);
@@ -86,6 +91,8 @@ public class InitializeAssertFileUtil {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 }
