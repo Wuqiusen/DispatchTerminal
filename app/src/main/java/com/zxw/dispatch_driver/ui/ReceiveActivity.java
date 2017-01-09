@@ -82,8 +82,8 @@ public class ReceiveActivity extends PresenterActivity<ReceivePresenter> impleme
             case 3:
                 ll_refuse.setVisibility(View.GONE);
                 ll_confirm.setVisibility(View.GONE);
-                tv_prompt.setVisibility(View.VISIBLE);
-                tv_prompt.setText(mContext.getResources().getString(R.string.receive_status_3));
+                tv_prompt.setVisibility(View.GONE);
+                //tv_prompt.setText(mContext.getResources().getString(R.string.receive_status_3));
                 break;
         }
     }

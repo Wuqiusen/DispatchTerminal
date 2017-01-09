@@ -167,4 +167,20 @@
         <item name="android:textSize">@dimen/font_large</item>
         <item name="android:textColor">@color/white</item>
     </style>
+     <!--行程或调度界面_TextView-->
+    <style name="tv_run_date_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">@null</item>
+        <item name="android:textSize">@dimen/font_large</item>
+        <item name="android:textColor">@color/font_bg_normal</item>
+    </style>
+    <style name="tv_symbol_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:textSize">@dimen/font_large</item>
+        <item name="android:textColor">@color/font_bg_normal</item>
+    </style>
 </resources>
