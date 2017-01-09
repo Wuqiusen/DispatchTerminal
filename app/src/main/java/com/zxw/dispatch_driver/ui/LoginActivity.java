@@ -33,8 +33,8 @@ public class LoginActivity extends PresenterActivity<LoginPresenter> implements 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        initView();
         ButterKnife.bind(this);
+        initView();
         if(SpUtils.isLogin(MyApplication.mContext)){
             startActivity(new Intent(this, MainActivity.class));
             finish();

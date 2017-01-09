@@ -51,7 +51,7 @@ public class ReceiveActivity extends PresenterActivity<ReceivePresenter> impleme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_receive);///
+        setContentView(R.layout.activity_receive);
         ButterKnife.bind(this);
         hideHeadArea();
         mMapView.onCreate(savedInstanceState);
@@ -88,12 +88,12 @@ public class ReceiveActivity extends PresenterActivity<ReceivePresenter> impleme
         }
     }
 
-    @OnClick(R.id.btn_confirm)
+    @OnClick(R.id.ll_confirm)
     public void confirm(){
         mPresenter.confirm();
     }
 
-    @OnClick(R.id.btn_refuse)
+    @OnClick(R.id.ll_refuse)
     public void refuse(){
         mPresenter.refuse();
     }
