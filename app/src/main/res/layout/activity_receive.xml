@@ -71,9 +71,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_gravity="bottom"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
         <LinearLayout
             android:id="@+id/ll_refuse"
             android:layout_width="0dp"
@@ -110,11 +111,17 @@
                 android:textSize="@dimen/font_large"
                 />
         </LinearLayout>
-        <TextView
-            android:id="@+id/tv_prompt"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_prompt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:padding="2dp"
+        tools:text="该工单已改派"
+        android:text=""
+        android:textSize="@dimen/font_small"
+        android:textColor="@color/font_bg_normal"
+        android:visibility="gone"/>
 </LinearLayout>
