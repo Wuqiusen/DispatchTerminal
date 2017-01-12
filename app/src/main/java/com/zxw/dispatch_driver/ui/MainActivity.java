@@ -80,6 +80,8 @@ public class MainActivity extends PresenterActivity<MainPresenter> implements Ma
         mViewPager.setAdapter(mainPagerAdapter);
         mViewPager.setCurrentItem(0);
         setMainTabStyle(0);
+        //设置不可滑动
+        mViewPager.setPagingEnabled(false);
         initPullToRefreshListView();
     }
 
