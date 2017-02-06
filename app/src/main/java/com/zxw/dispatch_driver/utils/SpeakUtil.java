@@ -59,6 +59,7 @@ public class SpeakUtil {
         this.mContext = context;
     }
     public void playText(String playText) {
+        VoiceController.outside();
         //3.开始合成
         mTts.startSpeaking(playText, mSynListener);
     }

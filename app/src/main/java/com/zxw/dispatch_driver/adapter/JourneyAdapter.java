@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.zxw.data.bean.Journey;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.ui.JourneyActivity;
-import com.zxw.dispatch_driver.utils.DebugLog;
 
 import java.util.List;
 
@@ -36,11 +35,15 @@ public class JourneyAdapter extends CommonAdapter<Journey> {
         tv_station_name.setText(item.getStationName());
         // tv_run_date.setText(item.getRunDate() +" " + item.getProjectTime());
         String runDate = String.valueOf(item.getRunDate());
-        tv_run_date_year.setText(runDate.substring(0,4));
-        tv_run_date_month.setText(runDate.substring(4,6));
-        tv_run_date_day.setText(runDate.substring(6));
-        tv_run_date_hour.setText(item.getProjectTime().substring(0,2));
-        tv_run_date_minutes.setText(item.getProjectTime().substring(2));
+        try{
+            tv_run_date_year.setText(runDate.substring(0,4));
+            tv_run_date_month.setText(runDate.substring(4,6));
+            tv_run_date_day.setText(runDate.substring(6));
+            tv_run_date_hour.setText(item.getProjectTime().substring(0,2));
+            tv_run_date_minutes.setText(item.getProjectTime().substring(2));
+        }catch (Exception e){
+
+        }
 
         switch (item.getStatus()){
             case 1:

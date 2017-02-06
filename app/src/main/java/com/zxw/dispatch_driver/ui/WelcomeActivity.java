@@ -1,7 +1,11 @@
 package com.zxw.dispatch_driver.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 import com.zxw.data.source.DogMainSource;
 import com.zxw.data.source.DogSecondSource;
@@ -26,11 +30,23 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         hideHeadArea();
-
+        initPermission();
         showLoading();
         initializeAssertFile();
         update();
         hideLoading();
+    }
+
+
+    private void initPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            //申请权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            //申请权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
+        }
     }
 
     private void initializeAssertFile() {
@@ -130,4 +146,5 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
         isUpdateDogSecond = true;
         goMain();
     }
+
 }

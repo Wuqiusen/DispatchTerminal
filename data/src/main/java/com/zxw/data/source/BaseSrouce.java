@@ -9,7 +9,7 @@ import com.zxw.data.http.HttpMethods;
 public class BaseSrouce {
 
     protected int mPageNo = 1;
-    protected int mPageSize = 20;
+    protected int mPageSize = 200;
 
 
     protected final HttpMethods mHttpMethods;

@@ -72,9 +72,8 @@ public class InitializeAssertFileUtil {
             if (file.exists() && file.length() > 0) {
                 //正常了，不需要拷贝了
                 Log.i(TAG, "正常了，不需要拷贝了");
+                return false;
             } else {
-                boolean newFile = file.createNewFile();
-                DebugLog.w("create " + newFile);
                 InputStream is = context.getAssets().open(filename);
 
                 FileOutputStream fos = new FileOutputStream(file);
