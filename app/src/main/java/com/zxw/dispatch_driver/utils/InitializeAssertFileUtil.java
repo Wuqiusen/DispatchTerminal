@@ -1,7 +1,6 @@
 package com.zxw.dispatch_driver.utils;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.zxw.data.sp.SpUtils;
 
@@ -13,8 +12,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import static com.iflytek.cloud.VerifierResult.TAG;
 
 /**
  * author：CangJie on 2016/12/26 15:31
@@ -69,13 +66,17 @@ public class InitializeAssertFileUtil {
         try {
             //在指定的目录创建了 database.db文件
             File file = context.getDatabasePath(filename);
+            File parentFile = file.getParentFile();
             if (file.exists() && file.length() > 0) {
                 //正常了，不需要拷贝了
-                Log.i(TAG, "正常了，不需要拷贝了");
+                DebugLog.w("正常了，不需要拷贝了");
                 return false;
             } else {
+                boolean mkdir = parentFile.mkdir();
+                DebugLog.w("mkdir :" + mkdir);
+                boolean newFile = file.createNewFile();
+                DebugLog.w("create new file :" + newFile);
                 InputStream is = context.getAssets().open(filename);
-
                 FileOutputStream fos = new FileOutputStream(file);
                 byte[] buffer = new byte[1024];
                 int len = 0;

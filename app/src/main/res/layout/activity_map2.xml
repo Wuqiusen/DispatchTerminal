@@ -20,13 +20,13 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         android:onClick="inside"
         android:text="inside"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         android:onClick="outside"
         android:text="outside"/>
     <Button

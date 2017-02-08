@@ -32,7 +32,7 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
         hideHeadArea();
         initPermission();
         showLoading();
-        initializeAssertFile();
+        InitializeAssertFileUtil.initialize(MyApplication.mContext);
         update();
         hideLoading();
     }
@@ -49,9 +49,6 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
         }
     }
 
-    private void initializeAssertFile() {
-        InitializeAssertFileUtil.initialize(MyApplication.mContext);
-    }
 
     private void update() {
         LineSource source = new LineSource(MyApplication.mContext);
