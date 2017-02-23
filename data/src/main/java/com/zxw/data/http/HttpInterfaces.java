@@ -51,11 +51,20 @@ public class HttpInterfaces {
      * 用户信息
      */
     public interface User {
+        /**
+         *
+         * @param code
+         * @param password
+         * @param time
+         * @param type 1:手机 2：终端机
+         * @return
+         */
         @FormUrlEncoded
-        @POST("phone/visitor/driver/login/2")
+        @POST("phone/driver/manage/login")
         Observable<BaseBean<Login>> login(@Field("code") String code,
                                           @Field("password") String password,
-                                          @Field("time") String time);
+                                          @Field("time") String time,
+                                          @Field("type") int type);
         @FormUrlEncoded
         @POST("phone/visitor/driver/card/login")
         Observable<BaseBean<Login>> loginByEmployeeCard(@Field("uuid") String uuid,
@@ -78,9 +87,10 @@ public class HttpInterfaces {
      */
     public interface Dispatch {
         @FormUrlEncoded
-        @POST("phone/driver/bill/data/2")
-        Observable<BaseBean<List<Receive>>> receiveList(@Field("code") String code,
+        @POST("phone/driver/manage/task/bill/list")
+        Observable<BaseBean<List<Receive>>> receiveList(@Field("userId") String userId,
                                                         @Field("keyCode") String keyCode,
+                                                        @Field("type") int type,
                                                         @Field("pageNo") int pageNo,
                                                         @Field("pageSize") int pageSize
         );
@@ -195,5 +205,15 @@ public class HttpInterfaces {
                                                                     @Field("pageNo") int pageNo,
                                                                     @Field("pageSize") int pageSize
         );
+    }
+    /**
+     * 上传异常报告
+     */
+    public interface UpLoadLog{
+        @FormUrlEncoded
+        @POST
+        Observable<BaseBean> upLoadLog(@Url String url,@Field("log") String log,
+                                       @Field("phone") String phone,
+                                       @Field("key") String key);
     }
 }

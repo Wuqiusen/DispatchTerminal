@@ -7,6 +7,7 @@ import android.os.Environment;
 
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
+import com.zxw.data.sp.SpUtils;
 import com.zxw.dispatch_driver.utils.DebugLog;
 
 import java.io.File;
@@ -63,6 +64,7 @@ public class MyApplication extends Application {
 
                 ex.printStackTrace(err);
                 String errorLog = sw.toString();
+                SpUtils.cacheErrorLog(MyApplication.this, errorLog, SpUtils.getCache(MyApplication.this, SpUtils.NAME));
 
                 //保存到本地
                 String filePath = Environment.getExternalStorageDirectory()+"/"+Constants.Path.ERRORPATH;

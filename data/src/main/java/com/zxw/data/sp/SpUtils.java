@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * author：CangJie on 2016/9/28 14:11
  * email：cangjie2016@gmail.com
@@ -13,6 +16,7 @@ public class SpUtils {
     private final static String CACHE_FILE_NAME = "eastSmartDispatch";
 
     public final static String CODE = "code";
+    public final static String USER_ID = "user_id";
     public final static String KEYCODE = "keycode";
     public final static String NAME = "name";
     public final static String FIRST = "first";
@@ -135,5 +139,25 @@ public class SpUtils {
         SharedPreferences.Editor edit = sp.edit();
         edit.putBoolean(IS_SET_ALIAS, isSetAlias);
         edit.commit();
+    }
+
+    public static void cacheErrorLog(Context mContext,String errorLog,String userPhone){
+        if(sp == null){
+            initSp(mContext,CACHE_FILE_NAME);
+        }
+        SharedPreferences.Editor edit = sp.edit();
+        edit.putString("errorLog",errorLog);
+        edit.putString("errorLogName", userPhone);
+        edit.commit();
+    }
+    public static List<String> getErrorLog(Context mContext){
+        if(sp == null){
+            initSp(mContext,CACHE_FILE_NAME);
+        }
+        List<String> list = new ArrayList<String>();
+        list.add(sp.getString("errorLog", ""));
+        list.add(sp.getString("errorLogName", ""));
+
+        return list;
     }
 }

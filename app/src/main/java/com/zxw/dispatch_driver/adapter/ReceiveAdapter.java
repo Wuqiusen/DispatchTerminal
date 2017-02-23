@@ -27,13 +27,9 @@ public class ReceiveAdapter extends CommonAdapter<Receive> {
 
     @Override
     protected void convert(ViewHolder holder, int position, final Receive item) {
-        TextView tv_station_name = holder.findViewById(R.id.tv_station_name);
-        //TextView tv_run_date = holder.findViewById(R.id.tv_run_date);
-        TextView tv_run_date_year = holder.findViewById(R.id.tv_run_date_year);// 年
-        TextView tv_run_date_month = holder.findViewById(R.id.tv_run_date_month);// 月
-        TextView tv_run_date_day = holder.findViewById(R.id.tv_run_date_day);// 日
-        TextView tv_run_date_hour = holder.findViewById(R.id.tv_run_date_hour);// 时
-        TextView tv_run_date_minutes = holder.findViewById(R.id.tv_run_date_minutes);// 分
+        TextView tv_line_code = holder.findViewById(R.id.tv_line_code);
+        TextView tv_car_code = holder.findViewById(R.id.tv_car_code);
+        TextView tv_run_date = holder.findViewById(R.id.tv_run_date);
 
         TextView tv_prompt = holder.findViewById(R.id.tv_prompt);
         Button btn_refuse = holder.findViewById(R.id.btn_refuse);
@@ -46,49 +42,36 @@ public class ReceiveAdapter extends CommonAdapter<Receive> {
                 mContext.startActivity(intent);
             }
         });
-        tv_station_name.setText(item.getStationName());
-        //tv_run_date.setText(item.getRunDate() +" " + item.getProjectTime());
-        String runDate = String.valueOf(item.getRunDate());
-        try{
-            tv_run_date_year.setText(runDate.substring(0,4));
-            tv_run_date_month.setText(runDate.substring(4,6));
-            tv_run_date_day.setText(runDate.substring(6));
-            tv_run_date_hour.setText(item.getProjectTime().substring(0,2));
-            tv_run_date_minutes.setText(item.getProjectTime().substring(2));
-        }catch (Exception e){
-
-        }
+        tv_line_code.setText(item.lineCode);
+        tv_car_code.setText(item.vehCode);
+        String runDate = String.valueOf(item.runDate);
+        String date = runDate.substring(0,4) + "-" +runDate.substring(4,6) + "-" + runDate.substring(6, 8);
+        tv_run_date.setText(date +" " + item.vehTime.substring(0, 2) + ":" + item.vehTime.substring(2, 4));
 
 
         btn_refuse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.refuse(item.getId());
+                mPresenter.refuse(item.billId);
             }
         });
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.confirm(item.getId());
+                mPresenter.confirm(item.billId);
             }
         });
-        switch(item.getStatus()){
-            case 0:
+        switch(item.status){
+            case 1:
                 btn_refuse.setVisibility(View.VISIBLE);
                 btn_confirm.setVisibility(View.VISIBLE);
                 tv_prompt.setVisibility(View.GONE);
-                break;
-            case 1:
-                btn_refuse.setVisibility(View.GONE);
-                btn_confirm.setVisibility(View.GONE);
-                tv_prompt.setVisibility(View.VISIBLE);
-                tv_prompt.setText(mContext.getResources().getString(R.string.receive_status_1));
                 break;
             case 2:
                 btn_refuse.setVisibility(View.GONE);
                 btn_confirm.setVisibility(View.GONE);
                 tv_prompt.setVisibility(View.VISIBLE);
-                tv_prompt.setText(mContext.getResources().getString(R.string.receive_status_2));
+                tv_prompt.setText(mContext.getResources().getString(R.string.receive_status_1));
                 break;
             case 3:
                 btn_refuse.setVisibility(View.GONE);

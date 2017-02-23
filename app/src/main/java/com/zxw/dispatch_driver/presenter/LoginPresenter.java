@@ -77,14 +77,14 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onNext(Login loginBean) {
                 cacheLoginInfo(loginBean);
-                BroadcastUtil.loginIn(loginBean.getName(), loginBean.getCode());
+                BroadcastUtil.loginIn(loginBean.getName(), loginBean.getUserId());
                 jPushComponent();
             }
         });
     }
 
     private void cacheLoginInfo(Login loginBean) {
-        SpUtils.setCache(MyApplication.mContext, SpUtils.CODE, loginBean.getCode());
+        SpUtils.setCache(MyApplication.mContext, SpUtils.USER_ID, loginBean.getUserId());
         SpUtils.setCache(MyApplication.mContext, SpUtils.NAME, loginBean.getName());
         SpUtils.setCache(MyApplication.mContext, SpUtils.KEYCODE, loginBean.getKeyCode());
     }

@@ -25,8 +25,8 @@ public class ReceivePresenter extends BasePresenter<ReceiveView> {
 
     public ReceivePresenter(ReceiveView mvpView, Receive receive) {
         super(mvpView);
-        this.mLineId = receive.getLineId();
-        this.mOrderId = receive.getId();
+        this.mLineId = 0;//
+        this.mOrderId = receive.billId;
         this.mDispatchSource = new DispatchSource();
     }
 

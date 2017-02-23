@@ -6,6 +6,10 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.widget.ImageView;
 
 import com.zxw.data.source.DogMainSource;
 import com.zxw.data.source.DogSecondSource;
@@ -20,21 +24,25 @@ import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.ui.base.BaseHeadActivity;
 import com.zxw.dispatch_driver.utils.InitializeAssertFileUtil;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUpdateLineTableFinishListener, StationSource.OnUpdateStationFinishListener, LineStationSource.OnUpdateLineStationFinishListener, ReportPointSource.OnUpdateReportPointFinishListener, ServiceWordSource.OnUpdateServiceWordTableFinishListener, VoiceCompoundSource.OnUpdateVoiceCompoundTableFinishListener, DogMainSource.OnUpdateDogMainTableFinishListener, DogSecondSource.OnUpdateDogSecondTableFinishListener {
-
+    @Bind(R.id.imageView)
+    ImageView imageView;
     private boolean isUpdateLineFinish, isUpdateStationFinish, isUpdateLineStationFinish, isUpdateReportPointFinish, isUpdateServiceWordFinish, isUpdateVoiceCompoundFinish, isUpdateDogMain, isUpdateDogSecond;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        ButterKnife.bind(this);
         hideHeadArea();
         initPermission();
-        showLoading();
+        initView(imageView);
         InitializeAssertFileUtil.initialize(MyApplication.mContext);
-        update();
-        hideLoading();
+//        update();
     }
 
 
@@ -79,6 +87,30 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
 
     }
 
+    public void initView(ImageView view) {
+        // 初始化控件
+        AnimationSet animationSet = new AnimationSet(true);
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0.4F, 0.9F);
+        animationSet.setDuration(400);
+        animationSet.addAnimation(alphaAnimation);
+        // 监听动画过程
+        animationSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                update();
+            }
+        });
+        view.startAnimation(animationSet);
+    }
+
     @Override
     public void onUpdateLineTableFinish() {
         isUpdateLineFinish = true;
@@ -103,8 +135,8 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
         goMain();
     }
 
-    private void goMain(){
-        if (isUpdateLineFinish && isUpdateLineStationFinish && isUpdateReportPointFinish && isUpdateStationFinish && isUpdateServiceWordFinish && isUpdateVoiceCompoundFinish && isUpdateDogMain && isUpdateDogSecond){
+    private void goMain() {
+        if (isUpdateLineFinish && isUpdateLineStationFinish && isUpdateReportPointFinish && isUpdateStationFinish && isUpdateServiceWordFinish && isUpdateVoiceCompoundFinish && isUpdateDogMain && isUpdateDogSecond) {
             hideLoading();
 //            String lineId = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID);
 //            if(TextUtils.isEmpty(lineId)){

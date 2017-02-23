@@ -12,16 +12,16 @@ public class Login {
      * name : 奥水军
      */
 
-    private String code;
+    private String userId;
     private String keyCode;
     private String name;
 
-    public String getCode() {
-        return code;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getKeyCode() {
@@ -43,7 +43,7 @@ public class Login {
     @Override
     public String toString() {
         return "Login{" +
-                "code='" + code + '\'' +
+                "userId='" + userId + '\'' +
                 ", keyCode='" + keyCode + '\'' +
                 ", name='" + name + '\'' +
                 '}';

@@ -28,6 +28,9 @@ public class BasePresenter<V extends BaseView> {
     protected String code(){
         return SpUtils.getCache(MyApplication.mContext, SpUtils.CODE);
     }
+    protected String userId(){
+        return SpUtils.getCache(MyApplication.mContext, SpUtils.USER_ID);
+    }
     protected String timestamp(){
         Date date = new Date();
         return String.valueOf(date.getTime());

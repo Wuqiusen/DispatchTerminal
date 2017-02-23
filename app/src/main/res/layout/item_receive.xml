@@ -5,140 +5,101 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/transparent"
-        android:padding="30dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="30dp">
 
         <LinearLayout
-         android:layout_width="0dp"
-         android:layout_height="match_parent"
-         android:layout_weight="2"
-         android:gravity="center"
-         android:orientation="vertical">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:orientation="vertical">
+
             <TextView
-                android:id="@+id/tv_station_name"
+                android:id="@+id/tv_line_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
-                tools:text="田心调度室"
                 android:text=""
-                android:textSize="@dimen/font_mhuge"
                 android:textColor="@color/font_bg_bold"
-                />
-
-            <!--<TextView-->
-                <!--android:id="@+id/tv_run_date"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:paddingLeft="4dp"-->
-                <!--tools:text="2016-12-01 15:30"-->
-                <!--android:text=""-->
-                <!--android:textSize="@dimen/font_large"-->
-                <!--android:textColor="@color/font_bg_normal"-->
-                <!--/>-->
-            <LinearLayout
+                android:textSize="@dimen/font_mhuge"
+                tools:text="P123" />
+            <TextView
+                android:id="@+id/tv_car_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/tv_run_date_year"
-                    style="@style/tv_run_date_style"
-                    android:paddingLeft="4dp"
-                    tools:text="2016"
-                    />
-                <TextView
-                    style="@style/tv_symbol_style"
-                    android:text="-"
-                    />
-                <TextView
-                    android:id="@+id/tv_run_date_month"
-                    style="@style/tv_run_date_style"
-                    tools:text="12"
-                    />
-                <TextView
-                    style="@style/tv_symbol_style"
-                    android:text="-"
-                    />
-                <TextView
-                    android:id="@+id/tv_run_date_day"
-                    style="@style/tv_run_date_style"
-                    tools:text="19"
-                    />
-                <TextView
-                    android:id="@+id/tv_run_date_hour"
-                    android:paddingLeft="8dp"
-                    style="@style/tv_run_date_style"
-                    tools:text="16"
-                    />
-                <TextView
-                    style="@style/tv_symbol_style"
-                    android:text=":"
-                    />
-                <TextView
-                    android:id="@+id/tv_run_date_minutes"
-                    style="@style/tv_run_date_style"
-                    tools:text="48"/>
-            </LinearLayout>
-    </LinearLayout>
+                android:textColor="@color/font_bg_bold"
+                android:textSize="@dimen/font_large"
+                tools:text="粤B12345"/>
+
+            <TextView
+                android:id="@+id/tv_run_date"
+                android:layout_width="match_parent"
+                style="@style/tv_run_date_style"
+                android:paddingLeft="4dp"
+                tools:text="2016-1-7" />
+        </LinearLayout>
 
         <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-        <!--接单默认样式-->
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:gravity="center"
-           android:orientation="horizontal"
-           android:visibility="visible">
-           <Button
-               android:id="@+id/btn_refuse"
-               android:layout_width="0dp"
-               android:layout_weight="1"
-               android:layout_height="wrap_content"
-               android:minHeight="50dp"
-               android:background="@drawable/btn_red_style"
-               android:text="拒绝"
-               android:textSize="@dimen/font_large"
-               android:textColor="@color/white"/>
-           <Button
-               android:id="@+id/btn_confirm"
-               android:layout_width="0dp"
-               android:layout_weight="1"
-               android:layout_height="wrap_content"
-               android:minHeight="50dp"
-               android:layout_marginLeft="10dp"
-               android:background="@drawable/btn_green_style"
-               android:text="接单"
-               android:textSize="@dimen/font_large"
-               android:textColor="@color/white"/>
-       </LinearLayout>
-        <!--已接单样式-->
-        <TextView
-            android:id="@+id/tv_prompt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_alignParentRight="true"
-            android:text="该工单已接受"
-            android:textSize="@dimen/font_medium"
-            android:textColor="@color/btn_bg_green"
-            android:visibility="invisible"
-            />
-     </RelativeLayout>
-  </LinearLayout>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <!--接单默认样式-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <Button
+                    android:id="@+id/btn_refuse"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_red_style"
+                    android:minHeight="50dp"
+                    android:text="拒绝"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_large" />
+
+                <Button
+                    android:id="@+id/btn_confirm"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_green_style"
+                    android:minHeight="50dp"
+                    android:text="接单"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_large" />
+            </LinearLayout>
+            <!--已接单样式-->
+            <TextView
+                android:id="@+id/tv_prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:text="该工单已接受"
+                android:textColor="@color/btn_bg_green"
+                android:textSize="@dimen/font_medium"
+                android:visibility="invisible" />
+        </RelativeLayout>
+    </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="@color/backdrop_bg"/>
+        android:background="@color/backdrop_bg" />
 
 </LinearLayout>

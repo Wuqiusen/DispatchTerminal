@@ -29,7 +29,8 @@ import rx.schedulers.Schedulers;
  * email：cangjie2016@gmail.com
  */
 public class HttpMethods {
-    public static final String BASE_URL = "http://120.24.252.195:8080/yd_app/";
+//    public static final String BASE_URL = "http://120.24.252.195:8080/yd_app/";
+    public static final String BASE_URL = "http://192.168.0.114:8080/yd_driver_app/";
 //    public static final String BASE_URL = "http://192.168.0.90:8080/yd_app/";
     public Retrofit retrofit = RetrofitSetting.getInstance();
 
@@ -65,7 +66,7 @@ public class HttpMethods {
 
     public void login(Subscriber<Login> subscriber, String code, String password, String time){
         HttpInterfaces.User user = retrofit.create(HttpInterfaces.User.class);
-        Observable<Login> observable = user.login(code, password, time).map(new HttpResultFunc<Login>());
+        Observable<Login> observable = user.login(code, password, time, 2).map(new HttpResultFunc<Login>());
         toSubscribe(observable, subscriber);
     }
 
@@ -121,7 +122,7 @@ public class HttpMethods {
      */
     public void receiveList(String code, String keyCode, int pageNo, int pageSize, Subscriber<BaseBean<List<Receive>>> subscriber){
         HttpInterfaces.Dispatch dispatch = retrofit.create(HttpInterfaces.Dispatch.class);
-        Observable<BaseBean<List<Receive>>> observable = dispatch.receiveList(code, keyCode, pageNo, pageSize);
+        Observable<BaseBean<List<Receive>>> observable = dispatch.receiveList(code, keyCode, 2, pageNo, pageSize);
         toSubscribe(observable, subscriber);
     }
 
@@ -152,6 +153,13 @@ public class HttpMethods {
         HttpInterfaces.UpdateVersion updateVersion = retrofit.create(HttpInterfaces.UpdateVersion.class);
         Observable<VersionBean> observable = updateVersion.checkVersion("http://slb.szebus.net/version/phone/last/data", keyCode)
                 .map(new HttpResultFunc<VersionBean>());
+        toSubscribe(observable, subscriber);
+    }
+
+    //上传异常日志
+    public void upLoadLog(Subscriber<BaseBean> subscriber,String log, String phone, String key){
+        HttpInterfaces.UpLoadLog upLoadLog = retrofit.create(HttpInterfaces.UpLoadLog.class);
+        Observable<BaseBean> observable = upLoadLog.upLoadLog("http://120.24.252.195:7002/app_ebus/upload/phone/error/log",log, phone, key);
         toSubscribe(observable, subscriber);
     }
 }

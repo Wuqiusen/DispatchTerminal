@@ -61,23 +61,17 @@ public class ReceiveActivity extends PresenterActivity<ReceivePresenter> impleme
     }
 
     private void initView() {
-        switch(mReceive.getStatus()){
-            case 0:
+        switch(mReceive.status){
+            case 1:
                 ll_refuse.setVisibility(View.VISIBLE);
                 ll_confirm.setVisibility(View.VISIBLE);
                 tv_prompt.setVisibility(View.GONE);
-                break;
-            case 1:
-                ll_refuse.setVisibility(View.GONE);
-                ll_confirm.setVisibility(View.GONE);
-                tv_prompt.setVisibility(View.VISIBLE);
-                tv_prompt.setText(mContext.getResources().getString(R.string.receive_status_1));
                 break;
             case 2:
                 ll_refuse.setVisibility(View.GONE);
                 ll_confirm.setVisibility(View.GONE);
                 tv_prompt.setVisibility(View.VISIBLE);
-                tv_prompt.setText(mContext.getResources().getString(R.string.receive_status_2));
+                tv_prompt.setText(mContext.getResources().getString(R.string.receive_status_1));
                 break;
             case 3:
                 ll_refuse.setVisibility(View.GONE);

@@ -1,12 +1,15 @@
 package com.zxw.data.source;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.zxw.data.bean.BaseBean;
 import com.zxw.data.bean.UpdateLineBean;
 import com.zxw.data.dao.LineDao;
+import com.zxw.data.http.HttpMethods;
 import com.zxw.data.sp.SpUtils;
+import com.zxw.data.utils.MD5;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,6 +38,7 @@ public class LineSource extends BaseSrouce {
     public LineSource(Context context) {
         super();
         this.mContext = context;
+        upLoadLog();//上传异常报告
         mDao = new LineDao(mContext);
         // 记录这个类工作的时间yyyyMMddHHmm 当更新完成后,把这个值赋给SP中的记录时间
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm", Locale.CHINA);
@@ -109,5 +113,32 @@ public class LineSource extends BaseSrouce {
     }
     public interface OnUpdateLineTableFinishListener{
         void onUpdateLineTableFinish();
+    }
+
+    private void upLoadLog(){
+        final List<String> errorLog = SpUtils.getErrorLog(mContext);
+        if (errorLog == null || errorLog.get(0) == null || TextUtils.isEmpty(errorLog.get(0))) {
+            Log.i("log", "errorLog == null");
+            return;
+        } else {
+            Log.i("log", "errorLog != null");
+        }
+        final SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
+        HttpMethods.getInstance().upLoadLog(new Subscriber<BaseBean>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(BaseBean baseBean) {
+
+            }
+        }, errorLog.get(0), errorLog.get(1), MD5.MD5Encode(df.format(new Date())));
     }
 }
