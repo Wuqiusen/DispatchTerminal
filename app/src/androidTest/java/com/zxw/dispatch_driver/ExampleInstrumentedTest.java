@@ -14,6 +14,14 @@ import org.junit.runner.RunWith;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
+
+    @Test
+    public void testPP() throws Exception{
+
+        long currentTime = System.currentTimeMillis();
+        Assert.assertEquals(currentTime, 123);
+
+    }
     @Test
     public void useAppContext() throws Exception {
 //        double v = calculateDiff(22.6413801906, 114.0095452679, 22.6415131906, 114.0094552679);   //55.91411300581078

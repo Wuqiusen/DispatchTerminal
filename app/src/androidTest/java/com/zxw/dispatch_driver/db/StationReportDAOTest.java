@@ -2,7 +2,8 @@ package com.zxw.dispatch_driver.db;
 
 import android.support.test.InstrumentationRegistry;
 
-import com.zxw.data.dao.LineDao;
+import com.zxw.data.dao.EDogIllegalityDao;
+import com.zxw.data.db.bean.IllegalityBean;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,11 +15,11 @@ import org.junit.Test;
 public class StationReportDAOTest{
 
 //    private StationReportDAO dao;
-    private LineDao dao;
+    private EDogIllegalityDao dao;
 
     @Before
     public void init(){
-        dao = new LineDao(InstrumentationRegistry.getTargetContext());
+        dao = new EDogIllegalityDao(InstrumentationRegistry.getTargetContext());
     }
 
 //    @Test
@@ -37,6 +38,22 @@ public class StationReportDAOTest{
 //        dao.addLineStationReport(2, 101, 207, 22.6413471906, 114.0094372679, 0, 12);  //F2 终点站
 //
 //    }
+
+    @Test
+    public void testEDogIllegality() throws Exception{
+        dao.add(new IllegalityBean(66,"2017-2-8 17:53", 31, "photo1", "photo2", "video", "driverId"));
+        dao.add(new IllegalityBean(66,"2017-2-8 17:53", 32, "photo1", "photo2", "video", "driverId"));
+        dao.add(new IllegalityBean(66,"2017-2-8 17:53", 33, "photo1", "photo2", "video", "driverId"));
+    }
+    @Test
+    public void testEDogPopupFirst() throws Exception{
+        dao.popupFirst();
+    }
+    @Test
+    public void testRemoveTable() throws Exception{
+        dao.removeTable();
+    }
+
     @Test
     public void testLine() throws Exception{
 //        dao.addLine(101, "淘金地线");

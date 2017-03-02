@@ -55,7 +55,6 @@
         android:name="com.zxw.dispatch_driver.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
-
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -63,11 +62,22 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Light.NoTitleBar">
+        <activity
+            android:name=".ui.LoginActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-        <activity android:name=".ui.TestActivity"
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name=".ui.TestActivity"
+            android:exported="true"
             android:label="testActivity"
-            android:screenOrientation="landscape"
-            android:exported="true">
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -79,13 +89,13 @@
         <!-- 高德地图 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="0f232b3b6b3f172aef61c6993344fcfb"/>
+            android:value="0f232b3b6b3f172aef61c6993344fcfb" />
 
         <activity
             android:name=".ui.WelcomeActivity"
+            android:exported="true"
             android:label="@string/app_name1"
-            android:screenOrientation="landscape"
-            android:exported="true">
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -95,9 +105,9 @@
         </activity>
         <activity
             android:name=".ui.AutoReportActivity"
+            android:exported="true"
             android:label="自动报站"
-            android:screenOrientation="landscape"
-            android:exported="true">
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -121,11 +131,13 @@
         <activity
             android:name=".ui.DogActivity"
             android:label="@string/app_name2">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
 
         <!-- Required SDK 核心功能 -->
@@ -221,7 +233,7 @@
             android:name="JPUSH_APPKEY"
             android:value="0bf740db292764f1c336bcb2" />
 
-        <!--替换，以便查看界面-->
+        <!-- 替换，以便查看界面 -->
         <activity
             android:name=".ui.MainActivity"
             android:label="主页面"
@@ -234,44 +246,31 @@
             </intent-filter>
         </activity>
 
-        <!--原来的-->
-        <!--<activity android:name=".ui.MainActivity"-->
-            <!--android:launchMode="singleTask"-->
-            <!--android:screenOrientation="landscape">-->
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
+        <!-- 原来的 -->
+        <!-- <activity android:name=".ui.MainActivity" -->
+        <!-- android:launchMode="singleTask" -->
+        <!-- android:screenOrientation="landscape"> -->
 
 
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        <!--</activity>-->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
 
 
-        <activity android:name=".ui.LoginActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
-
-
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
-        </activity>
-
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
 
         <activity
             android:name=".ui.JourneyActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ui.ReceiveActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ui.UserInfoActivity"
+            android:exported="true"
             android:label="@string/user_info_label"
-            android:screenOrientation="landscape"
-            android:exported="true">
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -283,6 +282,7 @@
         <service android:name=".service.DogService" />
         <service android:name=".service.UpdateService" />
         <service android:name=".service.VerifyFaceService" />
+        <service android:name=".trace.TraceService" />
 
         <receiver android:name=".receiver.EmployeeCardReceiver">
             <intent-filter>
@@ -290,12 +290,31 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="com.amap.api.location.APSService"></service>
+        <service android:name="com.amap.api.location.APSService" />
+
         <receiver android:name=".receiver.BootCompletedReceiver">
-                <intent-filter>
-                    <action android:name="android.intent.action.BOOT_COMPLETED" />
-                </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </receiver>
+
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="gMDTpH988kjG8KaiABoGmfFTGoP7RXSO" />
+
+        <service
+            android:name="com.baidu.trace.LBSTraceService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".ui.CallActivity"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter></activity>
     </application>
 
 </manifest>

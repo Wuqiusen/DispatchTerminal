@@ -1,5 +1,8 @@
 package com.zxw.dispatch_driver;
 
+import com.amap.api.maps2d.CoordinateConverter;
+import com.amap.api.maps2d.model.LatLng;
+
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -49,9 +52,18 @@ public class ExampleUnitTest {
 
     @Test
     public void addition_isCorrect() throws Exception {
-        long i = 201610291002L;
-        Integer integer = Integer.valueOf("201610291002");
-        assertEquals(2, integer.intValue());
+//        long i = 201610291002L;
+//        Integer integer = Integer.valueOf("201610291002");
+
+        LatLng sourceLatLng = new LatLng(22.6406051906,114.0115392679);
+        CoordinateConverter converter  = new CoordinateConverter();
+// CoordType.GPS 待转换坐标类型
+        converter.from(CoordinateConverter.CoordType.BAIDU);
+// sourceLatLng待转换坐标点 LatLng类型
+        converter.coord(sourceLatLng);
+// 执行转换操作
+        LatLng desLatLng = converter.convert();
+        assertEquals("", desLatLng.latitude + "," + desLatLng.longitude);
     }
 
     @Test
@@ -157,4 +169,6 @@ public class ExampleUnitTest {
             this.lng2 = lng2;
         }
     }
+
+
 }

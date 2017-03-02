@@ -68,6 +68,7 @@ public class LoginActivity extends PresenterActivity<LoginPresenter> implements 
 
     @Override
     public void loginSuccess() {
+        mPresenter.loadVehicleId();
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }

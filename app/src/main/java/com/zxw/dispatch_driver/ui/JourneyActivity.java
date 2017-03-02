@@ -12,6 +12,7 @@ import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.presenter.JourneyPresenter;
 import com.zxw.dispatch_driver.presenter.view.JourneyView;
 import com.zxw.dispatch_driver.service.DogService;
+import com.zxw.dispatch_driver.trace.TraceService;
 import com.zxw.dispatch_driver.ui.base.PresenterActivity;
 
 import butterknife.Bind;
@@ -91,7 +92,7 @@ public class JourneyActivity extends PresenterActivity<JourneyPresenter> impleme
     @Override
     public void startSuccess(String returnInfo) {
         disPlay(returnInfo);
-
+        startTraceService();
         startService(new Intent(this, DogService.class));
         startActivity(new Intent(this, AutoReportActivity.class));
         finish();
@@ -126,5 +127,11 @@ public class JourneyActivity extends PresenterActivity<JourneyPresenter> impleme
     @Override
     public void errorFinishFailed(String returnInfo) {
         disPlay(returnInfo);
+    }
+
+    private void startTraceService() {
+            Intent intent = new Intent(mContext, TraceService.class);
+            intent.putExtra("lineId", journey.getLineId());
+            mContext.startService(intent);
     }
 }

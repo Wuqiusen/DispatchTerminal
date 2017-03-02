@@ -2,9 +2,11 @@ package com.zxw.dispatch_driver.presenter;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.zxw.data.bean.Login;
+import com.zxw.data.http.HttpMethods;
 import com.zxw.data.source.DispatchSource;
 import com.zxw.data.sp.SpUtils;
 import com.zxw.data.utils.MD5;
@@ -22,6 +24,7 @@ import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import rx.Subscriber;
 
+import static android.content.Context.TELEPHONY_SERVICE;
 import static com.zxw.dispatch_driver.MyApplication.mContext;
 
 /**
@@ -77,7 +80,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onNext(Login loginBean) {
                 cacheLoginInfo(loginBean);
-                BroadcastUtil.loginIn(loginBean.getName(), loginBean.getUserId());
+                BroadcastUtil.loginIn(loginBean.getName(), loginBean.getCode());
                 jPushComponent();
             }
         });
@@ -85,6 +88,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
     private void cacheLoginInfo(Login loginBean) {
         SpUtils.setCache(MyApplication.mContext, SpUtils.USER_ID, loginBean.getUserId());
+        SpUtils.setCache(MyApplication.mContext, SpUtils.CODE, loginBean.getCode());
         SpUtils.setCache(MyApplication.mContext, SpUtils.NAME, loginBean.getName());
         SpUtils.setCache(MyApplication.mContext, SpUtils.KEYCODE, loginBean.getKeyCode());
     }
@@ -204,4 +208,25 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         }
 
     };
+
+    public void loadVehicleId() {
+        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(TELEPHONY_SERVICE);
+        String imei = tm.getDeviceId();
+        HttpMethods.getInstance().vehicleId(new Subscriber<Integer>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Integer vehicleId) {
+                SpUtils.setVehicleId(mContext, vehicleId);
+            }
+        }, userId(), keyCode(), 2, imei);
+    }
 }

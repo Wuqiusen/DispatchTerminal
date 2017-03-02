@@ -26,7 +26,7 @@ public class JourneyPresenter extends BasePresenter<JourneyView> {
     }
 
     public void start() {
-        realJourneyOperator(2, new Subscriber<BaseBean>() {
+        startJourneyOperator(new Subscriber<BaseBean>() {
             @Override
             public void onCompleted() {
 
@@ -50,7 +50,7 @@ public class JourneyPresenter extends BasePresenter<JourneyView> {
     }
 
     public void normalFinish() {
-        realJourneyOperator(4, new Subscriber<BaseBean>() {
+        finishJourneyOperator(4, new Subscriber<BaseBean>() {
             @Override
             public void onCompleted() {
 
@@ -73,7 +73,7 @@ public class JourneyPresenter extends BasePresenter<JourneyView> {
     }
 
     public void errorFinish() {
-        realJourneyOperator(3, new Subscriber<BaseBean>() {
+        finishJourneyOperator(3, new Subscriber<BaseBean>() {
             @Override
             public void onCompleted() {
 
@@ -95,8 +95,12 @@ public class JourneyPresenter extends BasePresenter<JourneyView> {
         });
     }
 
-    private void realJourneyOperator(int status, Subscriber<BaseBean> subscriber) {
+    private void startJourneyOperator(Subscriber<BaseBean> subscriber) {
         mvpView.showLoading();
-        mSource.journeyOperator(code(), keyCode(), mJourney.getId(), status, subscriber);
+        mSource.journeyOperator(userId(), keyCode(), mJourney.getScheduleId(), "", subscriber);
+    }
+    private void finishJourneyOperator(int status, Subscriber<BaseBean> subscriber) {
+        mvpView.showLoading();
+        mSource.journeyEnd(userId(), keyCode(), mJourney.getScheduleId(), status, subscriber);
     }
 }

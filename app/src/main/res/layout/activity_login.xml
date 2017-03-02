@@ -52,6 +52,7 @@
                         android:inputType="number"
                         android:hint="@string/login_hide_code"
                         tools:text="901969"
+                        android:text="100300"
                         style="@style/edit_login_style"
                         />
                 </LinearLayout>
@@ -73,6 +74,7 @@
                         android:hint="@string/login_hide_keycode"
                         android:drawableRight="@drawable/img_delete"
                         tools:text="123456"
+                        android:text="123456"
                         style="@style/edit_login_style"
                         />
 

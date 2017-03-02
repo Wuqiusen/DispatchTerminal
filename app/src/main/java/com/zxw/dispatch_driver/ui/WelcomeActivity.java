@@ -22,7 +22,6 @@ import com.zxw.data.source.VoiceCompoundSource;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.ui.base.BaseHeadActivity;
-import com.zxw.dispatch_driver.utils.InitializeAssertFileUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,7 +40,7 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
         hideHeadArea();
         initPermission();
         initView(imageView);
-        InitializeAssertFileUtil.initialize(MyApplication.mContext);
+//        InitializeAssertFileUtil.initialize(MyApplication.mContext);
 //        update();
     }
 
@@ -105,7 +104,8 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                update();
+//                update();
+                goMain();
             }
         });
         view.startAnimation(animationSet);
@@ -136,8 +136,8 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
     }
 
     private void goMain() {
-        if (isUpdateLineFinish && isUpdateLineStationFinish && isUpdateReportPointFinish && isUpdateStationFinish && isUpdateServiceWordFinish && isUpdateVoiceCompoundFinish && isUpdateDogMain && isUpdateDogSecond) {
-            hideLoading();
+//        if (isUpdateLineFinish && isUpdateLineStationFinish && isUpdateReportPointFinish && isUpdateStationFinish && isUpdateServiceWordFinish && isUpdateVoiceCompoundFinish && isUpdateDogMain && isUpdateDogSecond) {
+//            hideLoading();
 //            String lineId = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID);
 //            if(TextUtils.isEmpty(lineId)){
 //                startActivity(new Intent(this, SelectLineActivity.class));
@@ -148,8 +148,7 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
 //            }
             startActivity(new Intent(this, LoginActivity.class));
             finish();
-        }
-
+//        }
     }
 
     @Override

@@ -2,12 +2,19 @@ package com.zxw.dispatch_driver;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Environment;
 
+import com.baidu.mapapi.SDKInitializer;
+import com.facebook.stetho.Stetho;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.zxw.data.sp.SpUtils;
+import com.zxw.dispatch_driver.trace.TraceHelper;
+import com.zxw.dispatch_driver.trace.TraceService;
 import com.zxw.dispatch_driver.utils.DebugLog;
 
 import java.io.File;
@@ -27,18 +34,36 @@ import cn.jpush.android.api.JPushInterface;
 public class MyApplication extends Application {
 
     public static Context mContext;
+    public static SoundPool soundPool;
+
     @Override
     public void onCreate() {
         super.onCreate();
         this.mContext = this;
+        TraceHelper.getInstance(mContext);
+
+        initBeep();
+        Intent intent = new Intent(mContext, TraceService.class);
+        mContext.startService(intent);
+
         SpeechUtility.createUtility(mContext, SpeechConstant.APPID +"=581aeb22");
 
         JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
         JPushInterface.init(this);     		// 初始化 JPush
 
+        Stetho.initializeWithDefaults(this);
+
+        SDKInitializer.initialize(getApplicationContext());
 
         Thread.currentThread().setUncaughtExceptionHandler(
                 new MyUncaughtExceptionHandler());
+    }
+
+    private void initBeep() {
+
+        if(soundPool == null)
+            soundPool = new SoundPool(1, AudioManager.STREAM_SYSTEM,5);
+        soundPool.load(mContext, R.raw.beep,1);
     }
 
     private class MyUncaughtExceptionHandler implements

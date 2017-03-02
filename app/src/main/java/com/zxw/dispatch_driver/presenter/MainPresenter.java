@@ -161,7 +161,7 @@ public class MainPresenter extends BasePresenter<MainView> {
             return;
         isJourneyLoading= true;
         mvpView.showLoadingJourneyPage();
-        mSource.journeyList(code(), keyCode(), mCurrentJourneyPageNo, JOURNEY_DEFAULT_SIZE, new Subscriber<BaseBean<List<Journey>>>() {
+        mSource.journeyList(userId(), keyCode(), mCurrentJourneyPageNo, JOURNEY_DEFAULT_SIZE, new Subscriber<BaseBean<List<Journey>>>() {
             @Override
             public void onCompleted() {
                 isJourneyLoading = false;
@@ -190,7 +190,7 @@ public class MainPresenter extends BasePresenter<MainView> {
                     return;
                 }
                 if (mJourneyAdapter == null) {
-                    mJourneyAdapter = new JourneyAdapter(mActivity, R.layout.item_journey, mJourneyData);
+                    mJourneyAdapter = new JourneyAdapter(mActivity, MainPresenter.this, R.layout.item_journey, mJourneyData);
                     mvpView.journeyPageSetAdapter(mJourneyAdapter);
                 } else {
                     mJourneyAdapter.setItems(mJourneyData);
@@ -206,7 +206,7 @@ public class MainPresenter extends BasePresenter<MainView> {
      * @param id 工单id
      */
     public void refuse(int id) {
-        receiveListOperator(id, 1);
+        receiveListOperator(id, DispatchSource.TYPE_REJECT);
     }
 
     /**
@@ -214,11 +214,16 @@ public class MainPresenter extends BasePresenter<MainView> {
      * @param id 工单id
      */
     public void confirm(int id) {
-        receiveListOperator(id, 3);
+        receiveListOperator(id, DispatchSource.TYPE_ACCEPT);
     }
 
+    /**
+     *
+     * @param id 工单ID
+     * @param status 2/拒绝 3/接受
+     */
     public void receiveListOperator(int id, int status){
-        mSource.receiveOperator(code(), keyCode(), id, status, new Subscriber<BaseBean>() {
+        mSource.receiveOperator(userId(), keyCode(), id, status, new Subscriber<BaseBean>() {
             @Override
             public void onCompleted() {
 
@@ -266,6 +271,66 @@ public class MainPresenter extends BasePresenter<MainView> {
             setAlias();
             setTag();
         }
+    }
+
+    public void startJourney(int scheduleId, final int lineId) {
+        mvpView.showLoading();
+        mSource.journeyOperator(userId(), keyCode(), scheduleId, "", new Subscriber<BaseBean>() {
+            @Override
+            public void onCompleted() {
+                mvpView.hideLoading();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mvpView.hideLoading();
+            }
+
+            @Override
+            public void onNext(BaseBean baseBean) {
+                reloadJourneyList();
+            }
+        });
+    }
+
+    public void normalFinishJourney(int scheduleId) {
+        mvpView.showLoading();
+        mSource.journeyEnd(userId(), keyCode(), scheduleId, 4, new Subscriber<BaseBean>() {
+            @Override
+            public void onCompleted() {
+                mvpView.hideLoading();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mvpView.hideLoading();
+            }
+
+            @Override
+            public void onNext(BaseBean baseBean) {
+                reloadJourneyList();
+            }
+        });
+    }
+
+    public void errorFinishJourney(int scheduleId) {
+        mvpView.showLoading();
+        mSource.journeyEnd(userId(), keyCode(), scheduleId, 3, new Subscriber<BaseBean>() {
+            @Override
+            public void onCompleted() {
+                mvpView.hideLoading();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mvpView.hideLoading();
+            }
+
+            @Override
+            public void onNext(BaseBean baseBean) {
+                reloadJourneyList();
+            }
+        });
     }
 
     public class MessageReceiver extends BroadcastReceiver {

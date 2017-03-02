@@ -35,18 +35,18 @@ public class ReceivePresenter extends BasePresenter<ReceiveView> {
      * 拒绝工单
      */
     public void refuse() {
-        receiveListOperator(1);
+        receiveListOperator(DispatchSource.TYPE_REJECT);
     }
 
     /**
      * 接受工单
      */
     public void confirm() {
-        receiveListOperator(3);
+        receiveListOperator(DispatchSource.TYPE_ACCEPT);
     }
 
     public void receiveListOperator(int status){
-        mDispatchSource.receiveOperator(code(), keyCode(), mOrderId, status, new Subscriber<BaseBean>() {
+        mDispatchSource.receiveOperator(userId(), keyCode(), mOrderId, status, new Subscriber<BaseBean>() {
             @Override
             public void onCompleted() {
 
@@ -68,7 +68,7 @@ public class ReceivePresenter extends BasePresenter<ReceiveView> {
     }
 
     public void loadLineDetail(){
-        mDispatchSource.lineDetail(code(), keyCode(), mLineId, new Subscriber<LineDetail>() {
+        mDispatchSource.lineDetail(userId(), keyCode(), mLineId, new Subscriber<LineDetail>() {
             @Override
             public void onCompleted() {
 

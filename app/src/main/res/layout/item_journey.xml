@@ -13,13 +13,13 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/transparent"
-        android:padding="30dp"
+        android:padding="10dp"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:gravity="center"
             android:orientation="vertical">
             <TextView
@@ -33,6 +33,16 @@
                 android:textColor="@color/font_bg_bold"
                 />
 
+            <TextView
+                android:id="@+id/tv_vehicle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                tools:text="粤B12312"
+                android:text=""
+                android:textSize="@dimen/font_large"
+                android:textColor="@color/font_bg_bold"
+                />
             <!--<TextView-->
                 <!--android:id="@+id/tv_run_date"-->
                 <!--android:layout_width="match_parent"-->
@@ -88,43 +98,54 @@
             </LinearLayout>
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
             <!--未结束 或 已结束 按钮样式-->
+            <Button
+                android:id="@+id/btn_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:background="@drawable/btn_green_style"
+                android:text="开始"
+                android:textSize="@dimen/font_large"
+                android:textColor="@color/white"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:visibility="invisible">
+                android:gravity="center">
                 <Button
-                    android:id="@+id/btn_1"
+                    android:id="@+id/btn_2"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:background="@drawable/btn_blue_style"
+                    android:text="正常结束"
+                    android:textSize="@dimen/font_large"
+                    android:textColor="@color/white"
+                    />
+
+                <Button
+                    android:id="@+id/btn_3"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:minHeight="50dp"
                     android:background="@drawable/btn_red_style"
-                    android:text="未结束"
+                    android:text="异常结束"
                     android:textSize="@dimen/font_large"
                     android:textColor="@color/white"
                     />
             </LinearLayout>
             <!--已结束样式-->
-            <TextView
-                android:id="@+id/tv_prompt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_alignParentRight="true"
-                android:text="该行程已结束"
-                android:textSize="@dimen/font_medium"
-                android:textColor="@color/btn_bg_green"
-                android:visibility="visible"
-                />
-        </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
