@@ -16,26 +16,29 @@ import rx.Subscriber;
  * email：cangjie2016@gmail.com
  */
 public class DispatchSource {
+    public static final int TYPE_ACCEPT = 3, TYPE_REJECT = 2;
     public void login(String username, String time, String password, Subscriber<Login> subscriber){
         HttpMethods.getInstance().login(subscriber, username, password, time);
     }
-    public void loginByEmployeeCard(String uid, String time, Subscriber<Login> subscriber){
-        HttpMethods.getInstance().loginByEmployeeCard(subscriber, uid, time);
+    public void loginByEmployeeCard(String code, String time, Subscriber<Login> subscriber){
+        HttpMethods.getInstance().loginByEmployeeCard(subscriber, code, time, 2);
     }
     public void receiveList(String code, String keyCode, int pageNo, int pageSize, Subscriber<BaseBean<List<Receive>>> subscriber){
         HttpMethods.getInstance().receiveList(code, keyCode, pageNo, pageSize, subscriber);
     }
-    public void receiveOperator(String code, String keyCode, int opId, int status, Subscriber<BaseBean> subscriber){
-        HttpMethods.getInstance().receiveOperator(code, keyCode, opId, status, subscriber);
+    public void receiveOperator(String userId,String keyCode,int billId, int status, Subscriber<BaseBean> subscriber){
+        HttpMethods.getInstance().receiveOperator(userId, keyCode, billId, status, subscriber);
     }
     public void journeyList(String code, String keyCode, int pageNo, int pageSize, Subscriber<BaseBean<List<Journey>>> subscriber){
         HttpMethods.getInstance().journeyList(code, keyCode, pageNo, pageSize, subscriber);
     }
-    public void journeyOperator(String code, String keyCode, int opId, int status, Subscriber<BaseBean> subscriber){
-        HttpMethods.getInstance().journeyOperator(code, keyCode, opId, status, subscriber);
+    public void journeyOperator(String code, String keyCode,  int scheduleId, String lngLat, Subscriber<BaseBean> subscriber){
+        HttpMethods.getInstance().journeyOperator(code, keyCode, scheduleId, lngLat, subscriber);
+    }
+    public void journeyEnd(String code, String keyCode,  int scheduleId, int status, Subscriber<BaseBean> subscriber){
+        HttpMethods.getInstance().journeyEnd(code, keyCode, scheduleId, status, subscriber);
     }
     public void lineDetail(String code, String keyCode, int lineId, Subscriber<LineDetail> subscriber){
         HttpMethods.getInstance().lineDetail(code, keyCode, lineId, subscriber);
     }
-
 }

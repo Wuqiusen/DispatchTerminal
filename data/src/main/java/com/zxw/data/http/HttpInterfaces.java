@@ -1,6 +1,7 @@
 package com.zxw.data.http;
 
 import com.zxw.data.bean.BaseBean;
+import com.zxw.data.bean.ElectronRail;
 import com.zxw.data.bean.Journey;
 import com.zxw.data.bean.LineDetail;
 import com.zxw.data.bean.Login;
@@ -34,29 +35,30 @@ import rx.Observable;
  */
 public class HttpInterfaces {
 
-    public interface UpdateVersion{
+    public interface UpdateVersion {
         /**
          * 获取版本信息
          */
         @FormUrlEncoded
         @POST
-        Observable<BaseBean<VersionBean>> checkVersion(@Url String url, @Field("keyCode") String keyCode);
+        Observable<BaseBean<VersionBean>> checkVersion(@Url String url, @Field("time") String time);
+
         /**
          * 下载安装包
          */
         @GET
         Call<ResponseBody> getFile(@Url String url);
     }
+
     /**
      * 用户信息
      */
     public interface User {
         /**
-         *
          * @param code
          * @param password
          * @param time
-         * @param type 1:手机 2：终端机
+         * @param type     1:手机 2：终端机
          * @return
          */
         @FormUrlEncoded
@@ -65,21 +67,25 @@ public class HttpInterfaces {
                                           @Field("password") String password,
                                           @Field("time") String time,
                                           @Field("type") int type);
+
         @FormUrlEncoded
-        @POST("phone/visitor/driver/card/login")
-        Observable<BaseBean<Login>> loginByEmployeeCard(@Field("uuid") String uuid,
-                                          @Field("time") String time);
+        @POST("phone/driver/manage/login/card")
+        Observable<BaseBean<Login>> loginByEmployeeCard(@Field("code") String code,
+                                                        @Field("time") String time,
+                                                        @Field("type") int type
+                                                        );
 
         @FormUrlEncoded
         @POST
         Call<ResponseBody> face(@Url String url,
-                                         @Field("api_key") String api_key,
-                                         @Field("api_secret") String api_secret,
-                                         @Field("image_url1") String image_url1,
-                                         @Field("image_url2") String image_url2);
+                                @Field("api_key") String api_key,
+                                @Field("api_secret") String api_secret,
+                                @Field("image_url1") String image_url1,
+                                @Field("image_url2") String image_url2);
+
         @POST
         Call<ResponseBody> verifyFaceByFile(@Url String url,
-                                         @Body RequestBody Body);
+                                            @Body RequestBody Body);
     }
 
     /**
@@ -94,27 +100,43 @@ public class HttpInterfaces {
                                                         @Field("pageNo") int pageNo,
                                                         @Field("pageSize") int pageSize
         );
+
         @FormUrlEncoded
-        @POST("phone/driver/bill/deal/2")
-        Observable<BaseBean> receiveOperator(@Field("code") String code,
+        @POST("phone/driver/manage/task/bill/deal")
+        Observable<BaseBean> receiveOperator(@Field("userId") String userId,
                                              @Field("keyCode") String keyCode,
-                                             @Field("opId") int opId,  //对应接单列表id唯一值
+                                             @Field("type") int type,
+                                             @Field("billId") int billId,  //对应接单列表id唯一值
                                              @Field("status") int status  //操作类型,必填,格式：2开始、3异常终止、4正常结束
         );
+
         @FormUrlEncoded
-        @POST("phone/driver/trip/data/2")
-        Observable<BaseBean<List<Journey>>> journeyList(@Field("code") String code,
-                                                  @Field("keyCode") String keyCode,
-                                                  @Field("pageNo") int pageNo,
-                                                  @Field("pageSize") int pageSize
+        @POST("phone/driver/manage/task/schedule/list")
+        Observable<BaseBean<List<Journey>>> journeyList(@Field("userId") String userId,
+                                                        @Field("keyCode") String keyCode,
+                                                        @Field("type") int type,
+                                                        @Field("pageNo") int pageNo,
+                                                        @Field("pageSize") int pageSize
         );
+
         @FormUrlEncoded
-        @POST("phone/driver/trip/deal/2")
-        Observable<BaseBean> journeyOperator(@Field("code") String code,
-                                                  @Field("keyCode") String keyCode,
-                                                  @Field("opId") int opId,  //对应接单列表id唯一值
-                                                  @Field("status") int status  //操作类型,必填,格式：2开始、3异常终止、4正常结束
+        @POST("phone/driver/manage/task/schedule/begin")
+        Observable<BaseBean> journeyOperator(@Field("userId") String userId,
+                                             @Field("keyCode") String keyCode,
+                                             @Field("scheduleId") int scheduleId,
+                                             @Field("type") int type,
+                                             @Field("lngLat") String lngLat
         );
+
+        @FormUrlEncoded
+        @POST("phone/driver/manage/task/schedule/complete")
+        Observable<BaseBean> journeyEnd(@Field("userId") String userId,
+                                        @Field("keyCode") String keyCode,
+                                        @Field("scheduleId") int scheduleId,
+                                        @Field("type") int type,
+                                        @Field("status") int status
+        );
+
         @FormUrlEncoded
         @POST("phone/driver/line/detail/2")
         Observable<BaseBean<LineDetail>> lineDetail(@Field("code") String code,
@@ -128,6 +150,52 @@ public class HttpInterfaces {
      * 报站模块
      */
     public interface ReportStation {
+        // 通过线路获取线路电子围栏
+        @FormUrlEncoded
+        @POST("phone/driver/manage/line/electronrail/list")
+        Observable<BaseBean<List<ElectronRail>>> electronRail(@Field("userId") String userId,
+                                                              @Field("keyCode") String keyCode,
+                                                              @Field("type") int type,
+                                                              @Field("lineId") int lineId
+        );
+
+        // 车辆进站
+        @FormUrlEncoded
+        @POST("phone/driver/manage/task/vehicle/in/station")
+        Observable<BaseBean> enterStation(@Field("userId") String userId,
+                                                              @Field("keyCode") String keyCode,
+                                                              @Field("type") int type,
+                                                              @Field("electronRailId") int electronRailId,
+                                                              @Field("vehicleId") int vehicleId
+        );
+
+        // 车辆出站
+        @FormUrlEncoded
+        @POST("phone/driver/manage/task/vehicle/out/station")
+        Observable<BaseBean> leaveStation(@Field("userId") String userId,
+                                          @Field("keyCode") String keyCode,
+                                          @Field("type") int type,
+                                          @Field("electronRailId") int electronRailId,
+                                          @Field("vehicleId") int vehicleId
+        );
+
+
+        // 获取车辆ID
+        @FormUrlEncoded
+        @POST("phone/driver/manage/device/vehicle/id")
+        Observable<BaseBean<Integer>> vehicleId(@Field("userId") String userId,
+                                                @Field("keyCode") String keyCode,
+                                                @Field("type") int type,
+                                                @Field("imei") String imei
+        );
+        // 获取所有围栏
+        @FormUrlEncoded
+        @POST("phone/driver/manage/electronrail/all/list")
+        Observable<BaseBean<List<ElectronRail>>> loadAllFence(@Field("userId") String userId,
+                                                @Field("keyCode") String keyCode,
+                                                @Field("type") int type
+        );
+
         @FormUrlEncoded
         @POST("phone/station/report/line/data")
         Observable<BaseBean<List<UpdateLineBean>>> updateLine(@Field("code") String code,
@@ -206,13 +274,14 @@ public class HttpInterfaces {
                                                                     @Field("pageSize") int pageSize
         );
     }
+
     /**
      * 上传异常报告
      */
-    public interface UpLoadLog{
+    public interface UpLoadLog {
         @FormUrlEncoded
         @POST
-        Observable<BaseBean> upLoadLog(@Url String url,@Field("log") String log,
+        Observable<BaseBean> upLoadLog(@Url String url, @Field("log") String log,
                                        @Field("phone") String phone,
                                        @Field("key") String key);
     }

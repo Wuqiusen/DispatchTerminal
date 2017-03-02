@@ -17,6 +17,7 @@ public class SpUtils {
 
     public final static String CODE = "code";
     public final static String USER_ID = "user_id";
+    public final static String VEHICLE_ID = "vehicleId";
     public final static String KEYCODE = "keycode";
     public final static String NAME = "name";
     public final static String FIRST = "first";
@@ -32,6 +33,8 @@ public class SpUtils {
     public final static String CURRENT_LINE_ID = "current_line_id";
     public final static String CURRENT_LINE_NAME = "current_line_name";
     public final static String IS_SET_ALIAS = "is_set_alias";//是否已经设置别名
+
+    public final static String MAP_POINT = "map_point";
 
     private static void initSp(Context mContext, String fileName) {
         sp = mContext.getSharedPreferences(fileName,Context.MODE_PRIVATE);
@@ -159,5 +162,20 @@ public class SpUtils {
         list.add(sp.getString("errorLogName", ""));
 
         return list;
+    }
+
+    public static int getVehicleId(Context mContext){
+        if(sp == null){
+            initSp(mContext, CACHE_FILE_NAME);
+        }
+        return sp.getInt(VEHICLE_ID,-1);
+    }
+    public static void setVehicleId(Context mContext, int vehicleId){
+        if(sp == null){
+            initSp(mContext, CACHE_FILE_NAME);
+        }
+        SharedPreferences.Editor edit = sp.edit();
+        edit.putInt(VEHICLE_ID,vehicleId);
+        edit.commit();
     }
 }

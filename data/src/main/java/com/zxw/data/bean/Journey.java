@@ -7,44 +7,30 @@ import java.io.Serializable;
  * email：cangjie2016@gmail.com
  */
 public class Journey implements Serializable{
+
     /**
-     * driverCode : 901969
-     * id : 2
-     * lineCode : 387
-     * lineId : 42
-     * mainId : 2
-     * projectTime : 0800
-     * runDate : 20161206
-     * stationName : 方兴副站
+     * lineCode : 982上行
+     * runDate : 20170223
+     * scheduleId : 1
      * status : 1
-     * vehCode : F4547
+     * vehCode : 粤B001KN
+     * vehTime : 0646
      */
 
-    private String driverCode;
-    private int id;
     private String lineCode;
-    private int lineId;
-    private int mainId;
-    private String projectTime;
     private int runDate;
-    private String stationName;
+    private int scheduleId;
     private int status;
+    private int lineId;
     private String vehCode;
+    private String vehTime;
 
-    public String getDriverCode() {
-        return driverCode;
+    public int getLineId() {
+        return lineId;
     }
 
-    public void setDriverCode(String driverCode) {
-        this.driverCode = driverCode;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public void setLineId(int lineId) {
+        this.lineId = lineId;
     }
 
     public String getLineCode() {
@@ -55,30 +41,6 @@ public class Journey implements Serializable{
         this.lineCode = lineCode;
     }
 
-    public int getLineId() {
-        return lineId;
-    }
-
-    public void setLineId(int lineId) {
-        this.lineId = lineId;
-    }
-
-    public int getMainId() {
-        return mainId;
-    }
-
-    public void setMainId(int mainId) {
-        this.mainId = mainId;
-    }
-
-    public String getProjectTime() {
-        return projectTime;
-    }
-
-    public void setProjectTime(String projectTime) {
-        this.projectTime = projectTime;
-    }
-
     public int getRunDate() {
         return runDate;
     }
@@ -87,12 +49,12 @@ public class Journey implements Serializable{
         this.runDate = runDate;
     }
 
-    public String getStationName() {
-        return stationName;
+    public int getScheduleId() {
+        return scheduleId;
     }
 
-    public void setStationName(String stationName) {
-        this.stationName = stationName;
+    public void setScheduleId(int scheduleId) {
+        this.scheduleId = scheduleId;
     }
 
     public int getStatus() {
@@ -109,5 +71,13 @@ public class Journey implements Serializable{
 
     public void setVehCode(String vehCode) {
         this.vehCode = vehCode;
+    }
+
+    public String getVehTime() {
+        return vehTime;
+    }
+
+    public void setVehTime(String vehTime) {
+        this.vehTime = vehTime;
     }
 }

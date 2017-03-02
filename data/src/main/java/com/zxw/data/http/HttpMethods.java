@@ -1,6 +1,7 @@
 package com.zxw.data.http;
 
 import com.zxw.data.bean.BaseBean;
+import com.zxw.data.bean.ElectronRail;
 import com.zxw.data.bean.Journey;
 import com.zxw.data.bean.LineDetail;
 import com.zxw.data.bean.Login;
@@ -12,6 +13,7 @@ import com.zxw.data.bean.UpdateServiceWordBean;
 import com.zxw.data.bean.UpdateStationBean;
 import com.zxw.data.bean.UpdateVoiceCompoundBean;
 import com.zxw.data.bean.VersionBean;
+import com.zxw.data.db.bean.IllegalityBean;
 import com.zxw.data.db.bean.TbDogLineMain;
 import com.zxw.data.db.bean.TbDogLineSecond;
 
@@ -30,9 +32,10 @@ import rx.schedulers.Schedulers;
  */
 public class HttpMethods {
 //    public static final String BASE_URL = "http://120.24.252.195:8080/yd_app/";
-    public static final String BASE_URL = "http://192.168.0.114:8080/yd_driver_app/";
+    public static final String BASE_URL = "http://120.77.48.103:8080/yd_driver_app/";
 //    public static final String BASE_URL = "http://192.168.0.90:8080/yd_app/";
     public Retrofit retrofit = RetrofitSetting.getInstance();
+    public static final int TYPE_DEVICES = 2;
 
 
     private static class SingletonHolder{
@@ -70,9 +73,9 @@ public class HttpMethods {
         toSubscribe(observable, subscriber);
     }
 
-    public void loginByEmployeeCard(Subscriber<Login> subscriber, String uid, String time){
+    public void loginByEmployeeCard(Subscriber<Login> subscriber, String code, String time, int type){
         HttpInterfaces.User user = retrofit.create(HttpInterfaces.User.class);
-        Observable<Login> observable = user.loginByEmployeeCard(uid, time).map(new HttpResultFunc<Login>());
+        Observable<Login> observable = user.loginByEmployeeCard(code, time, type).map(new HttpResultFunc<Login>());
         toSubscribe(observable, subscriber);
     }
 
@@ -126,20 +129,26 @@ public class HttpMethods {
         toSubscribe(observable, subscriber);
     }
 
-    public void receiveOperator(String code, String keyCode, int opId, int status, Subscriber<BaseBean> subscriber){
+    public void receiveOperator(String userId,String keyCode, int billId, int status, Subscriber<BaseBean> subscriber){
         HttpInterfaces.Dispatch dispatch = retrofit.create(HttpInterfaces.Dispatch.class);
-        Observable<BaseBean> observable = dispatch.receiveOperator(code, keyCode, opId, status);
+        Observable<BaseBean> observable = dispatch.receiveOperator(userId, keyCode, TYPE_DEVICES, billId, status);
         toSubscribe(observable, subscriber);
     }
     public void journeyList(String code, String keyCode, int pageNo, int pageSize, Subscriber<BaseBean<List<Journey>>> subscriber){
         HttpInterfaces.Dispatch dispatch = retrofit.create(HttpInterfaces.Dispatch.class);
-        Observable<BaseBean<List<Journey>>> observable = dispatch.journeyList(code, keyCode, pageNo, pageSize);
+        Observable<BaseBean<List<Journey>>> observable = dispatch.journeyList(code, keyCode,TYPE_DEVICES, pageNo, pageSize);
         toSubscribe(observable, subscriber);
     }
 
-    public void journeyOperator(String code, String keyCode, int opId, int status, Subscriber<BaseBean> subscriber){
+    public void journeyOperator(String userId, String keyCode, int scheduleId, String lngLat, Subscriber<BaseBean> subscriber){
         HttpInterfaces.Dispatch dispatch = retrofit.create(HttpInterfaces.Dispatch.class);
-        Observable<BaseBean> observable = dispatch.journeyOperator(code, keyCode, opId, status);
+        Observable<BaseBean> observable = dispatch.journeyOperator(userId, keyCode, scheduleId, TYPE_DEVICES, lngLat);
+        toSubscribe(observable, subscriber);
+    }
+
+    public void journeyEnd(String userId, String keyCode, int scheduleId, int status, Subscriber<BaseBean> subscriber){
+        HttpInterfaces.Dispatch dispatch = retrofit.create(HttpInterfaces.Dispatch.class);
+        Observable<BaseBean> observable = dispatch.journeyEnd(userId, keyCode, scheduleId, TYPE_DEVICES, status);
         toSubscribe(observable, subscriber);
     }
 
@@ -151,15 +160,52 @@ public class HttpMethods {
 
     public void checkVersion(String keyCode, Subscriber<VersionBean> subscriber) {
         HttpInterfaces.UpdateVersion updateVersion = retrofit.create(HttpInterfaces.UpdateVersion.class);
-        Observable<VersionBean> observable = updateVersion.checkVersion("http://slb.szebus.net/version/phone/last/data", keyCode)
+        Observable<VersionBean> observable = updateVersion.checkVersion("http://120.77.48.103:8080/yd_control_app/phone/control/manage/app/new/version", keyCode)
                 .map(new HttpResultFunc<VersionBean>());
         toSubscribe(observable, subscriber);
+    }
+
+    public void edogIllegality(IllegalityBean illegalityBean, Subscriber<BaseBean> subscriber){
+
     }
 
     //上传异常日志
     public void upLoadLog(Subscriber<BaseBean> subscriber,String log, String phone, String key){
         HttpInterfaces.UpLoadLog upLoadLog = retrofit.create(HttpInterfaces.UpLoadLog.class);
         Observable<BaseBean> observable = upLoadLog.upLoadLog("http://120.24.252.195:7002/app_ebus/upload/phone/error/log",log, phone, key);
+        toSubscribe(observable, subscriber);
+    }
+
+    // 根据线路ID获取电子围栏
+    public void electronRail(Subscriber<List<ElectronRail>> subscriber, String userId, String keyCode, int lineId){
+        HttpInterfaces.ReportStation reportStation = retrofit.create(HttpInterfaces.ReportStation.class);
+        Observable<List<ElectronRail>> observable = reportStation.electronRail(userId, keyCode, TYPE_DEVICES, lineId).map(new HttpResultFunc<List<ElectronRail>>());
+        toSubscribe(observable, subscriber);
+    }
+    // 获取全部电子围栏
+    public void loadAllFence(Subscriber<List<ElectronRail>> subscriber, String userId, String keyCode){
+        HttpInterfaces.ReportStation reportStation = retrofit.create(HttpInterfaces.ReportStation.class);
+        Observable<List<ElectronRail>> observable = reportStation.loadAllFence(userId, keyCode, TYPE_DEVICES).map(new HttpResultFunc<List<ElectronRail>>());
+        toSubscribe(observable, subscriber);
+    }
+
+    // 车辆进站
+    public void enterStation(Subscriber<BaseBean> subscriber, String userId, String keyCode, int electronRailId, int vehicleId){
+        HttpInterfaces.ReportStation reportStation = retrofit.create(HttpInterfaces.ReportStation.class);
+        Observable<BaseBean> observable = reportStation.enterStation(userId, keyCode, TYPE_DEVICES, electronRailId, vehicleId);
+        toSubscribe(observable, subscriber);
+    }
+    // 车辆进站
+    public void leaveStation(Subscriber<BaseBean> subscriber, String userId, String keyCode, int electronRailId, int vehicleId){
+        HttpInterfaces.ReportStation reportStation = retrofit.create(HttpInterfaces.ReportStation.class);
+        Observable<BaseBean> observable = reportStation.leaveStation(userId, keyCode, TYPE_DEVICES, electronRailId, vehicleId);
+        toSubscribe(observable, subscriber);
+    }
+
+    // 获取车辆ID
+    public void vehicleId(Subscriber<Integer> subscriber, String userId, String keyCode, int type, String imei){
+        HttpInterfaces.ReportStation reportStation = retrofit.create(HttpInterfaces.ReportStation.class);
+        Observable<Integer> observable = reportStation.vehicleId(userId, keyCode, type, imei).map(new HttpResultFunc<Integer>());
         toSubscribe(observable, subscriber);
     }
 }

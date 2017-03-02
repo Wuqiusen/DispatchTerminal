@@ -15,6 +15,15 @@ public class Login {
     private String userId;
     private String keyCode;
     private String name;
+    private String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getUserId() {
         return userId;
