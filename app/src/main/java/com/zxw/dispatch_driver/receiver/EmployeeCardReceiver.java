@@ -17,6 +17,7 @@ import com.zxw.dispatch_driver.utils.BroadcastUtil;
 import com.zxw.dispatch_driver.utils.ByteToHexUtil;
 import com.zxw.dispatch_driver.utils.DebugLog;
 import com.zxw.dispatch_driver.utils.ToastHelper;
+import com.zxw.dispatch_driver.utils.VoiceController;
 
 import java.util.Date;
 
@@ -48,6 +49,7 @@ public class EmployeeCardReceiver extends BroadcastReceiver {
     }
 
     private void beep() {
+        VoiceController.inside();
         MyApplication.soundPool.play(1,1, 1, 0, 0, 1);
     }
 

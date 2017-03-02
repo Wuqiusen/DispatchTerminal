@@ -14,6 +14,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.zxw.data.bean.VersionBean;
 import com.zxw.data.http.HttpInterfaces;
@@ -43,18 +44,35 @@ import rx.Subscriber;
 public class WelcomeActivity extends BaseHeadActivity {
     @Bind(R.id.imageView)
     ImageView imageView;
+    @Bind(R.id.tv_version_name)
+    TextView tv_version_name;
     private AlertDialog show;
+    private PackageManager pm;
+    private int currentVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
+        initData();
         hideHeadArea();
         initPermission();
         initView(imageView);
     }
 
+    private void initData() {
+        pm = getPackageManager();
+        try {
+            PackageInfo info = pm.getPackageInfo(getPackageName(), 0);
+            String versionName = info.versionName;
+            tv_version_name.setText("V " + versionName);
+            currentVersion = info.versionCode;
+            DebugLog.i("当前版本号:" + currentVersion);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void initPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -66,6 +84,7 @@ public class WelcomeActivity extends BaseHeadActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
         }
     }
+
     public void initView(ImageView view) {
         // 初始化控件
         AnimationSet animationSet = new AnimationSet(true);
@@ -92,8 +111,8 @@ public class WelcomeActivity extends BaseHeadActivity {
 
 
     private void goMain() {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 
     private void checkVersion() {
@@ -112,20 +131,12 @@ public class WelcomeActivity extends BaseHeadActivity {
 
                     @Override
                     public void onNext(final VersionBean versionBean) {
-                        try {
-                            PackageManager pm = mContext.getPackageManager();
-                            PackageInfo packageInfo = pm.getPackageInfo(mContext.getPackageName(), 0);
-                            //获取当前的版本
-                            int currentCode = packageInfo.versionCode;
-                            if (versionBean != null && versionBean.codeNum > currentCode) {
-                                showLoading();
-                                showDialog();
-                                download(versionBean.url);
-                            }else{
-                                goMain();
-                            }
-                        } catch (PackageManager.NameNotFoundException e) {
-                            e.printStackTrace();
+                        if (versionBean != null && versionBean.codeNum > currentVersion) {
+                            showLoading();
+                            showDialog();
+                            download(versionBean.url);
+                        } else {
+                            goMain();
                         }
                     }
                 });
@@ -140,7 +151,7 @@ public class WelcomeActivity extends BaseHeadActivity {
 
     @Override
     protected void onDestroy() {
-        if(show != null && show.isShowing()) {
+        if (show != null && show.isShowing()) {
             show.dismiss();
         }
         super.onDestroy();
@@ -172,7 +183,7 @@ public class WelcomeActivity extends BaseHeadActivity {
                         is.close();
                         install(file.getAbsolutePath());
 
-                    }else {
+                    } else {
                         ToastHelper.showToast("请检查你的SD卡", MyApplication.mContext);
                     }
                 } catch (IOException e) {
@@ -183,7 +194,8 @@ public class WelcomeActivity extends BaseHeadActivity {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
-        });}
+        });
+    }
 
 
     private void install(String filePath) {

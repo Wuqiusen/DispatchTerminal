@@ -151,10 +151,10 @@ public class TraceHelper {
             throw new RuntimeException("OnEnterOrLeaveFenceListener can not be null!");
         if (action == 1) {
             listener.enterFence(serverFenceId);
-        } else {
-            listener.leaveFence(serverFenceId);
-        }
+    } else {
+        listener.leaveFence(serverFenceId);
     }
+}
 
     private void traceStatusChange(String str) {
         //保存到本地
