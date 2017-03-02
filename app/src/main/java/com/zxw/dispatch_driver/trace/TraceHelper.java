@@ -2,6 +2,7 @@ package com.zxw.dispatch_driver.trace;
 
 import android.content.Context;
 import android.os.Environment;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -11,13 +12,14 @@ import com.baidu.trace.OnGeoFenceListener;
 import com.baidu.trace.OnStartTraceListener;
 import com.baidu.trace.Trace;
 import com.zxw.data.bean.ElectronRail;
-import com.zxw.data.sp.SpUtils;
+import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.utils.DebugLog;
 import com.zxw.dispatch_driver.utils.MyGsonUtils;
 import com.zxw.dispatch_driver.utils.ToastHelper;
 
 import java.util.List;
 
+import static android.content.Context.TELEPHONY_SERVICE;
 import static com.zxw.dispatch_driver.MyApplication.writeTxtToFile;
 
 /**
@@ -70,11 +72,12 @@ public class TraceHelper {
     private TraceHelper(Context context) {
         this.mContext = context;
         fenceCallBackFilter = new FenceCallBackFilter();
-//        TelephonyManager tm = (TelephonyManager) MyApplication.mContext.getSystemService(TELEPHONY_SERVICE);
-//        entityName = tm.getDeviceId();
-        entityName = "353919025680130";
+        TelephonyManager tm = (TelephonyManager) MyApplication.mContext.getSystemService(TELEPHONY_SERVICE);
+        entityName = tm.getDeviceId();
+        DebugLog.w(entityName);
         initTrace();
         mFenceIdManager = FenceIdManager.getInstance();
+//        delete
     }
 
 
@@ -209,12 +212,12 @@ public class TraceHelper {
 
     public void createPolygonFence(ElectronRail rail) {
         DebugLog.w(rail.toString());
-        String cache = SpUtils.getCache(mContext, SpUtils.MAP_POINT);
-        if (TextUtils.isEmpty(cache)) {
-            SpUtils.setCache(mContext, SpUtils.MAP_POINT, rail.getPoints());
-        } else {
-            SpUtils.setCache(mContext, SpUtils.MAP_POINT, cache + "|" + rail.getPoints());
-        }
+//        String cache = SpUtils.getCache(mContext, SpUtils.MAP_POINT);
+//        if (TextUtils.isEmpty(cache)) {
+//            SpUtils.setCache(mContext, SpUtils.MAP_POINT, rail.getPoints());
+//        } else {
+//            SpUtils.setCache(mContext, SpUtils.MAP_POINT, cache + "|" + rail.getPoints());
+//        }
         currentRailId = rail.getElectronRailId();
         mTraceClient.createVertexesFence(serviceId, entityName, fenceName, fenceDesc, entityName, entityName, validTimes, validCycle, validDate, validDays, coordType,
                 rail.getPoints(), precision, alarmCondition, new OnGeoFenceListener() {
