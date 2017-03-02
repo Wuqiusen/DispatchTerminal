@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -11,9 +12,7 @@ import android.support.annotation.Nullable;
 import com.zxw.data.bean.VersionBean;
 import com.zxw.data.http.HttpInterfaces;
 import com.zxw.data.http.HttpMethods;
-import com.zxw.data.utils.MD5;
 import com.zxw.dispatch_driver.Constants;
-import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.utils.DebugLog;
 import com.zxw.dispatch_driver.utils.ToastHelper;
 
@@ -22,9 +21,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -54,13 +50,11 @@ public class UpdateService extends Service {
 
     private void checkVersion() {
         DebugLog.w("checkVersion");
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", Locale.CHINA);//设置日期格式
-        String keyCode = MD5.MD5Encode(df.format(new Date()));
-        HttpMethods.getInstance().checkVersion(keyCode,
+        long time = System.currentTimeMillis();
+        HttpMethods.getInstance().checkVersion(String.valueOf(time),
                 new Subscriber<VersionBean>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override
@@ -82,9 +76,7 @@ public class UpdateService extends Service {
                             e.printStackTrace();
                         }
                     }
-
                 });
-
     }
 
     private void download(String url) {
@@ -114,7 +106,7 @@ public class UpdateService extends Service {
                         install(file.getAbsolutePath());
 
                     }else {
-                        ToastHelper.showToast("请检查你的SD卡", MyApplication.mContext);
+                        ToastHelper.showToast("请检查你的SD卡", mContext);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -128,17 +120,10 @@ public class UpdateService extends Service {
     }
 
     private void install(String filePath) {
-//        Intent intent = new Intent();
-//        intent.setAction("android.intent.action.VIEW");
-//        intent.addCategory("android.intent.category.DEFAULT");
-//        intent.setDataAndType(Uri.fromFile(new File(filePath)), "application/vnd.android.package-archive");
-//        getBaseContext().startActivity(intent);
-//        SilentInstallUtil installUtil = new SilentInstallUtil();
-//        if(installUtil.install(filePath)){
-//            DebugLog.w("install success");
-//            boolean delete = new File(filePath).delete();
-//            DebugLog.w("delete is "+ delete);
-//        }
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.setDataAndType(Uri.fromFile(new File(filePath)), "application/vnd.android.package-archive");
+        getBaseContext().startActivity(intent);
     }
-
 }

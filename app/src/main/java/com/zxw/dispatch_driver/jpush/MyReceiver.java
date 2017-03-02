@@ -20,7 +20,6 @@ import com.zxw.data.source.ServiceWordSource;
 import com.zxw.data.source.StationSource;
 import com.zxw.data.source.VoiceCompoundSource;
 import com.zxw.dispatch_driver.R;
-import com.zxw.dispatch_driver.service.UpdateService;
 import com.zxw.dispatch_driver.ui.WelcomeActivity;
 
 import org.json.JSONException;
@@ -182,7 +181,7 @@ UpdateDogData更新终端机电子狗app数据标识，值：1
     private void updateDevice(Context context, String value) {
         if (1 != Integer.valueOf(value))
             return;
-        context.startService(new Intent(context, UpdateService.class));
+//        context.startService(new Intent(context, UpdateService.class));
     }
 
     private void deviceNotice(Context context, String value) {

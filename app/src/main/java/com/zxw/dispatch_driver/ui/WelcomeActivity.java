@@ -1,9 +1,13 @@
 package com.zxw.dispatch_driver.ui;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.animation.AlphaAnimation;
@@ -11,26 +15,35 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.widget.ImageView;
 
-import com.zxw.data.source.DogMainSource;
-import com.zxw.data.source.DogSecondSource;
-import com.zxw.data.source.LineSource;
-import com.zxw.data.source.LineStationSource;
-import com.zxw.data.source.ReportPointSource;
-import com.zxw.data.source.ServiceWordSource;
-import com.zxw.data.source.StationSource;
-import com.zxw.data.source.VoiceCompoundSource;
+import com.zxw.data.bean.VersionBean;
+import com.zxw.data.http.HttpInterfaces;
+import com.zxw.data.http.HttpMethods;
+import com.zxw.dispatch_driver.Constants;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.ui.base.BaseHeadActivity;
+import com.zxw.dispatch_driver.utils.DebugLog;
+import com.zxw.dispatch_driver.utils.ToastHelper;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import rx.Subscriber;
 
 
-public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUpdateLineTableFinishListener, StationSource.OnUpdateStationFinishListener, LineStationSource.OnUpdateLineStationFinishListener, ReportPointSource.OnUpdateReportPointFinishListener, ServiceWordSource.OnUpdateServiceWordTableFinishListener, VoiceCompoundSource.OnUpdateVoiceCompoundTableFinishListener, DogMainSource.OnUpdateDogMainTableFinishListener, DogSecondSource.OnUpdateDogSecondTableFinishListener {
+public class WelcomeActivity extends BaseHeadActivity {
     @Bind(R.id.imageView)
     ImageView imageView;
-    private boolean isUpdateLineFinish, isUpdateStationFinish, isUpdateLineStationFinish, isUpdateReportPointFinish, isUpdateServiceWordFinish, isUpdateVoiceCompoundFinish, isUpdateDogMain, isUpdateDogSecond;
+    private AlertDialog show;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +53,6 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
         hideHeadArea();
         initPermission();
         initView(imageView);
-//        InitializeAssertFileUtil.initialize(MyApplication.mContext);
-//        update();
     }
 
 
@@ -55,37 +66,6 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
         }
     }
-
-
-    private void update() {
-        LineSource source = new LineSource(MyApplication.mContext);
-        source.setOnUpdateLineTableFinishListener(this);
-        source.loadUpdateLineTableData();
-        StationSource stationSource = new StationSource(MyApplication.mContext);
-        stationSource.setOnUpdateStationFinishListener(this);
-        stationSource.loadUpdateStationTableData();
-        LineStationSource lineStationSource = new LineStationSource(MyApplication.mContext);
-        lineStationSource.setOnUpdateLineStationFinishListener(this);
-        lineStationSource.loadUpdateLineStationTableData();
-        ReportPointSource reportPointSource = new ReportPointSource(MyApplication.mContext);
-        reportPointSource.setOnUpdateReportPointFinishListener(this);
-        reportPointSource.loadUpdateReportPointSource();
-        ServiceWordSource serviceWordSource = new ServiceWordSource(MyApplication.mContext);
-        serviceWordSource.setOnUpdateServiceWordTableFinishListener(this);
-        serviceWordSource.loadUpdateServiceWordTableData();
-        VoiceCompoundSource voiceCompoundSource = new VoiceCompoundSource(MyApplication.mContext);
-        voiceCompoundSource.setOnUpdateVoiceCompoundTableFinishListener(this);
-        voiceCompoundSource.loadUpdateVoiceCompoundTableData();
-
-        DogMainSource dogMainSource = new DogMainSource(MyApplication.mContext);
-        dogMainSource.setOnUpdateDogMainTableFinishListener(this);
-        dogMainSource.loadUpdateDogMainTableData();
-        DogSecondSource dogSecondSource = new DogSecondSource(MyApplication.mContext);
-        dogSecondSource.setOnUpdateDogSecondTableFinishListener(this);
-        dogSecondSource.loadUpdateDogSecondTableData();
-
-    }
-
     public void initView(ImageView view) {
         // 初始化控件
         AnimationSet animationSet = new AnimationSet(true);
@@ -104,75 +84,114 @@ public class WelcomeActivity extends BaseHeadActivity implements LineSource.OnUp
 
             @Override
             public void onAnimationEnd(Animation animation) {
-//                update();
-                goMain();
+                checkVersion();
             }
         });
         view.startAnimation(animationSet);
     }
 
-    @Override
-    public void onUpdateLineTableFinish() {
-        isUpdateLineFinish = true;
-        goMain();
-    }
-
-    @Override
-    public void onUpdateStationFinish() {
-        isUpdateStationFinish = true;
-        goMain();
-    }
-
-    @Override
-    public void onUpdateLineStationFinishListener() {
-        isUpdateLineStationFinish = true;
-        goMain();
-    }
-
-    @Override
-    public void onUpdateReportPointFinishListener() {
-        isUpdateReportPointFinish = true;
-        goMain();
-    }
 
     private void goMain() {
-//        if (isUpdateLineFinish && isUpdateLineStationFinish && isUpdateReportPointFinish && isUpdateStationFinish && isUpdateServiceWordFinish && isUpdateVoiceCompoundFinish && isUpdateDogMain && isUpdateDogSecond) {
-//            hideLoading();
-//            String lineId = SpUtils.getCache(mContext, SpUtils.CURRENT_LINE_ID);
-//            if(TextUtils.isEmpty(lineId)){
-//                startActivity(new Intent(this, SelectLineActivity.class));
-//            }else{
-//                Intent intent = new Intent(mContext, AutoReportActivity.class);
-//                intent.putExtra("lineId", lineId);
-//                mContext.startActivity(intent);
-//            }
             startActivity(new Intent(this, LoginActivity.class));
             finish();
-//        }
+    }
+
+    private void checkVersion() {
+        DebugLog.w("checkVersion");
+        long time = System.currentTimeMillis();
+        HttpMethods.getInstance().checkVersion(String.valueOf(time),
+                new Subscriber<VersionBean>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        checkVersion();
+                    }
+
+                    @Override
+                    public void onNext(final VersionBean versionBean) {
+                        try {
+                            PackageManager pm = mContext.getPackageManager();
+                            PackageInfo packageInfo = pm.getPackageInfo(mContext.getPackageName(), 0);
+                            //获取当前的版本
+                            int currentCode = packageInfo.versionCode;
+                            if (versionBean != null && versionBean.codeNum > currentCode) {
+                                showLoading();
+                                showDialog();
+                                download(versionBean.url);
+                            }else{
+                                goMain();
+                            }
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("正在下载安装包");
+        builder.setCancelable(false);
+        show = builder.show();
     }
 
     @Override
-    public void onUpdateServiceWordTableFinish() {
-        isUpdateServiceWordFinish = true;
-        goMain();
+    protected void onDestroy() {
+        if(show != null && show.isShowing()) {
+            show.dismiss();
+        }
+        super.onDestroy();
     }
 
-    @Override
-    public void onUpdateVoiceCompoundTableFinish() {
-        isUpdateVoiceCompoundFinish = true;
-        goMain();
-    }
+    private void download(String url) {
+        Call<ResponseBody> downloadApk = HttpMethods.getInstance().retrofit.create(HttpInterfaces.UpdateVersion.class).getFile(url);
+        downloadApk.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    InputStream is = response.body().byteStream();
+                    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {//判断SD卡是否挂载
+                        File foder = new File(Environment.getExternalStorageDirectory(), Constants.Path.SECONDPATH + "/");
+                        File file = new File(foder, Constants.Path.APKNAME);
+                        if (!foder.exists()) {
+                            foder.mkdirs();
+                        }
+                        FileOutputStream fos = new FileOutputStream(file);
+                        BufferedInputStream bis = new BufferedInputStream(is);
+                        byte[] buffer = new byte[1024];
+                        int len;
+                        while ((len = bis.read(buffer)) != -1) {
+                            fos.write(buffer, 0, len);
+                            fos.flush();
+                        }
+                        fos.close();
+                        bis.close();
+                        is.close();
+                        install(file.getAbsolutePath());
 
-    @Override
-    public void onUpdateDogMainTableFinish() {
-        isUpdateDogMain = true;
-        goMain();
-    }
+                    }else {
+                        ToastHelper.showToast("请检查你的SD卡", MyApplication.mContext);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
-    @Override
-    public void onUpdateDogSecondTableFinish() {
-        isUpdateDogSecond = true;
-        goMain();
-    }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            }
+        });}
 
+
+    private void install(String filePath) {
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.setDataAndType(Uri.fromFile(new File(filePath)), "application/vnd.android.package-archive");
+        startActivityForResult(intent, 0);
+        finish();
+    }
 }
