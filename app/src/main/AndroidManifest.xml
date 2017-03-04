@@ -62,6 +62,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Light.NoTitleBar">
+
+        <activity android:name=".ui.TestActivity"
+            android:screenOrientation="landscape"
+            android:label="运调测试">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter></activity>
+
         <activity
             android:name=".ui.LoginActivity"
             android:launchMode="singleTask"
@@ -325,15 +336,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.TestActivity"
-            android:screenOrientation="landscape"
-            android:label="运调测试">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter></activity>
     </application>
 
 </manifest>

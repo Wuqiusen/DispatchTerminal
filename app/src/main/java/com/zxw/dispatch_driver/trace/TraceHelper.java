@@ -15,6 +15,8 @@ import com.zxw.dispatch_driver.utils.DebugLog;
 import com.zxw.dispatch_driver.utils.MyGsonUtils;
 import com.zxw.dispatch_driver.utils.ToastHelper;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static com.zxw.dispatch_driver.MyApplication.writeTxtToFile;
@@ -57,7 +59,6 @@ public class TraceHelper {
     private String validDays = null;
     private OnEnterOrLeaveFenceListener listener;
     private int currentRailId;
-    private final FenceCallBackFilter fenceCallBackFilter;
 
 
     public static TraceHelper getInstance(Context context) {
@@ -68,10 +69,9 @@ public class TraceHelper {
 
     private TraceHelper(Context context) {
         this.mContext = context;
-        fenceCallBackFilter = new FenceCallBackFilter();
 //        TelephonyManager tm = (TelephonyManager) MyApplication.mContext.getSystemService(TELEPHONY_SERVICE);
 //        entityName = tm.getDeviceId();
-        entityName = "pdd";
+        entityName = "lol";
         DebugLog.w(entityName);
         initTrace();
         mFenceIdManager = FenceIdManager.getInstance();
@@ -120,20 +120,22 @@ public class TraceHelper {
 
             @Override
             public void onTracePushCallback(byte b, String s) {
-                OnTracePushBean onTracePushBean = MyGsonUtils.fromJson(s, OnTracePushBean.class);
-                int serverFenceId = mFenceIdManager.queryServiceFenceByBaiDuFenceId(onTracePushBean.getFence_id());
-                if (serverFenceId == -1)
-                    return;
-                //查看最近几个坐标点是否有漂移
-                if(fenceCallBackFilter.isPY() || onTracePushBean.getPre_point().getRadius() > 100){
-                    ToastHelper.showToast("检测到漂移导致的进出围栏, 已经过滤 radius:" + onTracePushBean.getPre_point().getRadius());
-
-                    return;
-                }
                 traceStatusChange(s);
-                sendEnterOrLeaveFenceBroadcast(serverFenceId, onTracePushBean.getAction());
+                OnTracePushBean onTracePushBean = MyGsonUtils.fromJson(s, OnTracePushBean.class);
+                OutsideInsideFenceBean outsideInsideFence = mFenceIdManager.queryServiceFenceByBaiDuFenceId(onTracePushBean.getFence_id());
+                if (outsideInsideFence == null)
+                    return;
+//                //查看最近几个坐标点是否有漂移
+//                if(fenceCallBackFilter.isPY() || onTracePushBean.getPre_point().getRadius() > 100){
+//                    ToastHelper.showToast("检测到漂移导致的进出围栏, 已经过滤 radius:" + onTracePushBean.getPre_point().getRadius());
+//                    return;
+//                }
+                traceStatusChange(outsideInsideFence.getServiceFenceId() + " 发生了两个围栏事件 事件类型为 " + outsideInsideFence.getEventType());
+                sendEnterOrLeaveFenceBroadcast(outsideInsideFence.getServiceFenceId(), outsideInsideFence.getEventType());
                 ToastHelper.showToast(s);
 
+                //复位
+                mFenceIdManager.restoreFlag();
             }
         });
     }
@@ -153,29 +155,31 @@ public class TraceHelper {
 }
 
     private void traceStatusChange(String str) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String time = format.format(new Date());
         //保存到本地
         String filePath = Environment.getExternalStorageDirectory() + "/BdYy";
         String fileName = "log.txt";
-        writeTxtToFile("str : " + str, filePath, fileName);
+        writeTxtToFile(time + "\n str : " + str, filePath, fileName);
     }
 
-    public void unregisterFence() {
-        List<FenceIdPair> fenceIdList = mFenceIdManager.getFenceIdList();
-        for (FenceIdPair fenceIdPair : fenceIdList) {
-            Log.w(TAG, "unregisterFence: " + fenceIdPair.BaiDuFenceId);
-            mTraceClient.deleteFence(serviceId, fenceIdPair.BaiDuFenceId, new OnGeoFenceListener() {
-                @Override
-                public void onRequestFailedCallback(String s) {
-                    Log.w(TAG, "onRequestFailedCallback: " + s);
-                }
-
-                @Override
-                public void onDeleteFenceCallback(String s) {
-                    Log.w(TAG, "onDeleteFenceCallback: " + s);
-                }
-            });
-        }
-    }
+//    public void unregisterFence() {
+//        List<FenceIdPair> fenceIdList = mFenceIdManager.getFenceIdList();
+//        for (FenceIdPair fenceIdPair : fenceIdList) {
+//            Log.w(TAG, "unregisterFence: " + fenceIdPair.BaiDuFenceId);
+//            mTraceClient.deleteFence(serviceId, fenceIdPair.BaiDuFenceId, new OnGeoFenceListener() {
+//                @Override
+//                public void onRequestFailedCallback(String s) {
+//                    Log.w(TAG, "onRequestFailedCallback: " + s);
+//                }
+//
+//                @Override
+//                public void onDeleteFenceCallback(String s) {
+//                    Log.w(TAG, "onDeleteFenceCallback: " + s);
+//                }
+//            });
+//        }
+//    }
 
     /**
      * 围栏圆心（圆心位置, 格式 : "经度,纬度"）
@@ -200,7 +204,8 @@ public class TraceHelper {
                             return;
                         }
                         int fenceId = createFenceBean.getFence_id();
-                        mFenceIdManager.addFenceIdPair(new FenceIdPair(fenceId, rail.getElectronRailId()));
+                        // 通过当前id, 围栏id 和当前序号 就可以确定这个围栏是哪个一个的内环或者外环
+                        mFenceIdManager.addFenceIdPair(currentRailId, fenceId, currentPointer);
                         ToastHelper.showToast(s);
                     }
                 });
@@ -230,7 +235,7 @@ public class TraceHelper {
                             return;
                         }
                         int fenceId = createFenceBean.getFence_id();
-                        mFenceIdManager.addFenceIdPair(new FenceIdPair(fenceId, currentRailId));
+                        mFenceIdManager.addFenceIdPair(currentRailId, fenceId, currentPointer);
                         createFenceList();
                     }
                 });

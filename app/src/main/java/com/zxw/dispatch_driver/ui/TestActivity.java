@@ -5,7 +5,6 @@ import android.os.Bundle;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.presenter.TestPresenter;
 import com.zxw.dispatch_driver.presenter.view.TestView;
-import com.zxw.dispatch_driver.trace.TraceHelper;
 import com.zxw.dispatch_driver.ui.base.PresenterActivity;
 
 public class TestActivity extends PresenterActivity<TestPresenter> implements TestView {
@@ -19,8 +18,6 @@ public class TestActivity extends PresenterActivity<TestPresenter> implements Te
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        int fenceId = 0;
-        TraceHelper.getInstance(this).delete(fenceId);
     }
 
 }
