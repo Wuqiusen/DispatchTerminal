@@ -39,7 +39,6 @@ public class StationReportPresenter extends BasePresenter<StationReportView> imp
 
         this.mContext = context;
         mSpeakUtil = SpeakUtil.getInstance(MyApplication.mContext);
-        mSpeakUtil.init();
     }
 
     public void loadStations(long mLineId) {

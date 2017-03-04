@@ -36,7 +36,6 @@ public class AutoReportStationAdapter extends RecyclerView.Adapter<AutoReportSta
         mLayoutInflater = LayoutInflater.from(mContext);
 
         mSpeakUtil = SpeakUtil.getInstance(MyApplication.mContext);
-        mSpeakUtil.init();
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

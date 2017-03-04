@@ -54,7 +54,6 @@ public class AutoReportPresenter extends BasePresenter<AutoReportView> {
 //        lineStationReportBeen = mStationReportDao.queryLineStationReportBean();
         mVoiceCompundList = mVoiceCompoundDao.queryVoiceCompound();
         mSpeakUtil = SpeakUtil.getInstance(mContext);
-        mSpeakUtil.init();
     }
     public void drive(double lat, double lng){
         checkNearPoint(lat, lng);

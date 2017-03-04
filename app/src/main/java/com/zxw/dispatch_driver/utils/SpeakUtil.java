@@ -51,6 +51,7 @@ public class SpeakUtil {
     public static SpeakUtil getInstance(Context context) {
         if (speakUtil == null) {
             speakUtil = new SpeakUtil(context);
+            speakUtil.init();
         }
         return speakUtil;
     }
@@ -59,11 +60,11 @@ public class SpeakUtil {
         this.mContext = context;
     }
     public void playText(String playText) {
-        VoiceController.outside();
+//        VoiceController.outside();
         //3.开始合成
         mTts.startSpeaking(playText, mSynListener);
     }
-    public void init() {
+    private void init() {
         //1.创建SpeechSynthesizer对象, 第二个参数：本地合成时传InitListener
         mTts = SpeechSynthesizer.createSynthesizer(mContext, null);
         initSpeechSynthesizer();

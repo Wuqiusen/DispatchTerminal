@@ -38,7 +38,6 @@ public class ManualReportStationAdapter extends RecyclerView.Adapter<ManualRepor
         this.mContext = mContext;
         mLayoutInflater = LayoutInflater.from(mContext);
         mSpeakUtil = SpeakUtil.getInstance(MyApplication.mContext);
-        mSpeakUtil.init();
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

@@ -32,7 +32,6 @@ public class ServiceWordAdapter extends RecyclerView.Adapter<ServiceWordAdapter.
         mLayoutInflater = LayoutInflater.from(context);
         this.mData = serviceWordBeen;
         mSpeakUtil = SpeakUtil.getInstance(mContext);
-        mSpeakUtil.init();
     }
 
     @Override

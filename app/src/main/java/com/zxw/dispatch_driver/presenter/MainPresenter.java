@@ -20,6 +20,7 @@ import com.zxw.dispatch_driver.adapter.ReceiveAdapter;
 import com.zxw.dispatch_driver.jpush.ExampleUtil;
 import com.zxw.dispatch_driver.presenter.view.MainView;
 import com.zxw.dispatch_driver.utils.DebugLog;
+import com.zxw.dispatch_driver.utils.SpeakUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -222,7 +223,7 @@ public class MainPresenter extends BasePresenter<MainView> {
      * @param id 工单ID
      * @param status 2/拒绝 3/接受
      */
-    public void receiveListOperator(int id, int status){
+    public void receiveListOperator(int id, final int status){
         mSource.receiveOperator(userId(), keyCode(), id, status, new Subscriber<BaseBean>() {
             @Override
             public void onCompleted() {
@@ -238,6 +239,11 @@ public class MainPresenter extends BasePresenter<MainView> {
             public void onNext(BaseBean baseBean) {
                 if(baseBean.returnCode == SUCCESS){
                     reloadReceiveList();
+                    if (status == DispatchSource.TYPE_ACCEPT){
+                        SpeakUtil.getInstance(mActivity).playText("接受工单");
+                    }else{
+                        SpeakUtil.getInstance(mActivity).playText("拒绝工单");
+                    }
                 }else{
                     mvpView.disPlay(baseBean.returnInfo);
                 }
@@ -288,6 +294,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
             @Override
             public void onNext(BaseBean baseBean) {
+                SpeakUtil.getInstance(mActivity).playText("开始行程");
                 reloadJourneyList();
             }
         });
@@ -308,6 +315,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
             @Override
             public void onNext(BaseBean baseBean) {
+                SpeakUtil.getInstance(mActivity).playText("正常结束行程");
                 reloadJourneyList();
             }
         });
@@ -328,6 +336,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
             @Override
             public void onNext(BaseBean baseBean) {
+                SpeakUtil.getInstance(mActivity).playText("异常结束行程");
                 reloadJourneyList();
             }
         });

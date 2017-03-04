@@ -2,7 +2,6 @@ package com.zxw.dispatch_driver.trace;
 
 import android.content.Context;
 import android.os.Environment;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -12,14 +11,12 @@ import com.baidu.trace.OnGeoFenceListener;
 import com.baidu.trace.OnStartTraceListener;
 import com.baidu.trace.Trace;
 import com.zxw.data.bean.ElectronRail;
-import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.utils.DebugLog;
 import com.zxw.dispatch_driver.utils.MyGsonUtils;
 import com.zxw.dispatch_driver.utils.ToastHelper;
 
 import java.util.List;
 
-import static android.content.Context.TELEPHONY_SERVICE;
 import static com.zxw.dispatch_driver.MyApplication.writeTxtToFile;
 
 /**
@@ -72,8 +69,9 @@ public class TraceHelper {
     private TraceHelper(Context context) {
         this.mContext = context;
         fenceCallBackFilter = new FenceCallBackFilter();
-        TelephonyManager tm = (TelephonyManager) MyApplication.mContext.getSystemService(TELEPHONY_SERVICE);
-        entityName = tm.getDeviceId();
+//        TelephonyManager tm = (TelephonyManager) MyApplication.mContext.getSystemService(TELEPHONY_SERVICE);
+//        entityName = tm.getDeviceId();
+        entityName = "pdd";
         DebugLog.w(entityName);
         initTrace();
         mFenceIdManager = FenceIdManager.getInstance();
@@ -81,9 +79,8 @@ public class TraceHelper {
     }
 
 
-    public void delete() {
-        for (int i = 400; i < 600; i++) {
-            mTraceClient.deleteFence(serviceId, i, new OnGeoFenceListener() {
+    public void delete(int fenceId) {
+            mTraceClient.deleteFence(serviceId, fenceId, new OnGeoFenceListener() {
                 @Override
                 public void onRequestFailedCallback(String s) {
                     Log.w(TAG, "onRequestFailedCallback: " + s);
@@ -94,7 +91,6 @@ public class TraceHelper {
                     Log.w(TAG, "onDeleteFenceCallback: " + s);
                 }
             });
-        }
 
     }
 

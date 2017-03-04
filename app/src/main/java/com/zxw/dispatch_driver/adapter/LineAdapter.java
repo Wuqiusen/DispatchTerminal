@@ -36,7 +36,6 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder> {
         mLayoutInflater = LayoutInflater.from(mActivity);
 
         mSpeakUtil = SpeakUtil.getInstance(MyApplication.mContext);
-        mSpeakUtil.init();
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

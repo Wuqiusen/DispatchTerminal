@@ -39,7 +39,6 @@ public class DogPresenter extends BasePresenter<DogView> {
         this.mActivity = activity;
 
         mSpeakUtil = SpeakUtil.getInstance(MyApplication.mContext);
-        mSpeakUtil.init();
 //        DogSecondDao dogSecondDao = new DogSecondDao(MyApplication.mContext);
 //        dogSecondDao.mockData();
     }

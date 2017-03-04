@@ -1,7 +1,6 @@
 package com.zxw.dispatch_driver.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -9,7 +8,6 @@ import android.widget.TextView;
 import com.zxw.data.bean.Receive;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.presenter.MainPresenter;
-import com.zxw.dispatch_driver.ui.ReceiveActivity;
 
 import java.util.List;
 
@@ -34,14 +32,6 @@ public class ReceiveAdapter extends CommonAdapter<Receive> {
         TextView tv_prompt = holder.findViewById(R.id.tv_prompt);
         Button btn_refuse = holder.findViewById(R.id.btn_refuse);
         Button btn_confirm = holder.findViewById(R.id.btn_confirm);
-        holder.findViewById(R.id.ll_container).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, ReceiveActivity.class);
-                intent.putExtra("receive", item);
-                mContext.startActivity(intent);
-            }
-        });
         tv_line_code.setText(item.lineCode);
         tv_car_code.setText(item.vehCode);
         String runDate = String.valueOf(item.runDate);

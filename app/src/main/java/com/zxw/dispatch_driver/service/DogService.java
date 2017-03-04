@@ -105,7 +105,6 @@ public class DogService extends Service {
         mVoiceCompoundDao = new VoiceCompoundDao(MyApplication.mContext);
 
         mSpeakUtil = SpeakUtil.getInstance(MyApplication.mContext);
-        mSpeakUtil.init();
 
 
         //init position
