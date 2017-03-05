@@ -12,6 +12,7 @@ import com.zxw.data.sp.SpUtils;
 import com.zxw.data.utils.Base64;
 import com.zxw.data.utils.DESPlus;
 import com.zxw.dispatch_driver.MyApplication;
+import com.zxw.dispatch_driver.trace.TraceService;
 import com.zxw.dispatch_driver.ui.MainActivity;
 import com.zxw.dispatch_driver.utils.BroadcastUtil;
 import com.zxw.dispatch_driver.utils.ByteToHexUtil;
@@ -80,8 +81,14 @@ public class EmployeeCardReceiver extends BroadcastReceiver {
                 BroadcastUtil.loginIn(loginBean.getName(), loginBean.getCode());
                 startMainActivity();
                 loadVehicleId(loginBean.getUserId(), loginBean.getKeyCode());
+                startTraceService();
             }
         });
+    }
+
+    private void startTraceService() {
+        Intent intent = new Intent(mContext, TraceService.class);
+        mContext.startService(intent);
     }
 
     public void loadVehicleId(String userId, String keyCode) {

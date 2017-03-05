@@ -11,6 +11,7 @@ import com.baidu.trace.OnGeoFenceListener;
 import com.baidu.trace.OnStartTraceListener;
 import com.baidu.trace.Trace;
 import com.zxw.data.bean.ElectronRail;
+import com.zxw.data.sp.SpUtils;
 import com.zxw.dispatch_driver.utils.DebugLog;
 import com.zxw.dispatch_driver.utils.MyGsonUtils;
 import com.zxw.dispatch_driver.utils.ToastHelper;
@@ -18,6 +19,12 @@ import com.zxw.dispatch_driver.utils.ToastHelper;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 import static com.zxw.dispatch_driver.MyApplication.writeTxtToFile;
 
@@ -75,7 +82,37 @@ public class TraceHelper {
         DebugLog.w(entityName);
         initTrace();
         mFenceIdManager = FenceIdManager.getInstance();
-//        delete
+        //延时1分钟进行删除围栏 , 避免和生成围栏逻辑冲突
+        // 原因是百度调用删除再调用创建, 会没创建的回调触发, 这样就获取不到围栏ID
+        Observable.timer(60, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Long>() {
+            @Override
+            public void call(Long aLong) {
+                deleteOldFence();
+            }
+        });
+    }
+
+    private void deleteOldFence() {
+        String cache = SpUtils.getCache(mContext, SpUtils.OLD_FENCE_LIST);
+        if (!TextUtils.isEmpty(cache)){
+            String[] split = cache.split(";");
+            for (String str : split){
+                if (!TextUtils.isEmpty(str)){
+                    try{
+                        Integer fenceId = Integer.valueOf(str);
+                        delete(fenceId);
+                    }catch (Exception e){
+
+                    }
+                }
+            }
+        }
+        cache = SpUtils.getCache(mContext, SpUtils.NEW_FENCE_LIST);
+        SpUtils.setCache(mContext, SpUtils.OLD_FENCE_LIST, cache);
+        SpUtils.setCache(mContext, SpUtils.NEW_FENCE_LIST, "");
     }
 
 
@@ -163,24 +200,6 @@ public class TraceHelper {
         writeTxtToFile(time + "\n str : " + str, filePath, fileName);
     }
 
-//    public void unregisterFence() {
-//        List<FenceIdPair> fenceIdList = mFenceIdManager.getFenceIdList();
-//        for (FenceIdPair fenceIdPair : fenceIdList) {
-//            Log.w(TAG, "unregisterFence: " + fenceIdPair.BaiDuFenceId);
-//            mTraceClient.deleteFence(serviceId, fenceIdPair.BaiDuFenceId, new OnGeoFenceListener() {
-//                @Override
-//                public void onRequestFailedCallback(String s) {
-//                    Log.w(TAG, "onRequestFailedCallback: " + s);
-//                }
-//
-//                @Override
-//                public void onDeleteFenceCallback(String s) {
-//                    Log.w(TAG, "onDeleteFenceCallback: " + s);
-//                }
-//            });
-//        }
-//    }
-
     /**
      * 围栏圆心（圆心位置, 格式 : "经度,纬度"）
      * 围栏半径（单位 : 米）
@@ -264,6 +283,16 @@ public class TraceHelper {
         this.listElectronRail = listElectronRail;
         currentPointer = 0;
         createFenceList();
+    }
+
+    public void unregister() {
+        List<OutsideInsideFenceBean> fenceList = mFenceIdManager.getFenceList();
+        for (OutsideInsideFenceBean fence : fenceList){
+            delete(fence.getInsideFenceId());
+            DebugLog.w("delete " + fence.getInsideFenceId());
+            delete(fence.getOutsideFenceId());
+            DebugLog.w("delete " + fence.getOutsideFenceId());
+        }
     }
 
     public interface OnEnterOrLeaveFenceListener {

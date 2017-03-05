@@ -1,5 +1,10 @@
 package com.zxw.dispatch_driver.trace;
 
+import android.text.TextUtils;
+
+import com.zxw.data.sp.SpUtils;
+import com.zxw.dispatch_driver.MyApplication;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +49,8 @@ public class FenceIdManager {
     }
 
     public void addFenceIdPair(int currentRailId, int fenceId, int currentPointer) {
+        //储存围栏ID 在下一次打开APP时进行删除.
+        cacheFenceId(fenceId);
         //如果已经有就返回
         OutsideInsideFenceBean createdFence = isCreatedFence(currentRailId);
         // 如果没有就新建一个, 把对应的服务器围栏ID 传入构造方法. 并将其加入到list中
@@ -66,6 +73,17 @@ public class FenceIdManager {
             createdFence.setOutsideFenceId(fenceId);
         }
     }
+
+    private void cacheFenceId(int fenceId) {
+        String cache = SpUtils.getCache(MyApplication.mContext, SpUtils.NEW_FENCE_LIST);
+        if(TextUtils.isEmpty(cache)){
+            cache = fenceId + ";";
+        }else{
+            cache += fenceId + ";";
+        }
+        SpUtils.setCache(MyApplication.mContext, SpUtils.NEW_FENCE_LIST, cache);
+    }
+
     // 是否已创建这个围栏容器
     private OutsideInsideFenceBean isCreatedFence(int currentRailId){
         for (OutsideInsideFenceBean fence : mFenceList){
@@ -75,4 +93,7 @@ public class FenceIdManager {
         return null;
     }
 
+    public List<OutsideInsideFenceBean> getFenceList() {
+        return mFenceList;
+    }
 }

@@ -146,4 +146,16 @@ public class TraceService extends Service {
     private void createPolygonRail(ElectronRail rail) {
         TraceHelper.getInstance(mContext).createPolygonFence(rail);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        TraceHelper.getInstance(mContext).unregister();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        TraceHelper.getInstance(mContext).unregister();
+    }
 }

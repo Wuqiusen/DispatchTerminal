@@ -13,6 +13,7 @@ import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.R;
 import com.zxw.dispatch_driver.presenter.LoginPresenter;
 import com.zxw.dispatch_driver.presenter.view.LoginView;
+import com.zxw.dispatch_driver.trace.TraceService;
 import com.zxw.dispatch_driver.ui.base.PresenterActivity;
 
 import butterknife.Bind;
@@ -69,8 +70,14 @@ public class LoginActivity extends PresenterActivity<LoginPresenter> implements 
     @Override
     public void loginSuccess() {
         mPresenter.loadVehicleId();
+        startTraceService();
         startActivity(new Intent(this, MainActivity.class));
         finish();
+    }
+
+    private void startTraceService() {
+        Intent intent = new Intent(mContext, TraceService.class);
+        mContext.startService(intent);
     }
 
     @Override

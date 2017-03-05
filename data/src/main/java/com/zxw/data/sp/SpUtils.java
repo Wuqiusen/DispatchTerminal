@@ -35,6 +35,8 @@ public class SpUtils {
     public final static String IS_SET_ALIAS = "is_set_alias";//是否已经设置别名
 
     public final static String MAP_POINT = "map_point";
+    public final static String OLD_FENCE_LIST = "old_fence_list";
+    public final static String NEW_FENCE_LIST = "new_fence_list";
 
     private static void initSp(Context mContext, String fileName) {
         sp = mContext.getSharedPreferences(fileName,Context.MODE_PRIVATE);

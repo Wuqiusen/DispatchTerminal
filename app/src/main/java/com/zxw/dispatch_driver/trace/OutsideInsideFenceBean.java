@@ -65,4 +65,12 @@ public class OutsideInsideFenceBean {
     public int getEventType() {
         return eventType;
     }
+
+    public int getInsideFenceId() {
+        return insideFenceId;
+    }
+
+    public int getOutsideFenceId() {
+        return outsideFenceId;
+    }
 }
