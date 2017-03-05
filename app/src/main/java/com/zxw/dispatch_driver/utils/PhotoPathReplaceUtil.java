@@ -34,7 +34,7 @@ public class PhotoPathReplaceUtil {
                         .getSystemService(Context.STORAGE_SERVICE);
                 try {
                     volumePaths = (String[]) sm.getClass()
-                            .getMethod("getVolumePaths", (Class<?>)null).invoke(sm, (Object[])null);
+                            .getMethod("getVolumePaths", null).invoke(sm, null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

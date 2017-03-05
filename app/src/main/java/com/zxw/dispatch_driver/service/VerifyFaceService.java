@@ -21,7 +21,7 @@ import java.io.File;
  * email：cangjie2016@gmail.com
  */
 public class VerifyFaceService extends Service {
-    public String comparePhotoUrl = "http://ww2.sinaimg.cn/mw690/bdbb6334gw1fbp0m2bcmej20zk0k040b.jpg";
+    public String comparePhotoUrl;
 
     public PhotoReceiver myReceiver;
 
@@ -38,10 +38,12 @@ public class VerifyFaceService extends Service {
         DebugLog.w("onStartCommand");
         ToastHelper.showToast("正在计算");
         comparePhotoUrl = intent.getStringExtra("photoPath");
+        // 建立一个接收器, 系统拍完照后会返回照片路径过来
         myReceiver = new PhotoReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION);
         registerReceiver(myReceiver, filter);
+        // 让系统帮我拍照
         sendBroadcast(new Intent(ACTION_USB_CAMERA_CAPTURE_START));
 
         return super.onStartCommand(intent, flags, startId);
@@ -79,6 +81,7 @@ public class VerifyFaceService extends Service {
         public void onReceive(Context context, Intent intent) {
             String filePath = intent.getStringExtra("file");
             DebugLog.w("PhotoReceiver" + filePath);
+            ToastHelper.showToast(filePath);
             verifyFaceByFile(comparePhotoUrl, filePath);
         }
     }
