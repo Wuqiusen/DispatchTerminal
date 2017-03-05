@@ -2,6 +2,7 @@ package com.zxw.dispatch_driver.trace;
 
 import android.content.Context;
 import android.os.Environment;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -12,6 +13,7 @@ import com.baidu.trace.OnStartTraceListener;
 import com.baidu.trace.Trace;
 import com.zxw.data.bean.ElectronRail;
 import com.zxw.data.sp.SpUtils;
+import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.utils.DebugLog;
 import com.zxw.dispatch_driver.utils.MyGsonUtils;
 import com.zxw.dispatch_driver.utils.ToastHelper;
@@ -26,6 +28,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
+import static android.content.Context.TELEPHONY_SERVICE;
 import static com.zxw.dispatch_driver.MyApplication.writeTxtToFile;
 
 /**
@@ -76,9 +79,8 @@ public class TraceHelper {
 
     private TraceHelper(Context context) {
         this.mContext = context;
-//        TelephonyManager tm = (TelephonyManager) MyApplication.mContext.getSystemService(TELEPHONY_SERVICE);
-//        entityName = tm.getDeviceId();
-        entityName = "lol";
+        TelephonyManager tm = (TelephonyManager) MyApplication.mContext.getSystemService(TELEPHONY_SERVICE);
+        entityName = tm.getDeviceId();
         DebugLog.w(entityName);
         initTrace();
         mFenceIdManager = FenceIdManager.getInstance();
@@ -160,7 +162,7 @@ public class TraceHelper {
                 traceStatusChange(s);
                 OnTracePushBean onTracePushBean = MyGsonUtils.fromJson(s, OnTracePushBean.class);
                 OutsideInsideFenceBean outsideInsideFence = mFenceIdManager.queryServiceFenceByBaiDuFenceId(onTracePushBean.getFence_id());
-                if (outsideInsideFence == null)
+                if (outsideInsideFence == null || onTracePushBean.getPre_point().getRadius() > 500)
                     return;
 //                //查看最近几个坐标点是否有漂移
 //                if(fenceCallBackFilter.isPY() || onTracePushBean.getPre_point().getRadius() > 100){
