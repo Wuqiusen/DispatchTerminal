@@ -159,7 +159,7 @@ public class HttpMethods {
 
     public void checkVersion(String keyCode, Subscriber<VersionBean> subscriber) {
         HttpInterfaces.UpdateVersion updateVersion = retrofit.create(HttpInterfaces.UpdateVersion.class);
-        Observable<VersionBean> observable = updateVersion.checkVersion("http://120.77.48.103:8080/yd_control_app/phone/control/manage/app/new/version", keyCode)
+        Observable<VersionBean> observable = updateVersion.checkVersion("http://120.77.48.103:8080/yd_driver_app/phone/driver/manage/app/new/version", keyCode)
                 .map(new HttpResultFunc<VersionBean>());
         toSubscribe(observable, subscriber);
     }

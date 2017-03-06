@@ -13,7 +13,7 @@ import com.zxw.data.utils.Base64;
 import com.zxw.data.utils.DESPlus;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.trace.TraceService;
-import com.zxw.dispatch_driver.ui.MainActivity;
+import com.zxw.dispatch_driver.ui.WelcomeActivity;
 import com.zxw.dispatch_driver.utils.BroadcastUtil;
 import com.zxw.dispatch_driver.utils.ByteToHexUtil;
 import com.zxw.dispatch_driver.utils.DebugLog;
@@ -79,7 +79,7 @@ public class EmployeeCardReceiver extends BroadcastReceiver {
             public void onNext(Login loginBean) {
                 cacheLoginInfo(loginBean);
                 BroadcastUtil.loginIn(loginBean.getName(), loginBean.getCode());
-                startMainActivity();
+                startWelcomeActivity();
                 loadVehicleId(loginBean.getUserId(), loginBean.getKeyCode());
                 startTraceService();
             }
@@ -119,8 +119,8 @@ public class EmployeeCardReceiver extends BroadcastReceiver {
         SpUtils.setCache(MyApplication.mContext, SpUtils.KEYCODE, loginBean.getKeyCode());
     }
 
-    private void startMainActivity() {
-        Intent intent = new Intent(mContext, MainActivity.class);
+    private void startWelcomeActivity() {
+        Intent intent = new Intent(mContext, WelcomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                 Intent.FLAG_ACTIVITY_CLEAR_TASK);
         mContext.startActivity(intent);
