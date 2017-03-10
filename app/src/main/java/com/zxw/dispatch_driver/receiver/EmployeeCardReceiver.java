@@ -17,6 +17,7 @@ import com.zxw.dispatch_driver.ui.WelcomeActivity;
 import com.zxw.dispatch_driver.utils.BroadcastUtil;
 import com.zxw.dispatch_driver.utils.ByteToHexUtil;
 import com.zxw.dispatch_driver.utils.DebugLog;
+import com.zxw.dispatch_driver.utils.LogUtil;
 import com.zxw.dispatch_driver.utils.ToastHelper;
 import com.zxw.dispatch_driver.utils.VoiceController;
 
@@ -73,6 +74,7 @@ public class EmployeeCardReceiver extends BroadcastReceiver {
             @Override
             public void onError(Throwable e) {
                 ToastHelper.showToast(e.getMessage());
+                LogUtil.log("login fail : " + e.getMessage());
             }
 
             @Override
@@ -82,6 +84,7 @@ public class EmployeeCardReceiver extends BroadcastReceiver {
                 startWelcomeActivity();
                 loadVehicleId(loginBean.getUserId(), loginBean.getKeyCode());
                 startTraceService();
+                LogUtil.log("userId : " + loginBean.getUserId());
             }
         });
     }
@@ -102,12 +105,13 @@ public class EmployeeCardReceiver extends BroadcastReceiver {
 
             @Override
             public void onError(Throwable e) {
-
+                LogUtil.log("vehicleId fail : " + e.getMessage());
             }
 
             @Override
             public void onNext(Integer vehicleId) {
                 SpUtils.setVehicleId(mContext, vehicleId);
+                LogUtil.log("vehicleId : " + vehicleId);
             }
         }, userId, keyCode, 2, imei);
     }

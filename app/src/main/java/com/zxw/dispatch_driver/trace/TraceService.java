@@ -2,7 +2,6 @@ package com.zxw.dispatch_driver.trace;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -11,13 +10,13 @@ import com.zxw.data.bean.BaseBean;
 import com.zxw.data.bean.ElectronRail;
 import com.zxw.data.http.HttpMethods;
 import com.zxw.data.sp.SpUtils;
+import com.zxw.dispatch_driver.utils.LogUtil;
 
 import java.util.List;
 
 import rx.Subscriber;
 
 import static com.zxw.dispatch_driver.MyApplication.mContext;
-import static com.zxw.dispatch_driver.MyApplication.writeTxtToFile;
 
 /**
  * author：CangJie on 2017/2/24 10:40
@@ -37,12 +36,13 @@ public class TraceService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         loadElectronRail();
-        final int vehicleId = SpUtils.getVehicleId(mContext);
         TraceHelper.getInstance(mContext).setOnEnterOrLeaveFenceListener(new TraceHelper.OnEnterOrLeaveFenceListener() {
             @Override
             public void enterFence(final int fenceId) {
 //                if (checkTime()) return;
-                traceStatusChange(fenceId + "进站");
+                int vehicleId = SpUtils.getVehicleId(mContext);
+                String logStr = "后台围栏ID : " + fenceId + " ,进站, userId: "+ SpUtils.getCache(mContext, SpUtils.USER_ID) + " vehicleId : " + vehicleId;
+                LogUtil.uploadLog(logStr);
                 HttpMethods.getInstance().enterStation(new Subscriber<BaseBean>() {
                     @Override
                     public void onCompleted() {
@@ -66,7 +66,9 @@ public class TraceService extends Service {
             @Override
             public void leaveFence(int fenceId) {
 //                if (checkTime()) return;
-                traceStatusChange(fenceId + "出站");
+                int vehicleId = SpUtils.getVehicleId(mContext);
+                String logStr = "后台围栏ID : " + fenceId + " ,出站, userId: "+ SpUtils.getCache(mContext, SpUtils.USER_ID) + " vehicleId : " + vehicleId;
+                LogUtil.uploadLog(logStr);
                 HttpMethods.getInstance().leaveStation(new Subscriber<BaseBean>() {
                                                            @Override
                                                            public void onCompleted() {
@@ -100,13 +102,6 @@ public class TraceService extends Service {
         return false;
     }
 
-    private void traceStatusChange(String str) {
-        //保存到本地
-        String filePath = Environment.getExternalStorageDirectory() + "/BdYy";
-        String fileName = "sendLog.txt";
-        writeTxtToFile("str : " + str, filePath, fileName);
-    }
-
     private void loadElectronRail() {
         HttpMethods.getInstance().loadAllFence(new Subscriber<List<ElectronRail>>() {
             @Override
@@ -116,13 +111,14 @@ public class TraceService extends Service {
 
             @Override
             public void onError(Throwable e) {
-
+                LogUtil.log("fence fail : " + e.getMessage());
             }
 
             @Override
             public void onNext(List<ElectronRail> listElectronRail) {
 //                createBaiDuRail(listElectronRail);
                 TraceHelper.getInstance(mContext).initFenceList(listElectronRail);
+                LogUtil.log("fence size : " + listElectronRail.size());
             }
         }, SpUtils.getCache(mContext, SpUtils.USER_ID),
                 SpUtils.getCache(mContext, SpUtils.KEYCODE));

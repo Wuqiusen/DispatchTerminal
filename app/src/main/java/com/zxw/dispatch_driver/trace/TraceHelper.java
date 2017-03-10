@@ -1,7 +1,6 @@
 package com.zxw.dispatch_driver.trace;
 
 import android.content.Context;
-import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,11 +14,10 @@ import com.zxw.data.bean.ElectronRail;
 import com.zxw.data.sp.SpUtils;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.utils.DebugLog;
+import com.zxw.dispatch_driver.utils.LogUtil;
 import com.zxw.dispatch_driver.utils.MyGsonUtils;
 import com.zxw.dispatch_driver.utils.ToastHelper;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +27,6 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import static android.content.Context.TELEPHONY_SERVICE;
-import static com.zxw.dispatch_driver.MyApplication.writeTxtToFile;
 
 /**
  * author：CangJie on 2017/2/20 17:12
@@ -90,23 +87,24 @@ public class TraceHelper {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Long>() {
-            @Override
-            public void call(Long aLong) {
-                deleteOldFence();
-            }
-        });
+                    @Override
+                    public void call(Long aLong) {
+                        deleteOldFence();
+                    }
+                });
     }
 
     private void deleteOldFence() {
         String cache = SpUtils.getCache(mContext, SpUtils.OLD_FENCE_LIST);
-        if (!TextUtils.isEmpty(cache)){
+        LogUtil.log("delete fence : " + cache);
+        if (!TextUtils.isEmpty(cache)) {
             String[] split = cache.split(";");
-            for (String str : split){
-                if (!TextUtils.isEmpty(str)){
-                    try{
+            for (String str : split) {
+                if (!TextUtils.isEmpty(str)) {
+                    try {
                         Integer fenceId = Integer.valueOf(str);
                         delete(fenceId);
-                    }catch (Exception e){
+                    } catch (Exception e) {
 
                     }
                 }
@@ -119,17 +117,17 @@ public class TraceHelper {
 
 
     public void delete(int fenceId) {
-            mTraceClient.deleteFence(serviceId, fenceId, new OnGeoFenceListener() {
-                @Override
-                public void onRequestFailedCallback(String s) {
-                    Log.w(TAG, "onRequestFailedCallback: " + s);
-                }
+        mTraceClient.deleteFence(serviceId, fenceId, new OnGeoFenceListener() {
+            @Override
+            public void onRequestFailedCallback(String s) {
+                Log.w(TAG, "onRequestFailedCallback: " + s);
+            }
 
-                @Override
-                public void onDeleteFenceCallback(String s) {
-                    Log.w(TAG, "onDeleteFenceCallback: " + s);
-                }
-            });
+            @Override
+            public void onDeleteFenceCallback(String s) {
+                Log.w(TAG, "onDeleteFenceCallback: " + s);
+            }
+        });
 
     }
 
@@ -155,11 +153,12 @@ public class TraceHelper {
             @Override
             public void onTraceCallback(int i, String s) {
                 Log.w(TAG, "onTraceCallback: " + s);
+                LogUtil.log("onTraceCallback: " + s);
             }
 
             @Override
             public void onTracePushCallback(byte b, String s) {
-                traceStatusChange(s);
+                LogUtil.fenceLog(s);
                 OnTracePushBean onTracePushBean = MyGsonUtils.fromJson(s, OnTracePushBean.class);
                 OutsideInsideFenceBean outsideInsideFence = mFenceIdManager.queryServiceFenceByBaiDuFenceId(onTracePushBean.getFence_id());
                 if (outsideInsideFence == null || onTracePushBean.getPre_point().getRadius() > 500)
@@ -169,10 +168,9 @@ public class TraceHelper {
 //                    ToastHelper.showToast("检测到漂移导致的进出围栏, 已经过滤 radius:" + onTracePushBean.getPre_point().getRadius());
 //                    return;
 //                }
-                traceStatusChange(outsideInsideFence.getServiceFenceId() + " 发生了两个围栏事件 事件类型为 " + outsideInsideFence.getEventType());
+                String logStr = outsideInsideFence.getServiceFenceId() + " 发生了两个围栏事件 事件类型为 " + outsideInsideFence.getEventType();
+                LogUtil.fenceLog(logStr);
                 sendEnterOrLeaveFenceBroadcast(outsideInsideFence.getServiceFenceId(), outsideInsideFence.getEventType());
-                ToastHelper.showToast(s);
-
                 //复位
                 mFenceIdManager.restoreFlag();
             }
@@ -188,18 +186,9 @@ public class TraceHelper {
             throw new RuntimeException("OnEnterOrLeaveFenceListener can not be null!");
         if (action == 1) {
             listener.enterFence(serverFenceId);
-    } else {
-        listener.leaveFence(serverFenceId);
-    }
-}
-
-    private void traceStatusChange(String str) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        String time = format.format(new Date());
-        //保存到本地
-        String filePath = Environment.getExternalStorageDirectory() + "/BdYy";
-        String fileName = "log.txt";
-        writeTxtToFile(time + "\n str : " + str, filePath, fileName);
+        } else {
+            listener.leaveFence(serverFenceId);
+        }
     }
 
     /**
@@ -227,7 +216,6 @@ public class TraceHelper {
                         int fenceId = createFenceBean.getFence_id();
                         // 通过当前id, 围栏id 和当前序号 就可以确定这个围栏是哪个一个的内环或者外环
                         mFenceIdManager.addFenceIdPair(currentRailId, fenceId, currentPointer);
-                        ToastHelper.showToast(s);
                     }
                 });
     }
@@ -258,6 +246,7 @@ public class TraceHelper {
                         int fenceId = createFenceBean.getFence_id();
                         mFenceIdManager.addFenceIdPair(currentRailId, fenceId, currentPointer);
                         createFenceList();
+                        LogUtil.log(s);
                     }
                 });
     }
@@ -269,6 +258,7 @@ public class TraceHelper {
 
     private int currentPointer = 0;
     private List<ElectronRail> listElectronRail;
+
     public void createFenceList() {
         if (listElectronRail.size() != currentPointer) {
             ElectronRail rail = listElectronRail.get(currentPointer);
@@ -289,7 +279,7 @@ public class TraceHelper {
 
     public void unregister() {
         List<OutsideInsideFenceBean> fenceList = mFenceIdManager.getFenceList();
-        for (OutsideInsideFenceBean fence : fenceList){
+        for (OutsideInsideFenceBean fence : fenceList) {
             delete(fence.getInsideFenceId());
             DebugLog.w("delete " + fence.getInsideFenceId());
             delete(fence.getOutsideFenceId());

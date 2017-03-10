@@ -15,6 +15,7 @@ import com.zxw.dispatch_driver.jpush.ExampleUtil;
 import com.zxw.dispatch_driver.presenter.view.LoginView;
 import com.zxw.dispatch_driver.utils.DebugLog;
 import com.zxw.dispatch_driver.utils.BroadcastUtil;
+import com.zxw.dispatch_driver.utils.LogUtil;
 
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -75,6 +76,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onError(Throwable e) {
                 mvpView.loginFail(e.getMessage());
+                LogUtil.log("login fail : " + e.getMessage());
             }
 
             @Override
@@ -82,6 +84,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 cacheLoginInfo(loginBean);
                 BroadcastUtil.loginIn(loginBean.getName(), loginBean.getCode());
                 jPushComponent();
+                LogUtil.log("userId : " + loginBean.getUserId());
             }
         });
     }
@@ -220,12 +223,13 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             @Override
             public void onError(Throwable e) {
-
+                LogUtil.log("vehicleId fail : " + e.getMessage());
             }
 
             @Override
             public void onNext(Integer vehicleId) {
                 SpUtils.setVehicleId(mContext, vehicleId);
+                LogUtil.log("vehicleId : " + vehicleId);
             }
         }, userId(), keyCode(), 2, imei);
     }
