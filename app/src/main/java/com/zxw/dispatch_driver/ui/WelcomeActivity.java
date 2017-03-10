@@ -131,32 +131,13 @@ public class WelcomeActivity extends BaseHeadActivity {
     }
 
     private void downLoadDialog(final VersionBean versionBean) {
-        final MyDialog newVersionDialog = new MyDialog(this, "版本信息", versionBean.remarks, MyDialog.HAVEBUTTON);
-        newVersionDialog.show();
-        newVersionDialog.setCancelable(false);
-        newVersionDialog.ButtonCancel(new View.OnClickListener() {
+        hideLoading();
+        new DownLoadAndSetUpAPK().DownLoadAndSetUpAPK(WelcomeActivity.this, versionBean.url, new DownLoadAndSetUpAPK.LoadFailure() {
             @Override
-            public void onClick(View v) {
-                hideLoading();
-                newVersionDialog.dismiss();
-                goMain();
-
+            public void onLoadFailureListener() {
+                ToastHelper.showToast("更新失败", mContext);
             }
         });
-        newVersionDialog.ButtonQuery(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideLoading();
-                newVersionDialog.dismiss();
-                new DownLoadAndSetUpAPK().DownLoadAndSetUpAPK(WelcomeActivity.this, versionBean.url, new DownLoadAndSetUpAPK.LoadFailure() {
-                    @Override
-                    public void onLoadFailureListener() {
-                        ToastHelper.showToast("更新失败", mContext);
-                    }
-                });
-            }
-        });
-
 
 
     }
