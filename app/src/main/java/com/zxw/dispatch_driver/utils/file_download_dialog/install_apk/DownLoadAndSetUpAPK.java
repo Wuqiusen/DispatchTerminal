@@ -67,6 +67,7 @@ public class DownLoadAndSetUpAPK {
     private void showDialog(){
         progressDialog = new MyDialog(mActivity, "正在下载，请稍后...", "", MyDialog.PROGRESS);
         progressDialog.show();
+        progressDialog.setCancelable(false);
         progressDialogListener();
     }
 

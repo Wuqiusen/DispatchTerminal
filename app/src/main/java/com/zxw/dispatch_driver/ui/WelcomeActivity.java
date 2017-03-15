@@ -1,14 +1,12 @@
 package com.zxw.dispatch_driver.ui;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -22,7 +20,6 @@ import com.zxw.dispatch_driver.ui.base.BaseHeadActivity;
 import com.zxw.dispatch_driver.utils.DebugLog;
 import com.zxw.dispatch_driver.utils.ToastHelper;
 import com.zxw.dispatch_driver.utils.file_download_dialog.install_apk.DownLoadAndSetUpAPK;
-import com.zxw.dispatch_driver.view.MyDialog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -115,6 +112,7 @@ public class WelcomeActivity extends BaseHeadActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        ToastHelper.showToast("正在获取版本信息!!请稍候!!");
                         checkVersion();
                     }
 

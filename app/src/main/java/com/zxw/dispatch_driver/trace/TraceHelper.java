@@ -16,7 +16,6 @@ import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.utils.DebugLog;
 import com.zxw.dispatch_driver.utils.LogUtil;
 import com.zxw.dispatch_driver.utils.MyGsonUtils;
-import com.zxw.dispatch_driver.utils.ToastHelper;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -52,7 +51,7 @@ public class TraceHelper {
     // 坐标类型 （1：GPS经纬度，2：国测局经纬度，3：百度经纬度）
     int coordType = 3;
     //去燥经度
-    int precision = 0;
+    int precision = 100;
     //报警条件 1：进入时触发提醒    2：离开时触发提醒    3：进入离开均触发提醒
     int alarmCondition = 3;
 

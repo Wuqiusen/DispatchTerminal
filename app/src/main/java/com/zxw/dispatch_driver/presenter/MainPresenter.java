@@ -122,6 +122,9 @@ public class MainPresenter extends BasePresenter<MainView> {
                     mvpView.emptyReceiveData();
                     return;
                 }
+                if(isHasNotReceive(mReceiveData)){
+                    SpeakUtil.getInstance(mActivity).playText("请接单");
+                }
                 if (mReceiveAdapter == null) {
                     mReceiveAdapter = new ReceiveAdapter(mActivity, R.layout.item_receive, mReceiveData, MainPresenter.this);
                     mvpView.receivePageSetAdapter(mReceiveAdapter);
@@ -132,6 +135,15 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
 
         });
+    }
+
+    // 检查是否有未接受的单
+    private boolean isHasNotReceive(List<Receive> mReceiveData) {
+        for (Receive receive : mReceiveData){
+            if (receive.status == 1)
+                return true;
+        }
+        return false;
     }
 
     public void reloadJourneyList() {
