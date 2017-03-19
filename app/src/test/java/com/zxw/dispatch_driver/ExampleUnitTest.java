@@ -2,11 +2,15 @@ package com.zxw.dispatch_driver;
 
 import com.amap.api.maps2d.CoordinateConverter;
 import com.amap.api.maps2d.model.LatLng;
+import com.zxw.dispatch_driver.trace.Reseau;
 
+import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
@@ -17,6 +21,62 @@ import static junit.framework.Assert.assertEquals;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
+
+    @Test
+    public void testGps1() throws  Exception{
+        Reseau instance = Reseau.getInstance();
+    }
+
+    @Test
+    public void testGps() throws Exception{
+//(113.944421,22.528841) (113.94629,22.529208)
+//        isPointInPolygon(area.createDouble(),area.createDouble()); (114.082402,22.550271) 114.075323,22.543528)
+        Boolean pointInPolygon = isPointInPolygon(22.6467810000,114.0194800000);
+        Assert.assertEquals(true, pointInPolygon);
+    }
+    private static Boolean isPointInPolygon( double px , double py ){
+        Area a1=new Area(22.6472320000,114.0163270000);
+        Area a3=new Area(22.6481910000,114.0189950000);
+        Area a2=new Area(22.6467150000,114.0197590000);
+        Area a4=new Area(22.6464900000,114.0193000000);
+        Area a5=new Area(22.6470570000,114.0189320000);
+        Area a6=new Area(22.6467310000,114.0184650000);
+        Area a7=new Area(22.6461890000,114.0187520000);
+        Area a8=new Area(22.6455310000,114.0175220000);
+        List<Area> areas=new ArrayList<Area>();
+        areas.add(a1);
+        areas.add(a2);
+        areas.add(a3);
+        areas.add(a4);
+        areas.add(a5);
+        areas.add(a6);
+        areas.add(a7);
+        areas.add(a8);
+        ArrayList<Double> polygonXA = new ArrayList<Double>();
+        ArrayList<Double> polygonYA = new ArrayList<Double>();
+        for(int i=0;i<areas.size();i++){
+            Area area=areas.get(i);
+            polygonXA.add(area.getPx());
+            polygonYA.add(area.getPy());
+        }
+        Point point=new Point();
+        Boolean flag= point.isPointInPolygon(px, py, polygonXA, polygonYA);
+        StringBuffer buffer=new StringBuffer();
+        buffer.append("目标点").append("(").append(px).append(",").append(py).append(")").append("\n");
+        buffer.append(flag?"在":"不在").append("\t").append("由\n");
+        for(int i=0;i<areas.size();i++){
+            Area area=areas.get(i);
+            buffer.append(area.getPoint()).append("; ");
+            //buffer.append("第"+i+"个点"+area.getPoint()).append("\n");
+            System.out.println("第"+(i+1)+"个点"+area.getPoint());
+        }
+        StringBuffer sb=new StringBuffer();
+        sb.append("目标点:").append("(").append(px).append(",").append(py).append(")").append("\n");
+        System.out.println(sb);
+        buffer.append(areas.size()).append("个点组成的").append(areas.size()).append("边行内");
+        System.out.println(buffer.toString());
+        return  flag;
+    }
 
     @Test
     public void testMapCopy() throws Exception{
