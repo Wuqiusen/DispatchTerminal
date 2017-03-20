@@ -35,7 +35,6 @@ import static android.content.Context.TELEPHONY_SERVICE;
  */
 public class EmployeeCardReceiver extends BroadcastReceiver {
     private Context mContext;
-
     private String uid;
     private String befUid;
     private Long befTimeStamp;

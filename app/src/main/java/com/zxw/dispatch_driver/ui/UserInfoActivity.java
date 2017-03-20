@@ -43,6 +43,7 @@ public class UserInfoActivity extends PresenterActivity<UserInfoPresenter> imple
     private void hasNotLogin() {
 //      btn_login.setVisibility(View.VISIBLE);
         login();
+
     }
 
     private void showUserInfo() {
