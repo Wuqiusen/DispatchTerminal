@@ -44,7 +44,6 @@ public class EmployeeCardReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         this.mContext = context;
-        byte[] rfidData = intent.getByteArrayExtra("RFIDData");
         loginOut = intent.getBooleanExtra("loginOut",false);
         if (loginOut) {
             befUid = null;
@@ -53,6 +52,7 @@ public class EmployeeCardReceiver extends BroadcastReceiver {
             return;
         }
         beep();
+        byte[] rfidData = intent.getByteArrayExtra("RFIDData");
         // 转16进制
         String rfStr = ByteToHexUtil.bytesToHexString(rfidData);
         DebugLog.e("rfStr"+rfStr);
