@@ -36,7 +36,6 @@ public class MapTestActivity extends BaseHeadActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map2);
-// test
         initData();
         SDKInitializer.initialize(getApplicationContext());
 
