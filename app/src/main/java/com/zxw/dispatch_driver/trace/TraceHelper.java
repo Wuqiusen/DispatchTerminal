@@ -2,7 +2,6 @@ package com.zxw.dispatch_driver.trace;
 
 import android.content.Context;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.baidu.trace.LBSTraceClient;
@@ -11,19 +10,12 @@ import com.baidu.trace.OnGeoFenceListener;
 import com.baidu.trace.OnStartTraceListener;
 import com.baidu.trace.Trace;
 import com.zxw.data.bean.ElectronRail;
-import com.zxw.data.sp.SpUtils;
 import com.zxw.dispatch_driver.MyApplication;
 import com.zxw.dispatch_driver.utils.DebugLog;
 import com.zxw.dispatch_driver.utils.LogUtil;
 import com.zxw.dispatch_driver.utils.MyGsonUtils;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 import static android.content.Context.TELEPHONY_SERVICE;
 
@@ -80,54 +72,6 @@ public class TraceHelper {
         DebugLog.w(entityName);
         initTrace();
         mFenceIdManager = FenceIdManager.getInstance();
-        //延时1分钟进行删除围栏 , 避免和生成围栏逻辑冲突
-        // 原因是百度调用删除再调用创建, 会没创建的回调触发, 这样就获取不到围栏ID
-        Observable.timer(60, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long aLong) {
-                        deleteOldFence();
-                    }
-                });
-    }
-
-    private void deleteOldFence() {
-        String cache = SpUtils.getCache(mContext, SpUtils.OLD_FENCE_LIST);
-        LogUtil.log("delete fence : " + cache);
-        if (!TextUtils.isEmpty(cache)) {
-            String[] split = cache.split(";");
-            for (String str : split) {
-                if (!TextUtils.isEmpty(str)) {
-                    try {
-                        Integer fenceId = Integer.valueOf(str);
-                        delete(fenceId);
-                    } catch (Exception e) {
-
-                    }
-                }
-            }
-        }
-        cache = SpUtils.getCache(mContext, SpUtils.NEW_FENCE_LIST);
-        SpUtils.setCache(mContext, SpUtils.OLD_FENCE_LIST, cache);
-        SpUtils.setCache(mContext, SpUtils.NEW_FENCE_LIST, "");
-    }
-
-
-    public void delete(int fenceId) {
-        mTraceClient.deleteFence(serviceId, fenceId, new OnGeoFenceListener() {
-            @Override
-            public void onRequestFailedCallback(String s) {
-                Log.w(TAG, "onRequestFailedCallback: " + s);
-            }
-
-            @Override
-            public void onDeleteFenceCallback(String s) {
-                Log.w(TAG, "onDeleteFenceCallback: " + s);
-            }
-        });
-
     }
 
     private void initTrace() {
@@ -157,21 +101,21 @@ public class TraceHelper {
 
             @Override
             public void onTracePushCallback(byte b, String s) {
-                LogUtil.fenceLog(s);
-                OnTracePushBean onTracePushBean = MyGsonUtils.fromJson(s, OnTracePushBean.class);
-                OutsideInsideFenceBean outsideInsideFence = mFenceIdManager.queryServiceFenceByBaiDuFenceId(onTracePushBean.getFence_id());
-                if (outsideInsideFence == null || onTracePushBean.getPre_point().getRadius() > 500)
-                    return;
-//                //查看最近几个坐标点是否有漂移
-//                if(fenceCallBackFilter.isPY() || onTracePushBean.getPre_point().getRadius() > 100){
-//                    ToastHelper.showToast("检测到漂移导致的进出围栏, 已经过滤 radius:" + onTracePushBean.getPre_point().getRadius());
+//                LogUtil.fenceLog(s);
+//                OnTracePushBean onTracePushBean = MyGsonUtils.fromJson(s, OnTracePushBean.class);
+//                OutsideInsideFenceBean outsideInsideFence = mFenceIdManager.queryServiceFenceByBaiDuFenceId(onTracePushBean.getFence_id());
+//                if (outsideInsideFence == null || onTracePushBean.getPre_point().getRadius() > 500)
 //                    return;
-//                }
-                String logStr = outsideInsideFence.getServiceFenceId() + " 发生了两个围栏事件 事件类型为 " + outsideInsideFence.getEventType();
-                LogUtil.fenceLog(logStr);
-                sendEnterOrLeaveFenceBroadcast(outsideInsideFence.getServiceFenceId(), outsideInsideFence.getEventType());
-                //复位
-                mFenceIdManager.restoreFlag();
+////                //查看最近几个坐标点是否有漂移
+////                if(fenceCallBackFilter.isPY() || onTracePushBean.getPre_point().getRadius() > 100){
+////                    ToastHelper.showToast("检测到漂移导致的进出围栏, 已经过滤 radius:" + onTracePushBean.getPre_point().getRadius());
+////                    return;
+////                }
+//                String logStr = outsideInsideFence.getServiceFenceId() + " 发生了两个围栏事件 事件类型为 " + outsideInsideFence.getEventType();
+//                LogUtil.fenceLog(logStr);
+//                sendEnterOrLeaveFenceBroadcast(outsideInsideFence.getServiceFenceId(), outsideInsideFence.getEventType());
+//                //复位
+//                mFenceIdManager.restoreFlag();
             }
         });
     }
@@ -219,72 +163,9 @@ public class TraceHelper {
                 });
     }
 
-    public void createPolygonFence(ElectronRail rail) {
-        DebugLog.w(rail.toString());
-//        String cache = SpUtils.getCache(mContext, SpUtils.MAP_POINT);
-//        if (TextUtils.isEmpty(cache)) {
-//            SpUtils.setCache(mContext, SpUtils.MAP_POINT, rail.getPoints());
-//        } else {
-//            SpUtils.setCache(mContext, SpUtils.MAP_POINT, cache + "|" + rail.getPoints());
-//        }
-        currentRailId = rail.getElectronRailId();
-        mTraceClient.createVertexesFence(serviceId, entityName, fenceName, fenceDesc, entityName, entityName, validTimes, validCycle, validDate, validDays, coordType,
-                rail.getPoints(), precision, alarmCondition, new OnGeoFenceListener() {
-                    @Override
-                    public void onRequestFailedCallback(String s) {
-                        Log.w(TAG, "onRequestFailedCallback: " + s);
-                    }
-
-                    @Override
-                    public void onCreateVertexesFenceCallback(String s) {
-                        Log.w(TAG, "onCreateVertexesFenceCallback: " + s);
-                        CreateFenceBean createFenceBean = MyGsonUtils.fromJson(s, CreateFenceBean.class);
-                        if (createFenceBean == null || createFenceBean.getStatus() != 0) {
-                            return;
-                        }
-                        int fenceId = createFenceBean.getFence_id();
-                        mFenceIdManager.addFenceIdPair(currentRailId, fenceId, currentPointer);
-                        createFenceList();
-                        LogUtil.log(s);
-                    }
-                });
-    }
-
-    public void setOnEnterOrLeaveFenceListener(OnEnterOrLeaveFenceListener listener) {
-        this.listener = listener;
-    }
-
 
     private int currentPointer = 0;
     private List<ElectronRail> listElectronRail;
-
-    public void createFenceList() {
-        if (listElectronRail.size() != currentPointer) {
-            ElectronRail rail = listElectronRail.get(currentPointer);
-            currentPointer++;
-            if (TextUtils.isEmpty(rail.getRadius()) || "0".equals(rail.getRadius())) {
-                createPolygonFence(rail);
-            } else {
-                createCircleFence(rail);
-            }
-        }
-    }
-
-    public void initFenceList(List<ElectronRail> listElectronRail) {
-        this.listElectronRail = listElectronRail;
-        currentPointer = 0;
-        createFenceList();
-    }
-
-    public void unregister() {
-        List<OutsideInsideFenceBean> fenceList = mFenceIdManager.getFenceList();
-        for (OutsideInsideFenceBean fence : fenceList) {
-            delete(fence.getInsideFenceId());
-            DebugLog.w("delete " + fence.getInsideFenceId());
-            delete(fence.getOutsideFenceId());
-            DebugLog.w("delete " + fence.getOutsideFenceId());
-        }
-    }
 
     public interface OnEnterOrLeaveFenceListener {
         void enterFence(int fenceId);
