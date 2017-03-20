@@ -17,6 +17,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+
 public class UserInfoActivity extends PresenterActivity<UserInfoPresenter> implements UserInfoView {
     @Bind(R.id.tv_username)
     TextView tv_username;
@@ -40,7 +41,7 @@ public class UserInfoActivity extends PresenterActivity<UserInfoPresenter> imple
     }
 
     private void hasNotLogin() {
-//        btn_login.setVisibility(View.VISIBLE);
+//      btn_login.setVisibility(View.VISIBLE);
         login();
     }
 
@@ -61,15 +62,24 @@ public class UserInfoActivity extends PresenterActivity<UserInfoPresenter> imple
 
     @OnClick(R.id.btn_logout)
     public void logout(){
+        sendBroadcastReceiver();
         BroadcastUtil.loginOut();
         SpUtils.logOut(MyApplication.mContext);
         startActivity(new Intent(this, LoginActivity.class));
+
         finish();
     }
     @OnClick(R.id.btn_login)
     public void login(){
         startActivity(new Intent(this, LoginActivity.class));
         finish();
+    }
+
+    private void sendBroadcastReceiver(){
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.CUSTOM_RFID_EVENT");
+        intent.putExtra("loginOut",true);
+        sendBroadcast(intent);
     }
 
     @Override

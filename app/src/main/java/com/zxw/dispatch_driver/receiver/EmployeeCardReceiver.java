@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 
 import com.zxw.data.bean.Login;
 import com.zxw.data.http.HttpMethods;
@@ -21,6 +22,7 @@ import com.zxw.dispatch_driver.utils.LogUtil;
 import com.zxw.dispatch_driver.utils.ToastHelper;
 import com.zxw.dispatch_driver.utils.VoiceController;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import rx.Subscriber;
@@ -34,17 +36,42 @@ import static android.content.Context.TELEPHONY_SERVICE;
 public class EmployeeCardReceiver extends BroadcastReceiver {
     private Context mContext;
 
+    private String uid;
+    private String befUid;
+    private Long befTimeStamp;
+    private boolean loginOut;
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        beep();
         this.mContext = context;
         byte[] rfidData = intent.getByteArrayExtra("RFIDData");
+        loginOut = intent.getBooleanExtra("loginOut",false);
+        if (loginOut) {
+            befUid = null;
+            befTimeStamp = null;
+            loginOut = false;
+            return;
+        }
+        beep();
         // 转16进制
         String rfStr = ByteToHexUtil.bytesToHexString(rfidData);
+        DebugLog.e("rfStr"+rfStr);
         try {
-            String uid = rfStr.substring(4, 34);
-            DebugLog.w(uid);
-            loginByEmployeeCard(uid);
+            // uid
+            uid = rfStr.substring(4, 34);
+            if (!TextUtils.isEmpty(befUid) && uid.equals(befUid)){
+                Date date = new Date(System.currentTimeMillis());
+                long time = date.getTime();
+                long l = time - befTimeStamp;
+                long min = (long)(l/1000/60);
+                if (min < 30){
+                    ToastHelper.showToast("30分钟内，不允许重复登录",mContext);
+                }else{
+                    loginByEmployeeCard(uid);
+                }
+            }else{
+                loginByEmployeeCard(uid);
+            }
         } catch (Exception e) {
             DebugLog.w(e.getMessage());
         }
@@ -55,7 +82,7 @@ public class EmployeeCardReceiver extends BroadcastReceiver {
         MyApplication.soundPool.play(1,1, 1, 0, 0, 1);
     }
 
-    private void loginByEmployeeCard(String uid) {
+    private void loginByEmployeeCard(final String uid) {
         DispatchSource dispatchSource = new DispatchSource();
         Date date = new Date();
         String time = String.valueOf(date.getTime());
@@ -79,6 +106,10 @@ public class EmployeeCardReceiver extends BroadcastReceiver {
 
             @Override
             public void onNext(Login loginBean) {
+                befUid = uid;
+                Date date = new Date(System.currentTimeMillis());
+                befTimeStamp = date.getTime();
+
                 cacheLoginInfo(loginBean);
                 BroadcastUtil.loginIn(loginBean.getName(), loginBean.getCode());
                 startWelcomeActivity();
