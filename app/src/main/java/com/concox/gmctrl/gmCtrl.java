@@ -15,13 +15,38 @@
  */
 package com.concox.gmctrl;
 
+import android.media.AudioManager;
+import android.content.Context;
+import android.util.Log;
+
+
 public class gmCtrl{
     private static final String TAG = "gmctrl";
 
-       static {
-        System.loadLibrary("gmctrl_jni");
-    } 
+    public static void GM_Audio_Switch(Context context, int value)
+    {
+        Context mContext = context;
 
-    public static native int GM_Get_ACC_State(); 
+        final AudioManager mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+
+        if(value == 1)
+        {
+            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+            GM_Speaker_switch(1);
+        }
+        else
+        {
+            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            GM_Speaker_switch(0);
+        }
+
+    }
+
+
+    static {
+        System.loadLibrary("gmctrl_jni");
+    }
+
+    public static native int GM_Get_ACC_State();
     public static native void GM_Speaker_switch(int value); // 0 for inside , 1 for outside
 }

@@ -1,6 +1,7 @@
 package com.zxw.dispatch_driver.utils;
 
 import com.concox.gmctrl.gmCtrl;
+import com.zxw.dispatch_driver.MyApplication;
 
 /**
  * author：CangJie on 2017/1/18 14:44
@@ -8,9 +9,9 @@ import com.concox.gmctrl.gmCtrl;
  */
 public class VoiceController {
     public static void outside(){
-        gmCtrl.GM_Speaker_switch(1);
+        gmCtrl.GM_Audio_Switch(MyApplication.mContext, 1);
     }
     public static void inside(){
-        gmCtrl.GM_Speaker_switch(0);
+        gmCtrl.GM_Audio_Switch(MyApplication.mContext, 0);
     }
 }
