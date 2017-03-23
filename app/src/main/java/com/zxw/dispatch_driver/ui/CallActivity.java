@@ -13,6 +13,7 @@ public class CallActivity extends PresenterActivity<CallPresenter> implements Ca
         return new CallPresenter(this);
     }
 
+// text git fork
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
