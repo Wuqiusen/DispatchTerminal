@@ -70,10 +70,21 @@ public class Reseau {
     }
 
     /**
-     *  看围栏归属哪几个网格内.
-     * @param points
+     *  计算围栏需要放入哪个方格中
+     * @param rails
      */
-    public void put(List<LatLng> points){
+    public void put(List<List<LatLng>> rails){
+        for (List<LatLng> rail : rails){
+            Rect rect = generateMaxRectByRail(rail);
+
+        }
+    }
+
+    /**
+     *  获取包裹围栏的最小矩形
+     * @param points 围栏的各个顶点
+     */
+    private Rect generateMaxRectByRail(List<LatLng> points){
         // 获得包裹该围栏最大矩形的对角坐标点
         double maxX = 0, minX = 0, maxY = 0, minY = 0;
         for (LatLng point : points){
@@ -82,9 +93,12 @@ public class Reseau {
             maxY = Math.max(maxY, point.longitude);
             minY = Math.min(minY, point.longitude);
         }
-        // 得到一个矩形, 该矩形覆盖到或参与到哪些方块, 即把围栏放入方块的value值
-        double diffX = maxX - minX;
-
+        Rect rect = new Rect();
+        rect.x1 = minX;
+        rect.y1 = minY;
+        rect.x2 = maxX;
+        rect.y2 = maxY;
+        return rect;
     }
 
     private double subtract(double v1, double v2) {
@@ -113,4 +127,10 @@ public class Reseau {
         }
     }
 
+    public class Rect{
+        public double x1;
+        public double y1;
+        public double x2;
+        public double y2;
+    }
 }

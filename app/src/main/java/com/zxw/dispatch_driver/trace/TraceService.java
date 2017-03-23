@@ -22,12 +22,16 @@ import com.zxw.data.bean.BaseBean;
 import com.zxw.data.bean.ElectronRail;
 import com.zxw.data.http.HttpMethods;
 import com.zxw.data.sp.SpUtils;
+import com.zxw.dispatch_driver.utils.DebugLog;
 import com.zxw.dispatch_driver.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Action1;
 
 import static com.zxw.dispatch_driver.MyApplication.mContext;
 
@@ -238,7 +242,7 @@ public class TraceService extends Service {
 
         initLocationListener();
 
-        receive();
+//        receive();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -280,7 +284,15 @@ public class TraceService extends Service {
 
             @Override
             public void onError(Throwable e) {
+                DebugLog.w(e.getMessage());
                 LogUtil.log("fence fail : " + e.getMessage());
+                Observable.timer(2, TimeUnit.SECONDS)
+                        .subscribe(new Action1<Long>() {
+                            @Override
+                            public void call(Long aLong) {
+                                loadElectronRail();
+                            }
+                        });
             }
 
             @Override
